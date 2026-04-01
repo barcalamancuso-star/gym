@@ -1644,26 +1644,20 @@ function toGreek(n){
     .replace(/\s+/g,' ')
     .trim();
 
-  // Alfabeto griego (24): ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ
+  // Mapeo directo (sin reemplazar letra latina por otra latina).
+  // Cada letra se transforma siempre al mismo símbolo.
   const map={
-    a:'Α',b:'Β',c:'Κ',d:'Δ',e:'Ε',f:'Φ',g:'Γ',h:'Η',i:'Ι',j:'Ι',k:'Κ',l:'Λ',m:'Μ',n:'Ν',
-    o:'Ο',p:'Π',q:'Θ',r:'Ρ',s:'Σ',t:'Τ',u:'Υ',v:'Β',w:'Ω',x:'Χ',y:'Υ',z:'Ζ'
+    a:'Α', b:'Β', c:'Χ', d:'Δ', e:'Ε', f:'Φ', g:'Γ', h:'Η', i:'Ι', j:'Ϙ',
+    k:'Κ', l:'Λ', m:'Μ', n:'Ν', o:'Ο', p:'Π', q:'Θ', r:'Ρ', s:'Σ', t:'Τ',
+    u:'Υ', v:'Ϝ', w:'Ω', x:'Ξ', y:'Ψ', z:'Ζ'
   };
 
-  const out=[];
-  for(let i=0;i<plain.length;i++){
-    const ch=plain[i];
-    if(ch===' '){out.push(' ');continue;}
-    const next=plain[i+1]||'';
-    // Digrafos comunes para que "suene" más griego
-    if(ch==='c'&&next==='h'){out.push('Χ');i++;continue;} // ch
-    if(ch==='t'&&next==='h'){out.push('Θ');i++;continue;} // th
-    if(ch==='p'&&next==='h'){out.push('Φ');i++;continue;} // ph
-    if(ch==='p'&&next==='s'){out.push('Ψ');i++;continue;} // ps
-    if(ch==='k'&&next==='s'){out.push('Ξ');i++;continue;} // ks
-    out.push(map[ch]||ch.toUpperCase());
-  }
-  return out.join('').replace(/\s+/g,' ').trim();
+  return plain
+    .split('')
+    .map(ch=>ch===' ' ? ' ' : (map[ch]||ch.toUpperCase()))
+    .join('')
+    .replace(/\s+/g,' ')
+    .trim();
 }
 const GLYPH_POOL='ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ0123456789';
 const _nameDriftControllers=new WeakMap();
