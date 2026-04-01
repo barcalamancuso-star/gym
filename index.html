@@ -1627,30 +1627,38 @@ const GREEK_NAME_OVERRIDES={
   'carlos':'ΚΑΡΛΟΣ'
 };
 const NOMBRE_GRIEGO=GREEK_NAME_OVERRIDES;
-function compactGreekGlyphs(text){
-  const out=[];
-  const seen=new Set();
-  for(const ch of (text||'')){
-    if(ch===' '){out.push(ch);continue;}
-    if(seen.has(ch))continue;
-    seen.add(ch);
-    out.push(ch);
-  }
-  return out.join('');
-}
 function toGreek(n){
   const src=(n||'').trim().toLowerCase();
   if(!src)return '';
   if(GREEK_NAME_OVERRIDES[src])return GREEK_NAME_OVERRIDES[src];
-  const plain=src.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ñ/g,'n');
-  const m={
-    a:'\u0391',b:'\u0392',c:'\u039A',d:'\u0394',e:'\u0395',f:'\u03A6',g:'\u0393',
-    h:'\u0397',i:'\u0399',j:'\u0399',k:'\u039A',l:'\u039B',m:'\u039C',n:'\u039D',
-    o:'\u039F',p:'\u03A0',q:'\u039A',r:'\u03A1',s:'\u03A3',t:'\u03A4',u:'\u03A5',
-    v:'\u0392',w:'\u03A9',x:'\u039E',y:'\u03A5',z:'\u0396'
+  const plain=src
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .replace(/ñ/g,'n')
+    .replace(/[^a-z\s]/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+
+  // Alfabeto griego (24): ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ
+  const map={
+    a:'Α',b:'Β',c:'Κ',d:'Δ',e:'Ε',f:'Φ',g:'Γ',h:'Η',i:'Ι',j:'Ι',k:'Κ',l:'Λ',m:'Μ',n:'Ν',
+    o:'Ο',p:'Π',q:'Θ',r:'Ρ',s:'Σ',t:'Τ',u:'Υ',v:'Β',w:'Ω',x:'Χ',y:'Υ',z:'Ζ'
   };
-  const mapped=plain.split('').map(ch=>m[ch]??ch.toUpperCase()).join('');
-  return compactGreekGlyphs(mapped);
+
+  const out=[];
+  for(let i=0;i<plain.length;i++){
+    const ch=plain[i];
+    if(ch===' '){out.push(' ');continue;}
+    const next=plain[i+1]||'';
+    // Digrafos comunes para que "suene" más griego
+    if(ch==='c'&&next==='h'){out.push('Χ');i++;continue;} // ch
+    if(ch==='t'&&next==='h'){out.push('Θ');i++;continue;} // th
+    if(ch==='p'&&next==='h'){out.push('Φ');i++;continue;} // ph
+    if(ch==='p'&&next==='s'){out.push('Ψ');i++;continue;} // ps
+    if(ch==='k'&&next==='s'){out.push('Ξ');i++;continue;} // ks
+    out.push(map[ch]||ch.toUpperCase());
+  }
+  return out.join('').replace(/\s+/g,' ').trim();
 }
 const GLYPH_POOL='ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ0123456789';
 const _nameDriftControllers=new WeakMap();
