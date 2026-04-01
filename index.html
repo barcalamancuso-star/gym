@@ -680,14 +680,14 @@ body.screen-s3 #global-brand{top:10px;left:50%;right:auto;bottom:auto;opacity:.9
 <div id="overlay"></div>
 <div id="save-toast">ok guardado</div>
 <div id="global-brand" onclick="toggleTheme()">
-  <span id="global-brand-sym">Ω</span>
+  <span id="global-brand-sym">G</span>
   <span id="global-brand-name"></span>
 </div>
 
 <!-- SPLASH -->
 <div id="splash" style="position:fixed;inset:0;background:#0b0b0b;z-index:500;">
   <!-- Logo fijo en el centro, nunca se mueve -->
-  <div id="splash-sym" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-family:'Noto Serif JP',serif;font-size:142px;font-weight:500;letter-spacing:1px;color:#d7d6d1;opacity:0;filter:blur(8px);transition:opacity .45s ease,filter .45s ease;line-height:1;text-rendering:geometricPrecision;">Ω</div>
+  <div id="splash-sym" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-family:'Noto Serif JP',serif;font-size:142px;font-weight:500;letter-spacing:1px;color:#d7d6d1;opacity:0;filter:blur(8px);transition:opacity .45s ease,filter .45s ease;line-height:1;text-rendering:geometricPrecision;">G</div>
   <!-- Nombre griego — aparece debajo del logo, fijo -->
   <div id="splash-name" style="position:absolute;top:calc(50% + 80px);width:100%;text-align:center;font-family:'Noto Serif JP',serif;font-size:20px;font-weight:700;letter-spacing:10px;color:var(--mu2);opacity:0;transition:opacity 0.6s ease;"></div>
   <!-- Status -->
@@ -713,7 +713,7 @@ body.screen-s3 #global-brand{top:10px;left:50%;right:auto;bottom:auto;opacity:.9
   <div class="s0-head" id="s0-head">
     <div class="logo-wrap">
       <div class="logo-top">
-        <span class="logo-sym" id="logo-sym" onclick="toggleTheme()">Ω</span>
+        <span class="logo-sym" id="logo-sym" onclick="toggleTheme()">G</span>
         <span id="logo-name" class="logo-name-main"></span>
       </div>
     </div>
@@ -783,7 +783,7 @@ body.screen-s3 #global-brand{top:10px;left:50%;right:auto;bottom:auto;opacity:.9
 </div>
   <div class="workout-body" style="position:relative;">
     <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:0;overflow:hidden;">
-      <span style="font-family:var(--serif);font-size:500px;font-weight:700;color:var(--ac);opacity:0.03;user-select:none;line-height:0.8;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">Ω</span>
+      <span style="font-family:var(--serif);font-size:500px;font-weight:700;color:var(--ac);opacity:0.03;user-select:none;line-height:0.8;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">G</span>
     </div>
     <!-- PANTALLA DE REGISTRO — fullscreen overlay dentro de S2 -->
         <div id="register-screen">
@@ -871,7 +871,7 @@ body.screen-s3 #global-brand{top:10px;left:50%;right:auto;bottom:auto;opacity:.9
 <!-- S3 -->
 <div id="s3" class="screen">
   <div class="fin-top">
-    <div class="fin-app">GYM CODEX</div>
+    <div class="fin-app">GYM</div>
     <div class="fin-day" id="fin-day">—</div>
     <div class="fin-train-msg">estuviste <span class="fin-clock" id="fin-clock">00:00</span> entrenando</div>
     <div id="fin-vol" style="font-family:var(--mono);font-size:11px;color:var(--mu2);margin-top:2px;"></div>
@@ -1021,7 +1021,7 @@ const ALL_EJS=[
 const TIPO_GROUPS={'pull':'Espalda · Bíceps','push':'Pecho · Hombros · Tríceps','legs':'Cuádriceps · Glúteo · Isquios'};
 const TIPO_LABEL={manc:'kg/b',barra:'kg/l',maq:'kg',polea:'kg',pc:'—'};
 const TIPO_SHORT={manc:'manc',barra:'barra',maq:'máq',polea:'polea',pc:'p.c.'};
-const SCREEN_SYM={'s0':'Ω','s1':'Ω','s2':'Δ','s3':'φ'};
+const SCREEN_SYM={'s0':'G','s1':'G','s2':'Δ','s3':'φ'};
 const MEV_WINDOW_DAYS=7;
 const MEV_DEFAULT_TARGET={min:8,max:12};
 const MEV_TARGET_BY_MUSCLE={};
