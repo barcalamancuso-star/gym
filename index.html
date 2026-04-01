@@ -728,6 +728,7 @@ body.screen-s3 #global-brand{top:10px;left:50%;right:auto;bottom:auto;opacity:.9
     <div id="splash-enter-menu">
       <button class="splash-choice-btn" onclick="splashPickLoad()">cargar base JSON</button>
       <button class="splash-choice-btn" onclick="splashPickNombre()">usuario nuevo</button>
+      <button id="splash-btn-install" class="splash-choice-btn" onclick="installApp()" style="display:none;">instalar app</button>
     </div>
     <button id="splash-omit" onclick="onSplashOmit()" style="display:none;">omitir</button>
     <input type="file" id="fi-splash" accept=".json" onchange="onSplashLoad(event)" style="display:none">
@@ -1063,9 +1064,24 @@ const TIPO_SHORT={manc:'manc',barra:'barra',maq:'máq',polea:'polea',pc:'p.c.'};
 const SCREEN_SYM={'s0':'Ω','s1':'Ω','s2':'Δ','s3':'φ'};
 const MEV_WINDOW_DAYS=7;
 const MEV_DEFAULT_TARGET={min:8,max:12};
-const MEV_TARGET_BY_MUSCLE={};
+const MEV_TARGET_BY_MUSCLE={
+  'Pecho':{min:8,max:14},
+  'Espalda':{min:10,max:16},
+  'Hombros':{min:8,max:14},
+  'Tríceps':{min:7,max:13},
+  'Bíceps':{min:7,max:13},
+  'Cuádriceps':{min:10,max:16},
+  'Glúteo':{min:10,max:18},
+  'Isquios':{min:8,max:14},
+  'Core':{min:6,max:12},
+  'Gemelos':{min:8,max:16},
+  'Trapecios':{min:6,max:12},
+  'Aductores':{min:6,max:12},
+  'Antebrazos':{min:6,max:12}
+};
 const RECOVERY_HOURS_WARN=24;
 const RECOVERY_HOURS_OK=48;
+const RECOVERY_PRIMARY_WEIGHT_MIN=0.5;
 const TRACKED_MUSCLES=[
   'Pecho','Espalda','Hombros','Tríceps','Bíceps',
   'Cuádriceps','Glúteo','Isquios','Core','Gemelos',
@@ -1278,6 +1294,27 @@ let _lastDbLoadOk=false;
 let _splashAutoGoTimer=null;
 let _draftAutoIv=null;
 let _storageQuotaWarned=false;
+let _deferredInstallPrompt=null;
+const HAPTICS_ENABLED=true;
+let _hapticLastTs=0;
+
+function buzz(pattern,minGap=45){
+  if(!HAPTICS_ENABLED)return;
+  if(typeof navigator==='undefined'||typeof navigator.vibrate!=='function')return;
+  const now=Date.now();
+  if(now-_hapticLastTs<minGap)return;
+  _hapticLastTs=now;
+  try{navigator.vibrate(pattern);}catch(_e){}
+}
+
+function haptic(kind='tap'){
+  if(kind==='tap'){buzz(10);return;}
+  if(kind==='medium'){buzz(18);return;}
+  if(kind==='phase'){buzz([14,26,14],80);return;}
+  if(kind==='alert'){buzz([24,36,24],120);return;}
+  if(kind==='success'){buzz([16,28,22],100);return;}
+  buzz(10);
+}
 
 /* â•â• RUEDAS â•â• */
 let wheelVals={kg:null,reps:null,rpe:null,helped:null,dskg:null,dsreps:null,dsrpe:null};
@@ -1438,6 +1475,11 @@ function showMsgManana(){
 }
 
 function show(id){
+  // Seguridad de rendimiento: si ya estamos entrando al flujo de entrenamiento,
+  // apagamos cualquier resto del efecto splash y liberamos su canvas.
+  if(id==='s1' || id==='s2' || id==='s3'){
+    disableSplashMatrixForever();
+  }
   const current=document.querySelector('.screen.on');
   const next=$(id);
   if(!next)return;
@@ -1872,6 +1914,51 @@ function updateNombrePreview(val){
   el.textContent=val?toGreek(val):'';
 }
 
+function isStandaloneMode(){
+  try{
+    return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+  }catch(_e){return false;}
+}
+
+function isIosSafariInstallFlow(){
+  const ua=(navigator.userAgent||'').toLowerCase();
+  const ios=/iphone|ipad|ipod/.test(ua);
+  const webkit=/safari/.test(ua)&&!/crios|fxios|edgios|opios|instagram|fban|fbav/.test(ua);
+  return ios&&webkit;
+}
+
+function updateInstallButton(){
+  const btn=$('splash-btn-install');
+  if(!btn)return;
+  if(isStandaloneMode()){
+    btn.style.display='none';
+    return;
+  }
+  const canPrompt=!!_deferredInstallPrompt;
+  const canGuide=isIosSafariInstallFlow();
+  btn.style.display=(canPrompt||canGuide)?'inline-flex':'none';
+}
+
+async function installApp(){
+  haptic('tap');
+  if(isStandaloneMode())return;
+  if(_deferredInstallPrompt){
+    const prompt=_deferredInstallPrompt;
+    _deferredInstallPrompt=null;
+    try{
+      await prompt.prompt();
+      await prompt.userChoice;
+    }catch(_e){}
+    updateInstallButton();
+    return;
+  }
+  if(isIosSafariInstallFlow()){
+    alert('Para instalar en iPhone/iPad: Compartir -> Agregar a pantalla de inicio.');
+    return;
+  }
+  alert('Si tu navegador lo permite: menú del navegador -> Instalar app / Agregar a pantalla principal.');
+}
+
 function hideSplashGate(){
   const gate=$('splash-gate');
   if(!gate)return;
@@ -1895,6 +1982,7 @@ function showSplashChoices(){
   }
   const menu=$('splash-enter-menu');
   if(menu)menu.style.display='flex';
+  updateInstallButton();
   const om=$('splash-omit');
   if(om)om.style.display='block';
 }
@@ -1912,6 +2000,7 @@ function setSplashLoadMode(){
     btnLoad.style.opacity='1';
     btnLoad.classList.add('entrar-glow');
   }
+  updateInstallButton();
   const om=$('splash-omit');
   if(om)om.style.display='block';
   hideSplashGate();
@@ -1930,20 +2019,24 @@ function setSplashEnterMode(){
     btnLoad.style.opacity='1';
     btnLoad.classList.add('entrar-glow');
   }
+  updateInstallButton();
   const om=$('splash-omit');
   if(om)om.style.display='none';
 }
 function onSplashEnter(){
+  haptic('tap');
   showSplashChoices();
 }
 function onSplashOmit(){ dismissSplash(false); }
 function splashPickLoad(){
+  haptic('tap');
   const stTxt=$('splash-status-txt');
   if(stTxt)stTxt.textContent='selecciona la base';
   const fi=$('fi-splash');
   if(fi)fi.click();
 }
 function splashPickNombre(){
+  haptic('tap');
   hideSplashChoices();
   const stTxt=$('splash-status-txt');
   if(stTxt)stTxt.textContent='';
@@ -1984,6 +2077,7 @@ function splashNameReady(name){
 function confirmSplashNombre(){
   const n=($('splash-nombre')?.value||'').trim();
   if(!n)return;
+  haptic('success');
   DB.usuario=n;
   updateGreet();
   startNameFlicker();
@@ -2187,7 +2281,8 @@ function mevAccumulateExercises(exercises,sessionMeta,acc,latest){
       const ts=mevSeriesTimestamp(sessionMeta,s);
       loads.forEach(({m,w})=>{
         acc[m]=(acc[m]||0)+w;
-        if(!latest[m]||ts>latest[m])latest[m]=ts;
+        // La recuperación se actualiza sólo cuando el músculo es actor primario.
+        if(w>=RECOVERY_PRIMARY_WEIGHT_MIN&&(!latest[m]||ts>latest[m]))latest[m]=ts;
       });
     });
   });
@@ -2409,6 +2504,7 @@ function startObjetivo(nombre){
 }
 
 function pick(type){
+  haptic('tap');
   curType=type;
   $('s1-type').textContent=type.toUpperCase();
   $('s1-type').className='s1-type '+type;
@@ -2477,6 +2573,7 @@ function goBlank(){startWorkout(curType.toUpperCase(),[],curType,{},{},{});}
 
 /* â•â• WORKOUT â•â• */
 function startWorkout(name,ejs,dayId,tiposIniciales,multsIniciales,agarresIniciales){
+  haptic('phase');
   stopPrepCountdown();
   curDay={name,id:dayId};
   ejList=[...ejs];
@@ -2509,7 +2606,7 @@ function startWorkout(name,ejs,dayId,tiposIniciales,multsIniciales,agarresInicia
   updateLiveVol();
   syncS2StateUi();
   startDraftAutoSave();
-  saveSessionDraft(true);
+  saveSessionDraft(false);
   show('s2');
 }
 
@@ -2712,7 +2809,7 @@ function startPrepCountdown(name){
   if(ft){ft.style.color='var(--tx)';ft.innerHTML=String(prepLeft);}
   if(fb)fb.style.display='none';
   renderAr();
-  saveSessionDraft(true);
+  saveSessionDraft(false);
 
   prepIv=setInterval(()=>{
     prepLeft-=1;
@@ -2726,6 +2823,7 @@ function startPrepCountdown(name){
     const waitMs=prepBaseRestMs+(PREP_COUNTDOWN_SEC*1000);
     tR=fmt(Math.floor(waitMs/1000));
     state='work';
+    haptic('phase');
     if(clock)clock.className='tbar work';
     msec=0;
     const t2=$('tnum');if(t2)t2.innerHTML=fmtT(0);
@@ -2743,7 +2841,7 @@ function startPrepCountdown(name){
       if(ft){ft.style.color='var(--go)';ft.innerHTML=fmtT(0);}
     }
     renderAr();
-    saveSessionDraft(true);
+    saveSessionDraft(false);
   },1000);
 }
 
@@ -2770,6 +2868,7 @@ function startEjRest(name){
 function pulseEjTimer(){
   const el=$('ej-rest-timer');
   if(!el)return;
+  haptic('alert');
   el.classList.add('pulse');
   setTimeout(()=>el.classList.remove('pulse'),3000);
 }
@@ -2829,6 +2928,7 @@ function finishEj(){
   const name=ejList[curEjIdx];
   const hasSeries=(sesion[name]||[]).some(s=>s&&!s.deleted&&(Number(s.reps)||Number(s.kg)||s.rpe||s.helped||s.nota||s.dskg||s.dsreps));
   if(hasSeries)ejFinalizados[name]=true;
+  haptic('medium');
   clearEjRest(name);
   const next=ejList.findIndex((n,i)=>i>curEjIdx&&(!sesion[n]||sesion[n].length===0));
   if(next>=0)swEj(next);
@@ -2927,9 +3027,11 @@ function hAct(){
   const name=ejList[curEjIdx];
   const n=(sesion[name]||[]).length+1;
   if(state==='idle'||state==='rest'){
+    haptic('tap');
     startPrepCountdown(name);
     return;
   } else if(state==='work'){
+    haptic('success');
     tW=fmt(Math.floor(msec/1000));state='saving';
     $('clock').className='tbar rest';
     msec=0;$('tnum').innerHTML=fmtT(0);
@@ -2943,7 +3045,7 @@ function hAct(){
     const fo=$('focus-overlay');if(fo)fo.style.display='none';
   }
   renderAr();
-  saveSessionDraft(true);
+  saveSessionDraft(false);
 }
 
 // â•â• REGISTRO NATIVO â•â•
@@ -3120,11 +3222,12 @@ function saveSerie(){
   if(!sesion[name])sesion[name]=[];
   const serie=sesion[name].length+1;
   sesion[name].push({serie,kg,reps,rpe,helped,grip,mult,dskg,dsreps,dsrpe,nota,tWork:tW,tRest:tR,tipo,ts,deleted:false});
+  haptic('medium');
   collapseInp();
   state='rest';$('clock').className='tbar rest';
   $('inp-fields').className='inp-fields';
   renderLog();buildEjCol();renderAr();updateLiveVol();
-  saveSessionDraft(true);
+  saveSessionDraft(false);
 }
 
 /* â•â• MODAL EJERCICIO â•â• */
@@ -3238,7 +3341,7 @@ function mok(){
   else delete ejAgarres[n];
   ejMultipliers[n]=multModal; // ya viene del modal
   if(!sesion[n])sesion[n]=[];
-  saveSessionDraft(true);
+  saveSessionDraft(false);
   mclose();loadEj(ejList.length-1);
 }
 function mclose(){$('modal').classList.remove('on');}
@@ -3247,6 +3350,7 @@ function mclose(){$('modal').classList.remove('on');}
 function finishW(){
   if(!started){exitW();return;}
   if(!confirm('¿Terminaste el día?'))return;
+  haptic('success');
 
   stopPrepCountdown();
   clearInterval(iv);
@@ -3349,7 +3453,7 @@ function toggleSerieDelete(name,idx){
   if(!sesion[name]||!sesion[name][idx])return;
   sesion[name][idx].deleted=!sesion[name][idx].deleted;
   renderFinBody();
-  saveSessionDraft(true);
+  saveSessionDraft(false);
 }
 
 function exitW(){
@@ -3758,6 +3862,20 @@ function stopSplashMatrix(){
   _splashMatrixState=null;
 }
 
+function disableSplashMatrixForever(){
+  stopSplashMatrix();
+  const canvas=$('splash-matrix');
+  if(!canvas)return;
+  try{
+    const ctx=canvas.getContext('2d');
+    if(ctx)ctx.clearRect(0,0,canvas.width||0,canvas.height||0);
+  }catch(_e){}
+  // Reducir memoria del buffer de canvas al mínimo.
+  canvas.width=1;
+  canvas.height=1;
+  canvas.style.display='none';
+}
+
 function startSplashMatrix(){
   const splash=$('splash');
   const canvas=$('splash-matrix');
@@ -3864,7 +3982,7 @@ function dismissSplash(skipNamePrompt=false){
   if(!sp)return;
   if(_splashAutoGoTimer){clearTimeout(_splashAutoGoTimer);_splashAutoGoTimer=null;}
   hideSplashGate();
-  stopSplashMatrix();
+  disableSplashMatrixForever();
   stopNameDrift($('splash-name'));
   stopEntrarSparks();
   stopLogoPixelFall();
@@ -4082,6 +4200,21 @@ document.addEventListener('visibilitychange',()=>{
     saveSessionDraft(false);
     saveAutoDb();
   }
+});
+
+window.addEventListener('beforeinstallprompt',(e)=>{
+  e.preventDefault();
+  _deferredInstallPrompt=e;
+  updateInstallButton();
+});
+
+window.addEventListener('appinstalled',()=>{
+  _deferredInstallPrompt=null;
+  updateInstallButton();
+});
+
+window.addEventListener('load',()=>{
+  updateInstallButton();
 });
 
 if('serviceWorker' in navigator && window.isSecureContext && location.protocol.startsWith('http')){
