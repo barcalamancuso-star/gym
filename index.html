@@ -3777,6 +3777,7 @@ function startSplashMatrix(){
   let w=0,h=0,dpr=1,fontPx=14,cols=0,streams=0;
   let drops=[];
   let lastTs=0;
+  let startTs=0;
 
   function resize(){
     dpr=Math.max(1,Math.min(2.2,window.devicePixelRatio||1));
@@ -3788,13 +3789,18 @@ function startSplashMatrix(){
     canvas.style.height=window.innerHeight+'px';
     fontPx=Math.round(Math.max(12,Math.min(18,window.innerWidth/30))*dpr);
     cols=Math.max(12,Math.floor(w/(fontPx*0.9)));
-    streams=Math.max(cols,Math.floor(cols*1.75));
+    streams=Math.max(cols,Math.floor(cols*2.15));
     drops=Array.from({length:streams},()=>({
       x:Math.random()*cols,
-      y:Math.random()*h,
-      v:(0.85+Math.random()*1.2)*dpr,
-      tail:4+Math.floor(Math.random()*6)
+      // Inician fuera de pantalla para que el efecto "nazca" y no aparezca lleno de golpe
+      y:-(Math.random()*(h*1.15 + fontPx*10)),
+      // Mayor rango de velocidades para una caída más orgánica
+      v:(0.55+Math.random()*2.25)*dpr,
+      tail:6+Math.floor(Math.random()*8),
+      // Activación progresiva al iniciar el efecto
+      delay:Math.random()*1800
     }));
+    startTs=0;
     ctx.font=`${fontPx}px ${getComputedStyle(document.documentElement).getPropertyValue('--mono')||'monospace'}`;
     ctx.textBaseline='top';
     ctx.fillStyle=bgSolid;
@@ -3804,6 +3810,7 @@ function startSplashMatrix(){
   function frame(ts){
     if(!_splashMatrixRunning)return;
     _splashMatrixRaf=requestAnimationFrame(frame);
+    if(!startTs)startTs=ts;
     if(!lastTs)lastTs=ts;
     const dt=Math.min(33,ts-lastTs);
     lastTs=ts;
@@ -3814,6 +3821,7 @@ function startSplashMatrix(){
     const step=dt/16.6;
     const cellX=w/cols;
     for(const d of drops){
+      if((ts-startTs)<d.delay)continue;
       const x=d.x*cellX;
       const y=d.y;
       const ch=SPLASH_MATRIX_CHARS.charAt((Math.random()*SPLASH_MATRIX_CHARS.length)|0);
@@ -3825,7 +3833,7 @@ function startSplashMatrix(){
         const ty=y-(i*fontPx*0.84);
         if(ty<-fontPx)break;
         const tCh=SPLASH_MATRIX_CHARS.charAt((Math.random()*SPLASH_MATRIX_CHARS.length)|0);
-        ctx.globalAlpha=Math.max(0.06,0.44-(i*(0.44/(d.tail+1))));
+        ctx.globalAlpha=Math.max(0.07,0.5-(i*(0.5/(d.tail+1))));
         ctx.fillText(tCh,x,ty);
       }
       ctx.globalAlpha=1;
@@ -3834,8 +3842,9 @@ function startSplashMatrix(){
       if(d.y>h+fontPx*2){
         d.y=-Math.random()*h*0.35;
         d.x=Math.random()*cols;
-        d.v=(0.85+Math.random()*1.2)*dpr;
-        d.tail=4+Math.floor(Math.random()*6);
+        d.v=(0.55+Math.random()*2.25)*dpr;
+        d.tail=6+Math.floor(Math.random()*8);
+        d.delay=0;
       }
     }
   }
