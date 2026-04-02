@@ -250,15 +250,18 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 }
 .home-rec-battery{
   position:relative;
-  width:11px;
-  height:20px;
+  width:12px;
+  height:22px;
   border:1px solid var(--br2);
   border-radius:2px;
   background:rgba(255,255,255,.02);
-  overflow:hidden;
+  overflow:visible;
   display:inline-flex;
-  align-items:flex-end;
+  flex-direction:column-reverse;
+  align-items:stretch;
   justify-content:center;
+  gap:2px;
+  padding:2px 2px 2px;
 }
 .home-rec-battery::after{
   content:'';
@@ -270,27 +273,20 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   border-radius:1px;
   background:var(--br2);
 }
-.home-rec-fill{
-  position:absolute;
-  left:1px;right:1px;bottom:1px;
-  height:0%;
+.home-rec-seg{
+  height:3px;
   border-radius:1px;
-  background:var(--tone,var(--mu2));
-  opacity:.78;
-  transition:height .45s ease,background .25s ease;
+  background:rgba(255,255,255,.10);
+  opacity:.42;
+  transition:background .25s ease,opacity .25s ease;
 }
-.home-rec-battery-val{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:var(--mono);
-  font-size:7px;
-  line-height:1;
-  color:rgba(255,255,255,.68);
-  font-variant-numeric:tabular-nums;
-  pointer-events:none;
+.home-rec-seg.on{
+  background:var(--mu2);
+  opacity:.68;
+}
+.home-rec-seg.ok{
+  background:var(--go);
+  opacity:.9;
 }
 .home-rec-muted{
   display:block;
@@ -1880,16 +1876,18 @@ function renderHomeRecovery(){
     const maxRef=Math.max(1,Number(tg.max)||MEV_DEFAULT_TARGET.max);
     const ts=snap.latestTs?.[m];
     const hours=ts?Math.max(0,(now-Number(ts))/3600000):0;
-    const recColor=ts?recoveryColor(hours):'var(--mu)';
     const recFill=ts?Math.max(0,Math.min(100,(hours/RECOVERY_HOURS_OK)*100)):0;
-    const hoursLeft=ts?Math.max(0,Math.ceil(RECOVERY_HOURS_OK-hours)):0;
-    const battText=hoursLeft>0?String(hoursLeft):'ok';
+    const bars=recFill<=0?0:Math.min(4,Math.ceil(recFill/25));
+    const isOk=recFill>=99.9;
+    const segs=Array.from({length:4},(_,i)=>{
+      if(i>=bars)return '<span class="home-rec-seg"></span>';
+      return `<span class="home-rec-seg on${isOk?' ok':''}"></span>`;
+    }).join('');
     return `<div class="home-rec-row">
       <span class="home-rec-muscle">${m}</span>
       <span class="home-rec-series">${fmtSetCount(c)}/${maxRef}</span>
       <span class="home-rec-battery" aria-label="${m} recuperacion ${Math.round(recFill)} por ciento">
-        <span class="home-rec-fill" style="height:${recFill.toFixed(1)}%;--tone:${recColor}"></span>
-        <span class="home-rec-battery-val">${battText}</span>
+        ${segs}
       </span>
     </div>`;
   }).join('');
