@@ -216,42 +216,44 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 .home-rec-box{
   border:1px solid var(--br2);
   border-radius:10px;
-  padding:8px 10px 9px;
+  padding:6px 8px 7px;
   background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
 }
 .home-rec-table{
-  max-height:168px;
+  max-height:118px;
   overflow-y:auto;
   -webkit-overflow-scrolling:touch;
-  padding-right:2px;
-  display:flex;
-  flex-wrap:wrap;
-  align-items:flex-start;
-  gap:8px 10px;
+  padding-right:1px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:4px 8px;
 }
 .home-rec-head{display:none;}
 .home-rec-row{
   display:flex;
   align-items:center;
-  gap:6px;
-  padding:2px 0;
+  gap:4px;
+  padding:1px 0;
+  min-width:0;
 }
 .home-rec-muscle{
   color:var(--tx);
   font-family:var(--mono);
-  font-size:10px;
-  letter-spacing:.3px;
+  font-size:9px;
+  letter-spacing:.2px;
+  white-space:nowrap;
 }
 .home-rec-series{
   font-family:var(--mono);
-  font-size:10px;
+  font-size:9px;
   color:var(--mu2);
   font-variant-numeric:tabular-nums;
+  white-space:nowrap;
 }
 .home-rec-battery{
   position:relative;
-  width:12px;
-  height:22px;
+  width:9px;
+  height:16px;
   border:1px solid var(--br2);
   border-radius:2px;
   background:rgba(255,255,255,.02);
@@ -260,33 +262,34 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   flex-direction:column-reverse;
   align-items:stretch;
   justify-content:center;
-  gap:2px;
-  padding:2px 2px 2px;
+  gap:1px;
+  padding:1px;
+  margin-left:auto;
 }
 .home-rec-battery::after{
   content:'';
   position:absolute;
-  top:-3px;
-  left:3px;
-  width:3px;
-  height:2px;
+  top:-2px;
+  left:2px;
+  width:2px;
+  height:1px;
   border-radius:1px;
   background:var(--br2);
 }
 .home-rec-seg{
-  height:3px;
+  height:2px;
   border-radius:1px;
-  background:rgba(255,255,255,.10);
-  opacity:.42;
+  background:rgba(255,255,255,.08);
+  opacity:.36;
   transition:background .25s ease,opacity .25s ease;
 }
 .home-rec-seg.on{
   background:var(--mu2);
-  opacity:.68;
+  opacity:.6;
 }
 .home-rec-seg.ok{
   background:var(--go);
-  opacity:.9;
+  opacity:.85;
 }
 .home-rec-muted{
   display:block;
