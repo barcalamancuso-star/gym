@@ -991,9 +991,9 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   </div>
   <div class="s0-foot">
     <div class="ppl">
-      <button class="ppl-btn pull" onclick="pick('pull')"><div class="ppl-lbl">PULL</div></button>
-      <button class="ppl-btn push" onclick="pick('push')"><div class="ppl-lbl">PUSH</div></button>
-      <button class="ppl-btn legs" onclick="pick('legs')"><div class="ppl-lbl">LEGS</div></button>
+      <button class="ppl-btn pull" onclick="pick('pull')"><div class="ppl-lbl">TIRON</div></button>
+      <button class="ppl-btn push" onclick="pick('push')"><div class="ppl-lbl">EMPUJE</div></button>
+      <button class="ppl-btn legs" onclick="pick('legs')"><div class="ppl-lbl">PIERNAS</div></button>
     </div>
   </div>
 </div>
@@ -1342,6 +1342,10 @@ const ALL_EJS=[
 ];
 
 const TIPO_GROUPS={'pull':'Espalda · Bíceps','push':'Pecho · Hombros · Tríceps','legs':'Cuádriceps · Glúteo · Isquios'};
+const TIPO_UI_LABEL={'pull':'TIRON','push':'EMPUJE','legs':'PIERNAS'};
+function tipoUiLabel(type){
+  return TIPO_UI_LABEL[type]||String(type||'').toUpperCase();
+}
 const TIPO_LABEL={manc:'kg/b',barra:'kg/l',maq:'kg',polea:'kg',pc:'—'};
 const TIPO_SHORT={manc:'manc',barra:'barra',maq:'máq',polea:'polea',pc:'p.c.'};
 const SCREEN_SYM={'s0':'Ω','s1':'Ω','s2':'Δ','s3':'φ'};
@@ -1909,7 +1913,14 @@ function renderHome(){
   if(!DB.history.length){
     // Mostrar días vacíos con mismo diseño
     const dias=['Lun','Mar','Mié','Jue','Vie','Sáb'];
-    const tipos=[{t:'PULL',c:'var(--go)'},{t:'PUSH',c:'var(--ac)'},{t:'LEGS',c:'var(--re)'},{t:'PULL',c:'var(--go)'},{t:'PUSH',c:'var(--ac)'},{t:'LEGS',c:'var(--re)'}];
+    const tipos=[
+      {t:tipoUiLabel('pull'),c:'var(--go)'},
+      {t:tipoUiLabel('push'),c:'var(--ac)'},
+      {t:tipoUiLabel('legs'),c:'var(--re)'},
+      {t:tipoUiLabel('pull'),c:'var(--go)'},
+      {t:tipoUiLabel('push'),c:'var(--ac)'},
+      {t:tipoUiLabel('legs'),c:'var(--re)'}
+    ];
     el.innerHTML=dias.map((d,i)=>`<div class="hist-item" style="opacity:0.18;">
       <div class="hist-row hist-row-top">
         <span class="hi-date">${d}</span>
@@ -1937,7 +1948,7 @@ function renderHome(){
 
   el.innerHTML=DB.history.slice(0,6).map((h,idx)=>{
     const typeKey=h.dayId?h.dayId.split('-')[0]:'';
-    const type=typeKey.toUpperCase();
+    const type=tipoUiLabel(typeKey);
     const inMevWeek=mevDateInWindow(h.date,MEV_WINDOW_DAYS);
     const workedGroups=groupsFromHistoryEntry(h);
     const fallbackGroups=(TIPO_GROUPS[typeKey]||'')
@@ -3045,13 +3056,13 @@ function renderObjetivos(){
 function startObjetivo(nombre){
   const ejs=RUTINAS_OBJETIVO[curType]?.[nombre];
   if(!ejs)return;
-  startWorkout(`${curType.toUpperCase()} · ${nombre}`,ejs,curType,{},{},{});
+  startWorkout(`${tipoUiLabel(curType)} · ${nombre}`,ejs,curType,{},{},{});
 }
 
 function pick(type){
   haptic('tap');
   curType=type;
-  $('s1-type').textContent=type.toUpperCase();
+  $('s1-type').textContent=tipoUiLabel(type);
   $('s1-type').className='s1-type '+type;
   const last=DB.history.find(h=>h.dayId&&h.dayId.startsWith(type));
   const optLast=$('opt-last');
@@ -3079,7 +3090,7 @@ function goLast(){
   // Recuperar mult: desde ejTipos inferimos el default
   const multsAnt={};
   ejs.forEach(n=>{multsAnt[n]=defaultMult(tiposAnt[n]||'maq');});
-  startWorkout(last.dayName||curType.toUpperCase(),ejs,last.dayId||curType,tiposAnt,multsAnt,agarresAnt);
+  startWorkout(last.dayName||tipoUiLabel(curType),ejs,last.dayId||curType,tiposAnt,multsAnt,agarresAnt);
 }
 
 function loadRutinaDB(key){
@@ -3102,7 +3113,7 @@ function loadRutina(evt){
       const p=JSON.parse(e.target.result);
       const typeData=p[curType];
       if(!typeData)throw new Error('Sin datos para '+curType);
-      let ejs=[],name=curType.toUpperCase();
+      let ejs=[],name=tipoUiLabel(curType);
       if(typeData.a&&typeData.b){ejs=typeData.a.ejs||[];name=typeData.a.name;}
       else if(typeData.ejs){ejs=typeData.ejs;name=typeData.name||name;}
       else if(typeData.a){ejs=typeData.a.ejs||[];name=typeData.a.name;}
@@ -3114,7 +3125,7 @@ function loadRutina(evt){
   r.readAsText(f);evt.target.value='';
 }
 
-function goBlank(){startWorkout(curType.toUpperCase(),[],curType,{},{},{});}
+function goBlank(){startWorkout(tipoUiLabel(curType),[],curType,{},{},{});}
 
 /* â•â• WORKOUT â•â• */
 function startWorkout(name,ejs,dayId,tiposIniciales,multsIniciales,agarresIniciales){
