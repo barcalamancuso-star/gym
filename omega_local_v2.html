@@ -2604,13 +2604,14 @@ function mevSeriesTimestamp(sessionMeta,s){
   }
   return Date.now();
 }
-function mevAccumulateExercises(exercises,sessionMeta,acc,latest){
+function mevAccumulateExercises(exercises,sessionMeta,acc,latest,minTs=0){
   Object.entries(exercises||{}).forEach(([ej,series])=>{
     const loads=muscleLoadsForExercise(ej);
     if(!loads.length)return;
     (Array.isArray(series)?series:[]).forEach(s=>{
       if(!mevIsEffectiveSet(s))return;
       const ts=mevSeriesTimestamp(sessionMeta,s);
+      if(minTs&&ts<minTs)return;
       loads.forEach(({m,w})=>{
         acc[m]=(acc[m]||0)+w;
         // La recuperación se actualiza sólo cuando el músculo es actor primario.
@@ -2626,9 +2627,10 @@ function musclesInCurrentWorkout(){
 }
 function computeMevSnapshot(includeCurrent=true){
   const acc={},latest={};
+  const minTs=Date.now()-(MEV_WINDOW_DAYS*86400000);
   (DB.history||[]).forEach(h=>{
-    if(!h||!mevDateInWindow(h.date,MEV_WINDOW_DAYS))return;
-    mevAccumulateExercises(h.exercises||{},h,acc,latest);
+    if(!h)return;
+    mevAccumulateExercises(h.exercises||{},h,acc,latest,minTs);
   });
   if(includeCurrent&&curDay&&(ejList||[]).length){
     const currentEx={};
@@ -2636,7 +2638,7 @@ function computeMevSnapshot(includeCurrent=true){
       const rows=(sesion[ej]||[]).filter(s=>!s.deleted);
       if(rows.length)currentEx[ej]=rows;
     });
-    mevAccumulateExercises(currentEx,{date:today(),startTime:startTime||new Date().toISOString()},acc,latest);
+    mevAccumulateExercises(currentEx,{date:today(),startTime:startTime||new Date().toISOString()},acc,latest,minTs);
   }
   return {counts:acc,latestTs:latest};
 }
