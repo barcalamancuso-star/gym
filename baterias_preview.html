@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Omega - Preview Baterías</title>
+  <style>
+    :root{
+      --bg:#0b0b0b;
+      --card:#111;
+      --br:#2a2a2a;
+      --tx:#d8d6d1;
+      --mut:#8b8881;
+      --ok:#7aa86a;
+      --soft:#a7a49b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--tx);
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      padding:16px;
+    }
+    h1{
+      font-size:14px;
+      margin:0 0 14px;
+      letter-spacing:1px;
+      color:var(--tx);
+      font-weight:600;
+    }
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns:1fr;
+      max-width:520px;
+    }
+    .card{
+      border:1px solid var(--br);
+      background:linear-gradient(180deg,#111,#0f0f0f);
+      border-radius:12px;
+      padding:12px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:11px;
+      letter-spacing:1px;
+      color:var(--mut);
+      font-weight:600;
+      text-transform:uppercase;
+    }
+    .row{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin:8px 0;
+      font-size:13px;
+      line-height:1;
+    }
+    .mus{color:var(--tx)}
+    .sets{color:var(--soft)}
+    .sp{opacity:.4}
+
+    /* Opcion 1: limpia */
+    .bat1{
+      margin-left:auto;
+      position:relative;
+      width:12px;height:22px;
+      border:1px solid #3a3a3a;border-radius:2px;
+      background:#151515;
+      overflow:hidden;
+    }
+    .bat1::after{
+      content:"";
+      position:absolute;top:-3px;left:4px;
+      width:4px;height:2px;border-radius:1px;background:#3a3a3a;
+    }
+    .fill1{
+      position:absolute;left:1px;right:1px;bottom:1px;
+      height:0%;
+      background:#7f7f7f;
+      border-radius:1px;
+    }
+    .fill1.ok{background:var(--ok);}
+    .in1{
+      margin-left:4px;
+      font-size:10px;
+      color:var(--mut);
+      min-width:22px;
+      text-align:right;
+    }
+
+    /* Opcion 2: segmentos */
+    .bat2{
+      margin-left:auto;
+      position:relative;
+      width:13px;height:24px;
+      border:1px solid #3a3a3a;border-radius:2px;
+      background:#141414;
+      padding:2px;
+      display:flex;flex-direction:column;justify-content:flex-end;gap:2px;
+    }
+    .bat2::after{
+      content:"";
+      position:absolute;top:-3px;left:4px;
+      width:4px;height:2px;border-radius:1px;background:#3a3a3a;
+    }
+    .seg{height:3px;border-radius:1px;background:#2d2d2d}
+    .seg.on{background:#7a7a7a}
+    .seg.ok{background:var(--ok)}
+
+    /* Opcion 3: punto estado */
+    .bat3{
+      margin-left:auto;
+      position:relative;
+      width:12px;height:22px;
+      border:1px solid #3a3a3a;border-radius:2px;
+      background:#151515;
+      overflow:hidden;
+    }
+    .bat3::after{
+      content:"";
+      position:absolute;top:-3px;left:4px;
+      width:4px;height:2px;border-radius:1px;background:#3a3a3a;
+    }
+    .fill3{
+      position:absolute;left:1px;right:1px;bottom:1px;
+      height:0%;
+      background:#777;border-radius:1px;
+    }
+    .dot{
+      width:6px;height:6px;border-radius:50%;
+      margin-left:4px;background:#595959;opacity:.9;
+    }
+    .dot.ok{background:var(--ok);}
+    .hint{
+      margin-top:10px;
+      font-size:10px;
+      color:var(--mut);
+      letter-spacing:.4px;
+      line-height:1.35;
+    }
+  </style>
+</head>
+<body>
+  <h1>OMEGA · PREVIEW BATERÍAS (3 OPCIONES)</h1>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Opción 1 · Batería limpia (recomendada)</h2>
+      <div class="row">
+        <span class="mus">Biceps</span><span class="sets">8/12</span>
+        <span class="bat1"><span class="fill1" style="height:62%"></span></span>
+        <span class="in1">9h</span>
+      </div>
+      <div class="row">
+        <span class="mus">Pecho</span><span class="sets">12/12</span>
+        <span class="bat1"><span class="fill1 ok" style="height:100%"></span></span>
+        <span class="in1" style="color:var(--ok)">ok</span>
+      </div>
+      <div class="hint">Minimal, legible y consistente con la estética actual.</div>
+    </section>
+
+    <section class="card">
+      <h2>Opción 2 · Batería por segmentos</h2>
+      <div class="row">
+        <span class="mus">Espalda</span><span class="sets">6/12</span>
+        <span class="bat2">
+          <span class="seg on"></span>
+          <span class="seg on"></span>
+          <span class="seg"></span>
+          <span class="seg"></span>
+        </span>
+        <span class="in1">14h</span>
+      </div>
+      <div class="row">
+        <span class="mus">Hombros</span><span class="sets">11/12</span>
+        <span class="bat2">
+          <span class="seg ok"></span>
+          <span class="seg ok"></span>
+          <span class="seg ok"></span>
+          <span class="seg ok"></span>
+        </span>
+        <span class="in1" style="color:var(--ok)">ok</span>
+      </div>
+      <div class="hint">Más “estado de batería”, visualmente más marcado.</div>
+    </section>
+
+    <section class="card">
+      <h2>Opción 3 · Batería + punto de estado</h2>
+      <div class="row">
+        <span class="mus">Triceps</span><span class="sets">7/12</span>
+        <span class="bat3"><span class="fill3" style="height:48%"></span></span>
+        <span class="dot"></span>
+        <span class="in1">11h</span>
+      </div>
+      <div class="row">
+        <span class="mus">Core</span><span class="sets">10/12</span>
+        <span class="bat3"><span class="fill3" style="height:100%;background:var(--ok)"></span></span>
+        <span class="dot ok"></span>
+        <span class="in1" style="color:var(--ok)">ok</span>
+      </div>
+      <div class="hint">Ultra simple: batería neutra + estado rápido por color.</div>
+    </section>
+  </div>
+</body>
+</html>
