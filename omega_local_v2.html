@@ -220,22 +220,27 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
 }
 .home-rec-table{
-  max-height:118px;
+  max-height:108px;
   overflow-y:auto;
   -webkit-overflow-scrolling:touch;
   padding-right:1px;
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:4px 8px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  align-content:flex-start;
+  gap:3px 7px;
 }
 .home-rec-head{display:none;}
 .home-rec-row{
-  display:flex;
+  display:inline-flex;
   align-items:center;
-  gap:4px;
-  padding:1px 0;
+  gap:3px;
+  padding:1px 6px 1px 0;
+  border-right:1px solid var(--br2);
   min-width:0;
+  white-space:nowrap;
 }
+.home-rec-row:last-child{border-right:none;}
 .home-rec-muscle{
   color:var(--tx);
   font-family:var(--mono);
@@ -249,6 +254,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   color:var(--mu2);
   font-variant-numeric:tabular-nums;
   white-space:nowrap;
+  margin-left:1px;
 }
 .home-rec-battery{
   position:relative;
@@ -264,7 +270,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   justify-content:center;
   gap:1px;
   padding:1px;
-  margin-left:auto;
+  margin-left:1px;
 }
 .home-rec-battery::after{
   content:'';
@@ -1888,10 +1894,10 @@ function renderHomeRecovery(){
     }).join('');
     return `<div class="home-rec-row">
       <span class="home-rec-muscle">${m}</span>
-      <span class="home-rec-series">${fmtSetCount(c)}/${maxRef}</span>
       <span class="home-rec-battery" aria-label="${m} recuperacion ${Math.round(recFill)} por ciento">
         ${segs}
       </span>
+      <span class="home-rec-series">${fmtSetCount(c)}/${maxRef}</span>
     </div>`;
   }).join('');
   el.className='home-rec-table';
