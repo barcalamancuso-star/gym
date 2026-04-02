@@ -2740,7 +2740,8 @@ function calcMevChipStatus(m,count){
   const c=Number(count)||0;
   const missing=Math.max(0,target.min-c);
   const ok=c>=target.min;
-  const progress=target.min>0?Math.max(0,Math.min(1,c/target.min)):0;
+  const baseMax=Math.max(1,Number(target.max)||Number(target.min)||1);
+  const progress=Math.max(0,Math.min(1,c/baseMax));
   return {
     target,
     count:c,
@@ -2775,7 +2776,7 @@ function renderTopMevStrip(){
         <span class="tm-chip-state" style="color:${st.color}">${st.statusText}</span>
       </div>
       <div class="tm-bar"><span class="tm-fill" style="width:${(prev.progress*100).toFixed(1)}%;--tone:${st.color}" data-target-width="${(st.progress*100).toFixed(1)}%" data-target-color="${st.color}"></span></div>
-      <div class="tm-chip-val">${fmtSetCount(st.count)}/${st.target.min}</div>
+      <div class="tm-chip-val">${fmtSetCount(st.count)}/${st.target.max}</div>
     </div>`;
   }).join('');
   requestAnimationFrame(()=>{
