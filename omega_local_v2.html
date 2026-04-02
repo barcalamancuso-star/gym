@@ -1330,9 +1330,10 @@ const ALL_EJS=[
   "Tríceps Polea Barra","Tríceps en banco plano","Extensión Unilateral Tríceps","Press Francés","Rompecráneos","Press Cerrado",
   "Jalón al Pecho","Jalón al Pecho (Neutro)","Jalón al Pecho (Prono)","Jalón Prono Abierto","Jalón Unilateral",
   "Jalón con Brazos Rectos","Remo Bajo","Remo Bajo (Polea)","Remo con Barra","Remo en T","Remo Pendlay","Serrucho",
-  "Pullover en Polea","Dominadas","Dominadas Asistidas","Bíceps Barra W","Curl Barra Recta","Curl Martillo","Curl Scott",
+  "Pullover en Polea","Dominadas","Dominadas Asistidas","Dominadas Supinas","Dominadas Neutras","Bíceps Barra W","Curl Barra Recta","Curl Martillo","Curl Scott",
   "Curl Inclinado Mancuernas","Curl Concentrado","Curl Predicador","Curl Inverso","Bíceps Polea","Vuelos Laterales",
   "Vuelos Frontales","Hombro Posterior","Deltoide Posterior","Face Pull","Elevaciones Laterales Unilaterales","Shrugs","Encogimientos con Barra",
+  "Fondos en Silla",
   "Sentadilla","Sentadilla Frontal","Sentadilla Hack","Prensa de Piernas","Prensa 45","Prensa Pie Alto","Zancadas","Zancada Búlgara",
   "Extensión Cuádriceps","Leg Extension","Sillón Cuádriceps","Seated Leg Curl","Camilla Isquios","Isquios Máquina",
   "Peso Muerto Rumano","Peso Muerto Convencional","Hip Thrust","Patada de Glúteo","Abductores","Abductores (Forza)","Aductores",
@@ -1388,9 +1389,10 @@ const EJ_GRUPOS={
   "Jalón al Pecho":"Espalda","Jalón al Pecho (Neutro)":"Espalda","Jalón al Pecho (Prono)":"Espalda","Jalón Prono Abierto":"Espalda",
   "Jalón Unilateral":"Espalda","Jalón con Brazos Rectos":"Espalda","Remo Bajo":"Espalda","Remo Bajo (Polea)":"Espalda",
   "Remo con Barra":"Espalda","Remo en T":"Espalda","Remo Pendlay":"Espalda","Serrucho":"Espalda","Pullover en Polea":"Espalda",
-  "Dominadas":"Espalda","Dominadas Asistidas":"Espalda","Espinales":"Espinales","Hyperextensiones":"Espinales",
+  "Dominadas":"Espalda","Dominadas Asistidas":"Espalda","Dominadas Supinas":"Espalda","Dominadas Neutras":"Espalda","Espinales":"Espinales","Hyperextensiones":"Espinales",
   "Bíceps Barra W":"Bíceps","Curl Barra Recta":"Bíceps","Curl Martillo":"Bíceps","Curl Scott":"Bíceps","Curl Inclinado Mancuernas":"Bíceps",
   "Curl Concentrado":"Bíceps","Curl Predicador":"Bíceps","Curl Inverso":"Bíceps","Bíceps Polea":"Bíceps",
+  "Fondos en Silla":"Tríceps",
   "Sentadilla":"Cuádriceps","Sentadilla Frontal":"Cuádriceps","Sentadilla Hack":"Cuádriceps","Prensa de Piernas":"Cuádriceps",
   "Prensa 45":"Cuádriceps","Prensa Pie Alto":"Glúteo","Zancadas":"Cuádriceps","Zancada Búlgara":"Cuádriceps",
   "Extensión Cuádriceps":"Cuádriceps","Leg Extension":"Cuádriceps","Sillón Cuádriceps":"Cuádriceps",
@@ -1403,6 +1405,18 @@ const EJ_GRUPOS={
 };
 
 const EJ_NAME_ALIAS={
+  'dominada':'Dominadas',
+  'dominadas supinas':'Dominadas Supinas',
+  'chin up':'Dominadas Supinas',
+  'chin-up':'Dominadas Supinas',
+  'dominadas neutras':'Dominadas Neutras',
+  'dominada neutra':'Dominadas Neutras',
+  'fondos en silla':'Fondos en Silla',
+  'fondos silla':'Fondos en Silla',
+  'fondos en banco':'Fondos en Silla',
+  'bench dips':'Fondos en Silla',
+  'triceps en silla':'Fondos en Silla',
+  'triceps silla':'Fondos en Silla',
   'triceps en banco plano':'Tríceps en banco plano',
   'triceps barra polea':'Tríceps Polea Barra',
   'triceps polea barra':'Tríceps Polea Barra',
@@ -2533,8 +2547,14 @@ function muscleLoadsForExercise(name){
     loads=[{m:'Espinales',w:1},{m:'Isquios',w:0.25},{m:'Glúteo',w:0.2}];
   }else if(has('peso muerto rumano','camilla isquios','seated leg curl','isquios')){
     loads=[{m:'Isquios',w:1},{m:'Glúteo',w:0.5}];
+  }else if(has('fondos en silla','fondos silla','fondos en banco','bench dip','triceps en silla','triceps silla')){
+    loads=[{m:'Tríceps',w:1},{m:'Hombros',w:0.2},{m:'Pecho',w:0.15}];
   }else if(has('hip thrust','patada de gluteo','abductores','abductor')){
     loads=[{m:'Glúteo',w:1},{m:'Isquios',w:0.35}];
+  }else if(has('dominadas supinas','chin up','chin-up')){
+    loads=[{m:'Espalda',w:0.8},{m:'Bíceps',w:0.8}];
+  }else if(has('dominadas neutras','dominada neutra')){
+    loads=[{m:'Espalda',w:1},{m:'Bíceps',w:0.6}];
   }else if(has('sentadilla','prensa','zancada','cuadriceps','leg extension','sillon cuadriceps')){
     loads=[{m:'Cuádriceps',w:1},{m:'Glúteo',w:0.55},{m:'Isquios',w:0.3}];
   }else if(has('jalon','remo','dominad','pullover')){
