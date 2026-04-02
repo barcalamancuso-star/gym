@@ -1328,6 +1328,7 @@ const ALL_EJS=[
   "Press Militar","Press Arnold","Press Hombro Máquina","Cruces Polea Alta","Cruce de Poleas",
   "Aperturas Máquina","Aperturas Mancuernas","Pec Deck","Fondos","Extensión Soga","Tríceps Trasnuca",
   "Tríceps Polea Barra","Tríceps en banco plano","Extensión Unilateral Tríceps","Press Francés","Rompecráneos","Press Cerrado",
+  "Flexiones","Flexiones Diamante","Flexiones Inclinadas","Flexiones Declinadas","Flexiones Arqueras","Fondos en Paralelas",
   "Jalón al Pecho","Jalón al Pecho (Neutro)","Jalón al Pecho (Prono)","Jalón Prono Abierto","Jalón Unilateral",
   "Jalón con Brazos Rectos","Remo Bajo","Remo Bajo (Polea)","Remo con Barra","Remo en T","Remo Pendlay","Serrucho",
   "Pullover en Polea","Dominadas","Dominadas Asistidas","Dominadas Supinas","Dominadas Neutras","Bíceps Barra W","Curl Barra Recta","Curl Martillo","Curl Scott",
@@ -1381,6 +1382,8 @@ const RECOVERY_ORDER_LOWER=['Cuádriceps','Glúteo','Isquios','Aductores','Gemel
 const EJ_GRUPOS={
   "Press de Banca":"Pecho","Press Inclinado":"Pecho","Press Declinado":"Pecho","Press Plano Mancuernas":"Pecho","Press Inclinado Mancuernas":"Pecho",
   "Cruces Polea Alta":"Pecho","Cruce de Poleas":"Pecho","Aperturas Máquina":"Pecho","Aperturas Mancuernas":"Pecho","Pec Deck":"Pecho","Fondos":"Pecho",
+  "Flexiones":"Pecho","Flexiones Inclinadas":"Pecho","Flexiones Declinadas":"Pecho","Flexiones Arqueras":"Pecho","Fondos en Paralelas":"Pecho",
+  "Flexiones Diamante":"Tríceps",
   "Press Militar":"Hombros","Press Arnold":"Hombros","Press Hombro Máquina":"Hombros","Vuelos Laterales":"Hombros","Vuelos Frontales":"Hombros",
   "Hombro Posterior":"Hombros","Deltoide Posterior":"Hombros","Face Pull":"Hombros","Elevaciones Laterales Unilaterales":"Hombros",
   "Shrugs":"Trapecios","Encogimientos con Barra":"Trapecios",
@@ -1405,6 +1408,19 @@ const EJ_GRUPOS={
 };
 
 const EJ_NAME_ALIAS={
+  'flexiones de brazos':'Flexiones',
+  'flexiones':'Flexiones',
+  'lagartijas':'Flexiones',
+  'push up':'Flexiones',
+  'push-up':'Flexiones',
+  'flexiones diamante':'Flexiones Diamante',
+  'diamond push up':'Flexiones Diamante',
+  'diamond push-up':'Flexiones Diamante',
+  'flexiones inclinadas':'Flexiones Inclinadas',
+  'flexiones declinadas':'Flexiones Declinadas',
+  'flexiones arqueras':'Flexiones Arqueras',
+  'fondos paralelas':'Fondos en Paralelas',
+  'fondos en paralelas':'Fondos en Paralelas',
   'dominada':'Dominadas',
   'dominadas supinas':'Dominadas Supinas',
   'chin up':'Dominadas Supinas',
@@ -2557,6 +2573,10 @@ function muscleLoadsForExercise(name){
     loads=[{m:'Espalda',w:0.8},{m:'Bíceps',w:0.8}];
   }else if(has('dominadas neutras','dominada neutra')){
     loads=[{m:'Espalda',w:1},{m:'Bíceps',w:0.6}];
+  }else if(has('flexiones diamante','diamond push up','diamond push-up')){
+    loads=[{m:'Tríceps',w:1},{m:'Pecho',w:0.45},{m:'Hombros',w:0.2}];
+  }else if(has('flexiones','flexiones de brazos','lagartijas','push up','push-up')){
+    loads=[{m:'Pecho',w:1},{m:'Tríceps',w:0.45},{m:'Hombros',w:0.25}];
   }else if(has('sentadilla','prensa','zancada','cuadriceps','leg extension','sillon cuadriceps')){
     loads=[{m:'Cuádriceps',w:1},{m:'Glúteo',w:0.55},{m:'Isquios',w:0.3}];
   }else if(has('jalon','remo','dominad','pullover')){
