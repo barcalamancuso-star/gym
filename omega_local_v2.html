@@ -736,6 +736,35 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   box-shadow:0 10px 26px rgba(0,0,0,.34), inset 0 0 0 1px rgba(237,210,163,.12);
 }
 #focus-btn{width:136px !important;height:56px !important;}
+#focus-ej{
+  font-family:var(--serif);
+  font-size:18px;
+  color:var(--tx);
+  letter-spacing:.4px;
+  text-align:center;
+  max-width:min(86vw,540px);
+  white-space:normal;
+  text-wrap:balance;
+  line-height:1.2;
+  opacity:.92;
+}
+#focus-cancel{
+  background:transparent;
+  border:1px solid var(--br2);
+  color:var(--mu2);
+  border-radius:12px;
+  min-height:44px;
+  min-width:110px;
+  padding:0 14px;
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+#focus-cancel:active{border-color:var(--re);color:var(--re);}
 .reg-cta .ab3{width:132px;height:52px;}
 .action-pill{background:transparent;border:1px solid var(--br2);color:var(--mu2);
   font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;
@@ -1083,7 +1112,11 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 <!-- FOCUS MODE -->
 <div id="focus-overlay" style="display:none;position:absolute;inset:0;background:var(--bg);z-index:100;flex-direction:column;align-items:center;justify-content:center;gap:20px;">
   <div id="focus-tnum" style="font-family:var(--mono);font-size:88px;font-weight:300;letter-spacing:-4px;transition:color .3s;"></div>
-  <button onclick="hAct()" id="focus-btn" class="ab3 stop" style="width:110px;height:110px;"><span style="font-size:20px;font-weight:300;">✓</span><span>listo</span></button>
+  <div id="focus-ej"></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button id="focus-cancel" onclick="cancelPrepCountdown()">cancelar</button>
+    <button onclick="hAct()" id="focus-btn" class="ab3 stop" style="width:110px;height:110px;"><span style="font-size:20px;font-weight:300;">✓</span><span>listo</span></button>
+  </div>
 </div>
   <div class="workout-body">
     <div class="muscle-hud-bg">
@@ -3251,6 +3284,7 @@ function startWorkout(name,ejs,dayId,tiposIniciales,multsIniciales,agarresInicia
   buildEjCol();
   if(ejList.length>0){loadEj(0);refreshEjRestDisplay();}
   else{
+    updateFocusExerciseName('');
     $('ej-n').textContent='Agregá ejercicios con +';
     $('ej-prev').innerHTML='';
     $('ej-log').innerHTML='';
@@ -3297,6 +3331,11 @@ function buildEjCol(){
 function flashBlock(){
   const btn=document.querySelector('.ab3.save,.ab3.stop');
   if(btn){btn.style.outline='2px solid var(--re)';setTimeout(()=>btn.style.outline='',500);}
+}
+function updateFocusExerciseName(name){
+  const el=$('focus-ej');
+  if(!el)return;
+  el.textContent=name||'';
 }
 function swEj(i){
   // Bloqueo durante work O saving — solo se puede interactuar con el ejercicio activo
@@ -3357,6 +3396,7 @@ function removeEjAt(i,ev){
 function loadEj(i){
   curEjIdx=i;
   const name=ejList[i];
+  updateFocusExerciseName(name);
   const tipo=ejTipos[name]||'maq';
   const grip=activeGripForExercise(name);
   const mult=ejMultipliers[name]||1;
@@ -3518,6 +3558,36 @@ function stopPrepCountdown(){
   if(prepIv){clearInterval(prepIv);prepIv=null;}
   prepLeft=0;
 }
+function cancelPrepCountdown(){
+  if(state!=='prep')return;
+  stopPrepCountdown();
+  const clock=$('clock');
+  const fo=$('focus-overlay');
+  const ft=$('focus-tnum');
+  const fc=$('focus-cancel');
+  const fb=$('focus-btn');
+  if(fc)fc.style.display='none';
+  if(fb)fb.style.display='none';
+
+  if(prepFromState==='rest'){
+    state='rest';
+    msec=Math.max(0,Number(prepBaseRestMs)||0);
+    if(clock)clock.className='tbar rest';
+    if(ft){ft.style.color='var(--re)';ft.innerHTML=fmtT(msec);}
+    _phaseLastTs=Date.now();
+    clearInterval(iv);iv=setInterval(tick,10);
+  }else{
+    state='idle';
+    msec=0;
+    if(clock)clock.className='tbar';
+    if(ft){ft.style.color='var(--tx)';ft.innerHTML=fmtT(0);}
+    clearInterval(iv);iv=null;
+  }
+  if(fo)fo.style.display='none';
+  renderAr();
+  haptic('tap');
+  saveSessionDraft(false);
+}
 
 function startPrepCountdown(name){
   if(prepIv)return;
@@ -3533,8 +3603,11 @@ function startPrepCountdown(name){
   const fo=$('focus-overlay');
   const ft=$('focus-tnum');
   const fb=$('focus-btn');
+  const fc=$('focus-cancel');
   if(fo)fo.style.display='flex';
+  updateFocusExerciseName(name);
   if(ft){ft.style.color='var(--tx)';ft.innerHTML=String(prepLeft);}
+  if(fc)fc.style.display='inline-flex';
   if(fb)fb.style.display='none';
   renderAr();
   saveSessionDraft(false);
@@ -3568,6 +3641,7 @@ function startPrepCountdown(name){
     clearEjRest(name);
     if(fo){
       fo.style.display='flex';
+      if(fc)fc.style.display='none';
       if(fb)fb.style.display='flex';
       if(ft){ft.style.color='var(--go)';ft.innerHTML=fmtT(0);}
     }
@@ -3708,11 +3782,13 @@ function renderAr(){
   const name=ejList[curEjIdx];
   const n=name?(sesion[name]||[]).length+1:1;
   const el=$('ar');
+  const canUndo=!!name&&(sesion[name]||[]).some(s=>s&&!s.deleted);
+  const undoBtn=canUndo?`<button class="action-pill" onclick="undoLastSerieCurrent()">deshacer</button>`:'';
   if(state==='prep'){
     el.innerHTML=`<div class="ar-row"><button class="ab3 go" style="opacity:.5;pointer-events:none;"><span class="go-txt">${prepLeft>0?prepLeft:'...'}</span></button></div>`;
   }
   else if(state==='idle'||state==='rest'){
-    el.innerHTML=`<div class="ar-row"><button class="ab3 go" onclick="hAct()"><span class="go-txt">inicio</span></button></div>`;
+    el.innerHTML=`<div class="ar-row"><button class="ab3 go" onclick="hAct()"><span class="go-txt">inicio</span></button>${undoBtn}</div>`;
   }
   else if(state==='work')
     el.innerHTML=`<button class="ab3 stop" onclick="hAct()"><span style="font-size:20px;font-weight:300;">✓</span><span>listo</span></button>`;
@@ -3723,6 +3799,37 @@ function renderAr(){
   refreshFinishDayTopBtn();
   el.style.display='';
   syncS2StateUi();
+}
+function undoLastSerieCurrent(){
+  const name=ejList[curEjIdx];
+  if(!name)return;
+  if(state==='work'||state==='saving'||state==='prep'){
+    flashBlock();
+    return;
+  }
+  const rows=sesion[name]||[];
+  let idx=-1;
+  for(let i=rows.length-1;i>=0;i--){
+    if(rows[i]&&!rows[i].deleted){idx=i;break;}
+  }
+  if(idx<0){
+    alert('No hay series para deshacer en este ejercicio.');
+    return;
+  }
+  const s=rows[idx]||{};
+  const kv=(Number(s.kg)||0)>0?`${s.kg}×${s.reps||'—'}`:`${s.reps||'—'} reps`;
+  if(!confirm(`¿Deshacer última serie de "${name}" (${kv})?`))return;
+  rows[idx].deleted=true;
+  if(!rows.some(r=>r&&!r.deleted))ejFinalizados[name]=false;
+  renderLog();
+  buildEjCol();
+  refreshEjRestDisplay();
+  renderAr();
+  updateLiveVol();
+  renderTopMevStrip();
+  renderExerciseMuscleHud();
+  haptic('tap');
+  saveSessionDraft(false);
 }
 
 function totalSeriesDone(){
