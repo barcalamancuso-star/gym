@@ -45,6 +45,12 @@ input,select{-webkit-appearance:none;appearance:none;border-radius:0;
 @keyframes breathe{0%,100%{opacity:1}50%{opacity:0.65}}
 @keyframes splashIn{0%{opacity:0;filter:blur(9px) contrast(145%)}70%{opacity:1;filter:blur(1px) contrast(115%)}100%{opacity:1;filter:blur(0) contrast(100%)}}
 @keyframes splashGlow{0%,100%{text-shadow:none;opacity:1;filter:contrast(100%);}7%,8.2%{text-shadow:-2px 0 rgba(110,255,170,.68),2px 0 rgba(120,190,255,.52);opacity:.95;filter:contrast(112%);}8.3%,11.5%{text-shadow:none;opacity:1;filter:contrast(100%);}41%,42.2%{text-shadow:2px 0 rgba(110,255,170,.58),-2px 0 rgba(255,130,190,.48);opacity:.94;filter:contrast(110%);}42.3%,69%{text-shadow:none;opacity:1;filter:contrast(100%);}69.2%,70.1%{text-shadow:-2px 0 rgba(120,190,255,.45),2px 0 rgba(255,130,190,.38);opacity:.96;}70.2%,100%{text-shadow:none;opacity:1;filter:contrast(100%);}}
+@keyframes matrixNameDive{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.92);filter:blur(0);}
+  12%{opacity:1;transform:translate(-50%,-50%) scale(1);}
+  72%{opacity:.94;transform:translate(-50%,-50%) scale(6.4);filter:blur(.35px);}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(12.2);filter:blur(2.8px);}
+}
 @keyframes nameLogoGlitch{0%,100%{text-shadow:none;filter:contrast(100%);}20%{text-shadow:-2px 0 rgba(110,255,170,.62),2px 0 rgba(120,190,255,.52);filter:contrast(112%);}45%{text-shadow:2px 0 rgba(110,255,170,.58),-2px 0 rgba(255,130,190,.46);filter:contrast(115%);}70%{text-shadow:-1px 0 rgba(120,190,255,.45),1px 0 rgba(255,130,190,.36);filter:contrast(108%);}}
 @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeOnly{from{opacity:0}to{opacity:1}}
@@ -117,6 +123,13 @@ input,select{-webkit-appearance:none;appearance:none;border-radius:0;
   position:absolute;inset:0;pointer-events:none;display:none;opacity:.92;z-index:0;
 }
 #splash.matrix-on #splash-matrix{display:block;}
+#splash.matrix-entering #splash-sym,
+#splash.matrix-entering #splash-name,
+#splash.matrix-entering #splash-status,
+#splash.matrix-entering #splash-welcome{
+  opacity:0 !important;
+  transition:opacity .45s ease;
+}
 #splash-sym,#splash-name,#splash-status,#splash-welcome{z-index:1;}
 #splash-sym{top:42% !important;font-size:clamp(86px,24vw,142px) !important;transform:translate(-50%,-58%) !important;overflow:visible;}
 #splash-name{top:calc(42% + 78px) !important;font-size:clamp(15px,4.2vw,22px) !important;letter-spacing:clamp(4px,1.8vw,10px) !important;padding:0 14px;}
@@ -138,6 +151,26 @@ input,select{-webkit-appearance:none;appearance:none;border-radius:0;
   text-transform:uppercase;
 }
 .splash-choice-btn:active{border-color:var(--tx);}
+.splash-enter-zoom{
+  position:fixed;
+  z-index:3;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) scale(1);
+  font-family:'Noto Serif JP',serif;
+  font-size:clamp(20px,5.8vw,44px);
+  font-weight:700;
+  letter-spacing:clamp(5px,1.9vw,14px);
+  color:var(--tx);
+  text-transform:uppercase;
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  text-shadow:0 0 20px rgba(187,224,203,.24),0 0 8px rgba(130,190,255,.18);
+}
+.splash-enter-zoom.run{
+  animation:matrixNameDive 1.48s cubic-bezier(.12,.78,.18,1) forwards;
+}
 #splash-omit{
   position:fixed;left:50%;transform:translateX(-50%);
   bottom:max(6px,calc(env(safe-area-inset-bottom) + 4px));
@@ -1612,6 +1645,7 @@ const SESSION_DRAFT_KEY='gym_codex_session_draft_v1';
 const APP_SESSION_KEY='gym_codex_app_session_v1';
 let _lastDbLoadOk=false;
 let _splashAutoGoTimer=null;
+let _dismissSplashBusy=false;
 let _draftAutoIv=null;
 let _storageQuotaWarned=false;
 let _deferredInstallPrompt=null;
@@ -2388,7 +2422,7 @@ function onSplashEnter(){
   haptic('tap');
   showSplashChoices();
 }
-function onSplashOmit(){ dismissSplash(false); }
+function onSplashOmit(){ dismissSplash(false,{matrixFx:false}); }
 function splashPickLoad(){
   haptic('tap');
   const stTxt=$('splash-status-txt');
@@ -4767,23 +4801,59 @@ function startSplashMatrix(){
 }
 
 /* â•â• SPLASH â•â• */
-function dismissSplash(skipNamePrompt=false){
+function runSplashEnterMatrixFx(done){
+  const sp=$('splash');
+  if(!sp){if(done)done();return;}
+  if(_dismissSplashBusy)return;
+  _dismissSplashBusy=true;
+  try{startSplashMatrix();}catch(_e){}
+  sp.classList.add('matrix-on','matrix-entering');
+
+  const srcName=$('splash-name');
+  const txt=(srcName&&String(srcName.textContent||'').trim())||(toGreek(DB.usuario||'')||'Ω');
+  const fx=document.createElement('div');
+  fx.className='splash-enter-zoom';
+  fx.textContent=txt;
+
+  const r=srcName&&srcName.getBoundingClientRect?srcName.getBoundingClientRect():null;
+  if(r&&r.width>0&&r.height>0){
+    fx.style.left=`${r.left+(r.width*0.5)}px`;
+    fx.style.top=`${r.top+(r.height*0.5)}px`;
+  }
+  sp.appendChild(fx);
+  requestAnimationFrame(()=>fx.classList.add('run'));
+
+  setTimeout(()=>{
+    try{fx.remove();}catch(_e){}
+    _dismissSplashBusy=false;
+    if(done)done();
+  },1520);
+}
+function dismissSplash(skipNamePrompt=false,opts={}){
   const sp=$('splash');
   if(!sp)return;
-  if(_splashAutoGoTimer){clearTimeout(_splashAutoGoTimer);_splashAutoGoTimer=null;}
-  hideSplashGate();
-  disableSplashMatrixForever();
-  stopNameDrift($('splash-name'));
-  stopEntrarSparks();
-  stopLogoPixelFall();
-  sp.remove();
-  markAppSessionStarted();
-  // Si hay borrador de sesión, priorizar continuidad al volver.
-  if(tryRestoreSessionDraft())return;
-  if(!DB.usuario&&!skipNamePrompt){
-    $('nombre-in').value='';
-    $('modal-nombre').classList.add('on');
+  const useMatrixFx=opts&&opts.matrixFx===false?false:true;
+  const finalize=()=>{
+    if(_splashAutoGoTimer){clearTimeout(_splashAutoGoTimer);_splashAutoGoTimer=null;}
+    hideSplashGate();
+    disableSplashMatrixForever();
+    stopNameDrift($('splash-name'));
+    stopEntrarSparks();
+    stopLogoPixelFall();
+    sp.remove();
+    markAppSessionStarted();
+    // Si hay borrador de sesión, priorizar continuidad al volver.
+    if(tryRestoreSessionDraft())return;
+    if(!DB.usuario&&!skipNamePrompt){
+      $('nombre-in').value='';
+      $('modal-nombre').classList.add('on');
+    }
+  };
+  if(useMatrixFx){
+    runSplashEnterMatrixFx(finalize);
+    return;
   }
+  finalize();
 }
 
 function getSplashEnterBtn(){
@@ -4921,7 +4991,7 @@ function animateNameReveal(el, greekName, realName, onDone){
     renderHome();
   }
   if(shouldAutoEnterFromSplash()){
-    setTimeout(()=>dismissSplash(true),240);
+    setTimeout(()=>dismissSplash(true,{matrixFx:false}),240);
     return;
   }
   setTimeout(()=>{
@@ -4982,7 +5052,7 @@ function morphOmitirToEntrar(stepMs=55){
   },speed);
 }
 function splashSymClick(){
-  if(DB.history.length>0||DB.usuario) dismissSplash();
+  if(DB.history.length>0||DB.usuario) dismissSplash(false,{matrixFx:false});
 }
 
 function onSplashLoad(e){
