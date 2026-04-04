@@ -1,0 +1,3 @@
+site=ariadna
+entry=inicio/
+mode=read_only

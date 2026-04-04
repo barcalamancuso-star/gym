@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ariadna</title>
+
+  <style>
+    :root {
+      --bg: #f4efe7;
+      --panel: #fff9f0;
+      --ink: #1f1a16;
+      --muted: #6b6157;
+      --line: #d8cdbd;
+      --accent: #7a5a2b;
+      --mono: "IBM Plex Mono", "Fira Code", monospace;
+      --serif: "Iowan Old Style", "Palatino Linotype", serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #efe6d8 0%, #f7f2ea 100%);
+      color: var(--ink);
+      font-family: var(--serif);
+    }
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 28px 20px 72px;
+    }
+    h1 {
+      margin: 0 0 18px;
+      font-size: clamp(32px, 6vw, 62px);
+      line-height: .95;
+    }
+    .eyebrow {
+      margin-bottom: 12px;
+      color: var(--muted);
+      font: 12px var(--mono);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .actions a, .actions button {
+      display: inline-block;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      color: var(--ink);
+      background: rgba(255, 249, 240, .92);
+      font: 12px var(--mono);
+      cursor: pointer;
+    }
+    .actions a.primary, .actions button.primary {
+      background: var(--accent);
+      color: #fff9f0;
+      border-color: var(--accent);
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 249, 240, .94);
+      padding: 18px;
+      box-shadow: 0 12px 30px rgba(44, 29, 8, .06);
+    }
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font: 14px/1.58 var(--mono);
+      color: #29231d;
+    }
+    .link-box {
+      margin-bottom: 22px;
+      border: 1px dashed #bba17b;
+      border-radius: 14px;
+      padding: 14px;
+      background: rgba(255, 252, 245, .82);
+    }
+    .label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font: 11px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .14em;
+    }
+    code {
+      font: 13px var(--mono);
+      color: #2d241a;
+    }
+  </style>
+
+</head>
+<body>
+  <main>
+    <h1>Ariadna</h1>
+    <div class="link-box">
+      <span class="label">Link para pegar en cualquier modelo</span>
+      <code id="inicio-link">https://barcalamancuso-star.github.io/gym/ariadna/inicio/</code>
+    </div>
+    <div class="actions">
+      <button class="primary" id="copy-link">Copiar link</button>
+      <a href="https://barcalamancuso-star.github.io/gym/ariadna/inicio/">Abrir inicio</a>
+    </div>
+  </main>
+  <script>
+    (() => {
+      const target = 'https://barcalamancuso-star.github.io/gym/ariadna/' + 'inicio/';
+      const box = document.getElementById('inicio-link');
+      if (box) box.textContent = target;
+      const btn = document.getElementById('copy-link');
+      if (!btn) return;
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(target);
+          btn.textContent = 'Link copiado';
+          setTimeout(() => { btn.textContent = 'Copiar link'; }, 1400);
+        } catch (err) {
+          btn.textContent = 'Copialo manual';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
