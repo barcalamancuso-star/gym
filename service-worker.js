@@ -1,7 +1,8 @@
-const CACHE_NAME = "gym-codex-v1.0.1";
+const CACHE_NAME = "gym-codex-v1.0.2";
 const APP_SHELL = [
   "./",
   "./index.html",
+  "./omega_local_v2.html",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
