@@ -3,340 +3,514 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Ω · Laboratorio Muñeco</title>
+  <title>Omega · Muscle Lab</title>
   <style>
     :root{
-      --bg:#090909;
-      --card:#111;
-      --line:#242424;
-      --txt:#d8d6d0;
-      --muted:#8f8b82;
-      --hi:#d8ba6b;
-      --hi2:#95d9ff;
-      --ok:#8aaa52;
+      --bg:#0f1013;
+      --bg-2:#17181d;
+      --panel:#17181c;
+      --panel-2:#202127;
+      --line:rgba(255,255,255,.08);
+      --line-2:rgba(255,255,255,.14);
+      --text:#f1ece3;
+      --muted:#a19b92;
+      --accent:#ddc09b;
+      --prime:#f09a52;
+      --secondary:#87a8bb;
+      --prime-glow:rgba(240,154,82,.34);
+      --secondary-glow:rgba(135,168,187,.26);
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
+
     body{
       margin:0;
-      background:radial-gradient(circle at 20% 0%, #131313 0%, var(--bg) 52%);
-      color:var(--txt);
-      font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color:var(--text);
+      font-family:Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(900px 460px at 18% -10%, rgba(221,192,155,.11), transparent 52%),
+        radial-gradient(720px 440px at 100% 0%, rgba(221,192,155,.08), transparent 42%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
     }
+
     .wrap{
-      width:min(1200px,94vw);
-      margin:18px auto 26px;
-      display:flex;
-      flex-direction:column;
+      width:min(1240px, calc(100vw - 28px));
+      margin:18px auto 28px;
+      display:grid;
+      gap:14px;
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      border-radius:24px;
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      box-shadow:
+        0 20px 48px rgba(0,0,0,.28),
+        inset 0 1px 0 rgba(255,255,255,.05);
+      backdrop-filter:blur(10px);
+    }
+
+    .top{
+      padding:18px 18px 14px;
+      display:grid;
       gap:12px;
     }
-    .top{
+
+    .eyebrow{
+      font-size:11px;
+      letter-spacing:.34em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .title-row{
       display:flex;
       flex-wrap:wrap;
-      align-items:center;
-      gap:10px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.015);
-      border-radius:12px;
-      padding:10px;
+      justify-content:space-between;
+      gap:10px 18px;
+      align-items:end;
     }
-    .tag{
-      letter-spacing:2px;
+
+    h1{
+      margin:0;
+      font-size:clamp(26px, 4vw, 42px);
+      font-weight:500;
+      letter-spacing:.02em;
+    }
+
+    .title-copy{
+      max-width:540px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.55;
+    }
+
+    .controls{
+      display:grid;
+      gap:12px;
+      grid-template-columns:minmax(260px, 360px) 1fr;
+      align-items:start;
+    }
+
+    select{
+      min-height:48px;
+      width:100%;
+      border-radius:16px;
+      border:1px solid var(--line-2);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:0 14px;
+      font-size:15px;
+      outline:none;
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      min-height:48px;
+    }
+
+    .chip{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line-2);
+      background:rgba(255,255,255,.03);
+      font-size:12px;
+      letter-spacing:.02em;
+    }
+
+    .chip.prime{
+      border-color:rgba(240,154,82,.42);
+      color:#ffd8b6;
+      box-shadow:0 0 0 1px rgba(240,154,82,.14) inset;
+    }
+
+    .chip.secondary{
+      border-color:rgba(135,168,187,.38);
+      color:#d4e5f0;
+      box-shadow:0 0 0 1px rgba(135,168,187,.12) inset;
+    }
+
+    .main{
+      padding:14px;
+      display:grid;
+      gap:14px;
+      grid-template-columns:minmax(0, 1fr) 280px;
+      align-items:start;
+    }
+
+    .stage{
+      padding:16px;
+      border-radius:20px;
+      border:1px solid var(--line);
+      background:
+        radial-gradient(900px 420px at 50% 10%, rgba(255,242,224,.06), transparent 58%),
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)),
+        #0d0e11;
+    }
+
+    .stage-head{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:8px 18px;
+      align-items:end;
+      margin-bottom:12px;
+    }
+
+    .stage-head h2,
+    .side h2{
+      margin:0;
+      font-size:17px;
+      font-weight:500;
+      letter-spacing:.03em;
+      color:var(--accent);
+    }
+
+    .stage-head p,
+    .side p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+
+    .canvas{
+      position:relative;
+      width:100%;
+      aspect-ratio:3 / 2;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.06);
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.16), rgba(255,248,236,.02) 22%, rgba(0,0,0,.06) 48%, rgba(255,248,236,.02) 78%, rgba(0,0,0,.16)),
+        #15161a;
+    }
+
+    .base-image,
+    .overlay{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      display:block;
+    }
+
+    .base-image{
+      object-fit:contain;
+      filter:drop-shadow(0 26px 34px rgba(0,0,0,.34));
+    }
+
+    .overlay{
+      pointer-events:none;
+    }
+
+    .zone{
+      fill:rgba(255,255,255,.04);
+      stroke:rgba(255,255,255,.08);
+      stroke-width:3;
+      opacity:.12;
+      transition:
+        fill .22s ease,
+        stroke .22s ease,
+        opacity .22s ease,
+        filter .22s ease,
+        transform .22s ease;
+      transform-origin:center;
+    }
+
+    .zone.prime{
+      fill:rgba(240,154,82,.56);
+      stroke:rgba(255,203,159,.88);
+      opacity:1;
+      filter:drop-shadow(0 0 14px var(--prime-glow));
+    }
+
+    .zone.secondary{
+      fill:rgba(135,168,187,.34);
+      stroke:rgba(213,230,240,.72);
+      opacity:.95;
+      filter:drop-shadow(0 0 11px var(--secondary-glow));
+    }
+
+    .side{
+      padding:16px;
+      display:grid;
+      gap:12px;
+      align-self:stretch;
+    }
+
+    .list{
+      display:grid;
+      gap:8px;
+    }
+
+    .muscle-row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.06);
+      background:rgba(255,255,255,.025);
+      font-size:13px;
+    }
+
+    .muscle-row em{
+      font-style:normal;
       color:var(--muted);
       font-size:11px;
+      letter-spacing:.16em;
       text-transform:uppercase;
     }
-    select{
-      background:#101010;
-      color:var(--txt);
-      border:1px solid #303030;
-      border-radius:9px;
-      min-height:38px;
-      padding:0 12px;
-      font-size:14px;
-      min-width:230px;
+
+    .muscle-row.prime{
+      border-color:rgba(240,154,82,.32);
     }
-    .muscles{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.5;
+
+    .muscle-row.secondary{
+      border-color:rgba(135,168,187,.26);
+    }
+
+    .foot{
       display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-    }
-    .chip{
-      border:1px solid #2f2f2f;
-      border-radius:999px;
-      padding:2px 8px;
-      color:var(--txt);
-      background:rgba(255,255,255,.02);
-    }
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
-      gap:12px;
-    }
-    .card{
-      border:1px solid var(--line);
-      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
-      border-radius:12px;
-      padding:10px;
-      min-height:460px;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    .card h2{
-      margin:0;
-      font-size:15px;
-      letter-spacing:.4px;
-      font-weight:600;
-    }
-    .sub{
+      justify-content:space-between;
+      gap:14px;
+      padding:0 4px;
       color:var(--muted);
       font-size:11px;
-      line-height:1.4;
-      min-height:33px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
     }
-    .stage{
-      flex:1;
-      border:1px solid #252525;
-      border-radius:10px;
-      background:radial-gradient(circle at 50% 0%, rgba(255,255,255,.03), rgba(0,0,0,.05));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      padding:8px;
-    }
-    svg{width:min(210px,85%);height:auto}
-    .skin{fill:rgba(220,215,205,.14)}
-    .outline{fill:none;stroke:rgba(210,208,200,.22);stroke-width:1}
 
-    .zone-a,.zone-b,.zone-c{
-      transition:all .25s ease;
-      opacity:.2;
-    }
-    .zone-a{fill:rgba(216,186,107,.08);stroke:rgba(216,186,107,.28);stroke-width:.8}
-    .zone-a.on{opacity:.95;fill:rgba(216,186,107,.42);stroke:rgba(216,186,107,.9)}
-
-    .zone-b{fill:rgba(149,217,255,.08);stroke:rgba(149,217,255,.28);stroke-width:.7}
-    .zone-b.on{opacity:.95;fill:rgba(149,217,255,.45);stroke:rgba(149,217,255,.92);filter:drop-shadow(0 0 7px rgba(149,217,255,.35))}
-
-    .zone-c{fill:none;stroke:rgba(138,170,82,.18);stroke-width:3;stroke-linecap:round}
-    .zone-c.on{opacity:1;stroke:rgba(138,170,82,.95);filter:drop-shadow(0 0 4px rgba(138,170,82,.35))}
-
-    .legend{
-      font-size:11px;
-      color:var(--muted);
-      border-top:1px dashed #2b2b2b;
-      padding-top:8px;
-      line-height:1.5;
-    }
-    .legend strong{color:var(--txt);font-weight:600}
-    a{
-      color:var(--txt);
+    .foot a{
+      color:var(--text);
       text-decoration:none;
-      border-bottom:1px solid #333;
-      padding-bottom:1px;
+      border-bottom:1px solid rgba(255,255,255,.16);
+      padding-bottom:2px;
+    }
+
+    @media (max-width:980px){
+      .controls,
+      .main{
+        grid-template-columns:1fr;
+      }
+
+      .side{
+        order:2;
+      }
+    }
+
+    @media (max-width:720px){
+      .wrap{
+        width:min(100vw - 18px, 100%);
+        margin:10px auto 22px;
+      }
+
+      .panel{
+        border-radius:18px;
+      }
+
+      .top,
+      .main{
+        padding:12px;
+      }
+
+      .stage,
+      .side{
+        padding:12px;
+      }
+
+      .canvas{
+        aspect-ratio:1 / 1;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="top">
-      <span class="tag">Laboratorio visual · muñeco muscular</span>
-      <select id="exercise-select">
-        <option value="press_banca">Press de banca</option>
-        <option value="dominadas">Dominadas</option>
-        <option value="remo">Remo</option>
-        <option value="sentadilla">Sentadilla</option>
-        <option value="peso_muerto">Peso muerto</option>
-        <option value="curl_biceps">Curl bíceps</option>
-        <option value="triceps_polea">Tríceps polea</option>
-        <option value="plancha">Plancha</option>
-      </select>
-      <div id="muscles-out" class="muscles"></div>
+  <main class="wrap">
+    <section class="panel top">
+      <div class="eyebrow">Omega · Laboratorio local</div>
+      <div class="title-row">
+        <div>
+          <h1>Muscle Lab</h1>
+          <div class="title-copy">Base anatómica realista de frente y espalda con overlay encima. La idea ya no es dibujar el cuerpo, sino usar una base seria y que la capa interactiva solo marque activacion.</div>
+        </div>
+      </div>
+      <div class="controls">
+        <select id="exercise-select" aria-label="Seleccionar ejercicio">
+          <option value="press_banca">Press de banca</option>
+          <option value="dominadas">Dominadas</option>
+          <option value="remo">Remo</option>
+          <option value="sentadilla">Sentadilla</option>
+          <option value="peso_muerto">Peso muerto</option>
+          <option value="curl_biceps">Curl biceps</option>
+          <option value="triceps_polea">Triceps polea</option>
+          <option value="plancha">Plancha</option>
+        </select>
+        <div id="chips" class="chips"></div>
+      </div>
+    </section>
+
+    <section class="panel main">
+      <div class="stage">
+        <div class="stage-head">
+          <div>
+            <h2>Frente + Espalda</h2>
+            <p>La base visual ya es anatomica. El overlay solo subraya los grupos que ese ejercicio usa como principal o secundario.</p>
+          </div>
+        </div>
+
+        <div class="canvas">
+          <img class="base-image" src="assets/muscle_lab_base_front_back.png" alt="Lamina anatomica realista de frente y espalda">
+          <svg class="overlay" viewBox="0 0 1536 1024" aria-hidden="true">
+            <g id="front-overlay">
+              <path class="zone" data-muscle="trapecios" d="M425 156 C457 132 507 132 540 156 C534 184 516 205 482 205 C448 205 431 184 425 156 Z"/>
+              <path class="zone" data-muscle="hombros" d="M336 188 C356 149 395 146 421 180 C427 217 406 244 371 246 C346 237 334 215 336 188 Z"/>
+              <path class="zone" data-muscle="hombros" d="M543 180 C569 146 608 149 628 188 C630 215 618 237 593 246 C558 244 537 217 543 180 Z"/>
+              <path class="zone" data-muscle="pecho" d="M386 206 C417 173 463 174 487 212 C478 270 449 317 405 317 C372 303 365 243 386 206 Z"/>
+              <path class="zone" data-muscle="pecho" d="M476 212 C501 174 547 173 578 206 C599 243 592 303 559 317 C515 317 486 270 476 212 Z"/>
+              <path class="zone" data-muscle="biceps" d="M318 268 C333 240 360 236 376 255 C385 292 378 344 359 380 C336 386 320 365 314 333 C312 307 313 286 318 268 Z"/>
+              <path class="zone" data-muscle="biceps" d="M588 255 C604 236 631 240 646 268 C651 286 652 307 650 333 C644 365 628 386 605 380 C586 344 579 292 588 255 Z"/>
+              <path class="zone" data-muscle="triceps" d="M339 348 C358 336 373 344 378 369 C378 401 367 444 344 472 C327 471 317 452 316 426 C320 393 327 364 339 348 Z"/>
+              <path class="zone" data-muscle="triceps" d="M586 369 C591 344 606 336 625 348 C637 364 644 393 648 426 C647 452 637 471 620 472 C597 444 586 401 586 369 Z"/>
+              <path class="zone" data-muscle="antebrazos" d="M311 458 C328 443 348 447 353 471 C350 513 334 565 310 595 C293 594 285 575 286 548 C291 512 299 481 311 458 Z"/>
+              <path class="zone" data-muscle="antebrazos" d="M611 471 C616 447 636 443 653 458 C665 481 673 512 678 548 C679 575 671 594 654 595 C630 565 614 513 611 471 Z"/>
+              <path class="zone" data-muscle="core" d="M424 330 C454 308 511 308 541 330 C552 378 553 487 524 558 C495 574 470 575 441 558 C412 487 413 378 424 330 Z"/>
+              <path class="zone" data-muscle="cuadriceps" d="M403 572 C434 554 465 558 483 589 C489 652 478 779 448 854 C417 866 392 852 382 816 C379 740 384 633 403 572 Z"/>
+              <path class="zone" data-muscle="cuadriceps" d="M482 589 C500 558 531 554 562 572 C581 633 586 740 583 816 C573 852 548 866 517 854 C487 779 476 652 482 589 Z"/>
+              <path class="zone" data-muscle="aductores" d="M464 578 C479 570 486 570 501 578 C511 649 507 743 490 808 C476 810 468 810 454 808 C438 743 434 649 444 578 Z"/>
+              <path class="zone" data-muscle="gemelos" d="M407 813 C426 800 446 805 457 826 C462 876 453 940 433 974 C415 978 400 968 392 945 C390 905 394 848 407 813 Z"/>
+              <path class="zone" data-muscle="gemelos" d="M528 826 C539 805 559 800 578 813 C591 848 595 905 593 945 C585 968 570 978 552 974 C532 940 523 876 528 826 Z"/>
+            </g>
+
+            <g id="back-overlay">
+              <path class="zone" data-muscle="trapecios" d="M920 162 C959 131 1029 131 1068 162 C1060 213 1035 255 994 255 C953 255 928 213 920 162 Z"/>
+              <path class="zone" data-muscle="hombros" d="M835 204 C852 168 891 160 917 192 C926 225 908 258 874 269 C848 259 835 235 835 204 Z"/>
+              <path class="zone" data-muscle="hombros" d="M1071 192 C1097 160 1136 168 1153 204 C1153 235 1140 259 1114 269 C1080 258 1062 225 1071 192 Z"/>
+              <path class="zone" data-muscle="espalda" d="M889 231 C929 192 977 201 995 252 C1003 325 994 472 959 592 C924 601 894 575 880 524 C874 448 872 313 889 231 Z"/>
+              <path class="zone" data-muscle="espalda" d="M993 252 C1011 201 1059 192 1099 231 C1116 313 1114 448 1108 524 C1094 575 1064 601 1029 592 C994 472 985 325 993 252 Z"/>
+              <path class="zone" data-muscle="espinales" d="M977 232 C988 220 1000 220 1011 232 C1019 326 1017 492 1002 607 C994 612 987 612 979 607 C964 492 962 326 970 232 Z"/>
+              <path class="zone" data-muscle="triceps" d="M817 344 C835 328 853 334 861 360 C864 401 855 459 833 500 C816 503 804 485 800 458 C800 415 805 374 817 344 Z"/>
+              <path class="zone" data-muscle="triceps" d="M1127 360 C1135 334 1153 328 1171 344 C1183 374 1188 415 1188 458 C1184 485 1172 503 1155 500 C1133 459 1124 401 1127 360 Z"/>
+              <path class="zone" data-muscle="biceps" d="M832 295 C846 276 864 275 878 291 C888 320 885 363 870 396 C852 405 837 397 827 374 C823 346 824 317 832 295 Z"/>
+              <path class="zone" data-muscle="biceps" d="M1110 291 C1124 275 1142 276 1156 295 C1164 317 1165 346 1161 374 C1151 397 1136 405 1118 396 C1103 363 1100 320 1110 291 Z"/>
+              <path class="zone" data-muscle="antebrazos" d="M797 489 C814 476 832 480 840 504 C842 549 830 618 805 664 C790 667 779 651 775 623 C776 573 783 525 797 489 Z"/>
+              <path class="zone" data-muscle="antebrazos" d="M1148 504 C1156 480 1174 476 1191 489 C1205 525 1212 573 1213 623 C1209 651 1198 667 1183 664 C1158 618 1146 549 1148 504 Z"/>
+              <path class="zone" data-muscle="gluteo" d="M918 573 C951 547 980 553 996 587 C1012 553 1041 547 1074 573 C1094 625 1088 692 1056 733 C1028 739 1014 723 996 703 C978 723 964 739 936 733 C904 692 898 625 918 573 Z"/>
+              <path class="zone" data-muscle="isquios" d="M925 704 C952 686 976 693 988 724 C993 794 983 902 954 973 C930 980 912 969 901 943 C895 875 899 769 925 704 Z"/>
+              <path class="zone" data-muscle="isquios" d="M1004 724 C1016 693 1040 686 1067 704 C1093 769 1097 875 1091 943 C1080 969 1062 980 1038 973 C1009 902 999 794 1004 724 Z"/>
+              <path class="zone" data-muscle="gemelos" d="M934 829 C952 816 972 820 983 842 C987 894 977 957 956 995 C939 998 925 989 917 968 C914 926 919 865 934 829 Z"/>
+              <path class="zone" data-muscle="gemelos" d="M1010 842 C1021 820 1041 816 1059 829 C1074 865 1079 926 1076 968 C1068 989 1054 998 1037 995 C1016 957 1006 894 1010 842 Z"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <aside class="panel side">
+        <div>
+          <h2>Lectura rapida</h2>
+          <p>La lista de la derecha sigue la misma logica del overlay: principal mas intenso, secundario mas suave.</p>
+        </div>
+        <div id="muscle-list" class="list"></div>
+      </aside>
+    </section>
+
+    <div class="foot">
+      <span>Version local · no toca omega</span>
+      <a href="./">volver a omega principal</a>
     </div>
-
-    <div class="grid">
-      <section class="card">
-        <h2>Opción A · Bloques Minimal</h2>
-        <div class="sub">Muy legible, estilo app actual. Buen balance entre claridad y poco ruido.</div>
-        <div class="stage">
-          <svg viewBox="0 0 170 290" id="svg-a" aria-label="opcion a">
-            <circle class="skin" cx="85" cy="20" r="14"/>
-            <rect class="skin" x="61" y="36" width="48" height="86" rx="18"/>
-            <rect class="skin" x="34" y="44" width="22" height="92" rx="10"/>
-            <rect class="skin" x="114" y="44" width="22" height="92" rx="10"/>
-            <rect class="skin" x="65" y="122" width="40" height="30" rx="12"/>
-            <rect class="skin" x="62" y="154" width="20" height="108" rx="10"/>
-            <rect class="skin" x="88" y="154" width="20" height="108" rx="10"/>
-            <circle class="outline" cx="85" cy="20" r="14"/>
-            <rect class="outline" x="61" y="36" width="48" height="86" rx="18"/>
-            <rect class="outline" x="34" y="44" width="22" height="92" rx="10"/>
-            <rect class="outline" x="114" y="44" width="22" height="92" rx="10"/>
-            <rect class="outline" x="65" y="122" width="40" height="30" rx="12"/>
-            <rect class="outline" x="62" y="154" width="20" height="108" rx="10"/>
-            <rect class="outline" x="88" y="154" width="20" height="108" rx="10"/>
-
-            <rect class="zone-a" data-muscle="trapecios" x="69" y="38" width="32" height="11" rx="5"/>
-            <circle class="zone-a" data-muscle="hombros" cx="55" cy="53" r="11"/>
-            <circle class="zone-a" data-muscle="hombros" cx="115" cy="53" r="11"/>
-            <rect class="zone-a" data-muscle="pecho" x="66" y="53" width="38" height="19" rx="8"/>
-            <rect class="zone-a" data-muscle="espalda" x="67" y="74" width="36" height="18" rx="7"/>
-            <rect class="zone-a" data-muscle="espinales" x="81" y="72" width="8" height="46" rx="4"/>
-            <rect class="zone-a" data-muscle="core" x="70" y="96" width="30" height="22" rx="8"/>
-            <rect class="zone-a" data-muscle="biceps" x="39" y="62" width="12" height="22" rx="6"/>
-            <rect class="zone-a" data-muscle="biceps" x="119" y="62" width="12" height="22" rx="6"/>
-            <rect class="zone-a" data-muscle="triceps" x="39" y="86" width="12" height="22" rx="6"/>
-            <rect class="zone-a" data-muscle="triceps" x="119" y="86" width="12" height="22" rx="6"/>
-            <rect class="zone-a" data-muscle="gluteo" x="69" y="124" width="32" height="19" rx="9"/>
-            <rect class="zone-a" data-muscle="cuadriceps" x="64" y="158" width="16" height="46" rx="8"/>
-            <rect class="zone-a" data-muscle="cuadriceps" x="90" y="158" width="16" height="46" rx="8"/>
-            <rect class="zone-a" data-muscle="isquios" x="64" y="204" width="16" height="22" rx="8"/>
-            <rect class="zone-a" data-muscle="isquios" x="90" y="204" width="16" height="22" rx="8"/>
-            <rect class="zone-a" data-muscle="gemelos" x="65" y="230" width="14" height="32" rx="8"/>
-            <rect class="zone-a" data-muscle="gemelos" x="91" y="230" width="14" height="32" rx="8"/>
-          </svg>
-        </div>
-        <div class="legend"><strong>Uso sugerido:</strong> versión productiva rápida para Omega.</div>
-      </section>
-
-      <section class="card">
-        <h2>Opción B · Heat Dots</h2>
-        <div class="sub">Más “biofeedback”. Marca foco con puntos calientes, ideal para efecto gamer suave.</div>
-        <div class="stage">
-          <svg viewBox="0 0 170 290" id="svg-b" aria-label="opcion b">
-            <circle class="skin" cx="85" cy="20" r="14"/>
-            <rect class="skin" x="61" y="36" width="48" height="86" rx="18"/>
-            <rect class="skin" x="34" y="44" width="22" height="92" rx="10"/>
-            <rect class="skin" x="114" y="44" width="22" height="92" rx="10"/>
-            <rect class="skin" x="65" y="122" width="40" height="30" rx="12"/>
-            <rect class="skin" x="62" y="154" width="20" height="108" rx="10"/>
-            <rect class="skin" x="88" y="154" width="20" height="108" rx="10"/>
-            <circle class="outline" cx="85" cy="20" r="14"/>
-            <rect class="outline" x="61" y="36" width="48" height="86" rx="18"/>
-            <rect class="outline" x="34" y="44" width="22" height="92" rx="10"/>
-            <rect class="outline" x="114" y="44" width="22" height="92" rx="10"/>
-            <rect class="outline" x="65" y="122" width="40" height="30" rx="12"/>
-            <rect class="outline" x="62" y="154" width="20" height="108" rx="10"/>
-            <rect class="outline" x="88" y="154" width="20" height="108" rx="10"/>
-
-            <circle class="zone-b" data-muscle="trapecios" cx="85" cy="44" r="9"/>
-            <circle class="zone-b" data-muscle="hombros" cx="54" cy="54" r="10"/>
-            <circle class="zone-b" data-muscle="hombros" cx="116" cy="54" r="10"/>
-            <circle class="zone-b" data-muscle="pecho" cx="85" cy="63" r="13"/>
-            <circle class="zone-b" data-muscle="espalda" cx="85" cy="84" r="12"/>
-            <ellipse class="zone-b" data-muscle="espinales" cx="85" cy="96" rx="5" ry="16"/>
-            <ellipse class="zone-b" data-muscle="core" cx="85" cy="108" rx="12" ry="9"/>
-            <circle class="zone-b" data-muscle="biceps" cx="45" cy="74" r="8"/>
-            <circle class="zone-b" data-muscle="biceps" cx="125" cy="74" r="8"/>
-            <circle class="zone-b" data-muscle="triceps" cx="45" cy="98" r="8"/>
-            <circle class="zone-b" data-muscle="triceps" cx="125" cy="98" r="8"/>
-            <ellipse class="zone-b" data-muscle="gluteo" cx="85" cy="134" rx="15" ry="9"/>
-            <ellipse class="zone-b" data-muscle="cuadriceps" cx="72" cy="181" rx="8" ry="19"/>
-            <ellipse class="zone-b" data-muscle="cuadriceps" cx="98" cy="181" rx="8" ry="19"/>
-            <ellipse class="zone-b" data-muscle="isquios" cx="72" cy="213" rx="8" ry="9"/>
-            <ellipse class="zone-b" data-muscle="isquios" cx="98" cy="213" rx="8" ry="9"/>
-            <ellipse class="zone-b" data-muscle="gemelos" cx="72" cy="245" rx="8" ry="12"/>
-            <ellipse class="zone-b" data-muscle="gemelos" cx="98" cy="245" rx="8" ry="12"/>
-          </svg>
-        </div>
-        <div class="legend"><strong>Uso sugerido:</strong> para sensación “activo/energía” durante la serie.</div>
-      </section>
-
-      <section class="card">
-        <h2>Opción C · Trazos Anatómicos</h2>
-        <div class="sub">Más elegante y técnico. Menos “bloque”, más “línea de tensión”.</div>
-        <div class="stage">
-          <svg viewBox="0 0 170 290" id="svg-c" aria-label="opcion c">
-            <circle class="skin" cx="85" cy="20" r="14"/>
-            <rect class="skin" x="61" y="36" width="48" height="86" rx="18"/>
-            <rect class="skin" x="34" y="44" width="22" height="92" rx="10"/>
-            <rect class="skin" x="114" y="44" width="22" height="92" rx="10"/>
-            <rect class="skin" x="65" y="122" width="40" height="30" rx="12"/>
-            <rect class="skin" x="62" y="154" width="20" height="108" rx="10"/>
-            <rect class="skin" x="88" y="154" width="20" height="108" rx="10"/>
-            <circle class="outline" cx="85" cy="20" r="14"/>
-            <rect class="outline" x="61" y="36" width="48" height="86" rx="18"/>
-            <rect class="outline" x="34" y="44" width="22" height="92" rx="10"/>
-            <rect class="outline" x="114" y="44" width="22" height="92" rx="10"/>
-            <rect class="outline" x="65" y="122" width="40" height="30" rx="12"/>
-            <rect class="outline" x="62" y="154" width="20" height="108" rx="10"/>
-            <rect class="outline" x="88" y="154" width="20" height="108" rx="10"/>
-
-            <path class="zone-c" data-muscle="trapecios" d="M72 47 L85 40 L98 47"/>
-            <path class="zone-c" data-muscle="hombros" d="M48 50 Q55 58 62 50"/>
-            <path class="zone-c" data-muscle="hombros" d="M108 50 Q115 58 122 50"/>
-            <path class="zone-c" data-muscle="pecho" d="M68 66 Q85 54 102 66"/>
-            <path class="zone-c" data-muscle="espalda" d="M70 84 Q85 92 100 84"/>
-            <path class="zone-c" data-muscle="espinales" d="M85 70 L85 118"/>
-            <path class="zone-c" data-muscle="core" d="M74 104 Q85 114 96 104"/>
-            <path class="zone-c" data-muscle="biceps" d="M43 68 L43 86"/>
-            <path class="zone-c" data-muscle="biceps" d="M127 68 L127 86"/>
-            <path class="zone-c" data-muscle="triceps" d="M47 88 L47 108"/>
-            <path class="zone-c" data-muscle="triceps" d="M123 88 L123 108"/>
-            <path class="zone-c" data-muscle="gluteo" d="M72 132 Q85 142 98 132"/>
-            <path class="zone-c" data-muscle="cuadriceps" d="M72 164 L72 202"/>
-            <path class="zone-c" data-muscle="cuadriceps" d="M98 164 L98 202"/>
-            <path class="zone-c" data-muscle="isquios" d="M72 206 L72 222"/>
-            <path class="zone-c" data-muscle="isquios" d="M98 206 L98 222"/>
-            <path class="zone-c" data-muscle="gemelos" d="M72 232 L72 258"/>
-            <path class="zone-c" data-muscle="gemelos" d="M98 232 L98 258"/>
-          </svg>
-        </div>
-        <div class="legend"><strong>Uso sugerido:</strong> estilo premium minimal con foco anatómico.</div>
-      </section>
-    </div>
-
-    <div class="tag">Volver a <a href="./">Ω principal</a></div>
-  </div>
+  </main>
 
   <script>
-    const EX_MAP={
-      press_banca:['pecho','hombros','triceps'],
-      dominadas:['espalda','biceps','trapecios'],
-      remo:['espalda','espinales','biceps','trapecios'],
-      sentadilla:['cuadriceps','gluteo','core'],
-      peso_muerto:['espinales','gluteo','isquios','trapecios'],
-      curl_biceps:['biceps'],
-      triceps_polea:['triceps','hombros'],
-      plancha:['core','hombros']
+    const EX_MAP = {
+      press_banca: { prime: ["pecho", "triceps"], secondary: ["hombros", "core"] },
+      dominadas: { prime: ["espalda", "biceps"], secondary: ["trapecios", "antebrazos"] },
+      remo: { prime: ["espalda", "biceps"], secondary: ["espinales", "trapecios", "antebrazos"] },
+      sentadilla: { prime: ["cuadriceps", "gluteo"], secondary: ["core", "isquios", "aductores"] },
+      peso_muerto: { prime: ["espinales", "gluteo", "isquios"], secondary: ["trapecios", "antebrazos"] },
+      curl_biceps: { prime: ["biceps"], secondary: ["antebrazos"] },
+      triceps_polea: { prime: ["triceps"], secondary: ["hombros"] },
+      plancha: { prime: ["core"], secondary: ["hombros", "gluteo"] }
     };
 
-    const LABELS={
-      pecho:'pecho',
-      hombros:'hombros',
-      triceps:'tríceps',
-      espalda:'espalda',
-      espinales:'espinales',
-      biceps:'bíceps',
-      trapecios:'trapecios',
-      cuadriceps:'cuádriceps',
-      gluteo:'glúteos',
-      core:'core',
-      isquios:'isquios',
-      gemelos:'gemelos'
+    const LABELS = {
+      pecho: "Pecho",
+      hombros: "Hombros",
+      triceps: "Triceps",
+      espalda: "Espalda",
+      espinales: "Espinales",
+      biceps: "Biceps",
+      trapecios: "Trapecios",
+      cuadriceps: "Cuadriceps",
+      gluteo: "Gluteos",
+      core: "Core",
+      isquios: "Isquios",
+      gemelos: "Gemelos",
+      aductores: "Aductores",
+      antebrazos: "Antebrazos"
     };
 
-    function renderMuscleChips(ms){
-      const out=document.getElementById('muscles-out');
-      out.innerHTML=ms.map(m=>`<span class="chip">${LABELS[m]||m}</span>`).join('');
-    }
+    const select = document.getElementById("exercise-select");
+    const chips = document.getElementById("chips");
+    const list = document.getElementById("muscle-list");
+    const zones = Array.from(document.querySelectorAll("[data-muscle]"));
 
-    function paintForExercise(key){
-      const muscles=EX_MAP[key]||[];
-      document.querySelectorAll('[data-muscle]').forEach(el=>{
-        const on=muscles.includes(el.dataset.muscle);
-        el.classList.toggle('on',on);
+    function clearZones(){
+      zones.forEach((zone) => {
+        zone.classList.remove("prime", "secondary");
       });
-      renderMuscleChips(muscles);
     }
 
-    const sel=document.getElementById('exercise-select');
-    sel.addEventListener('change',()=>paintForExercise(sel.value));
-    paintForExercise(sel.value);
+    function renderChips(prime, secondary){
+      const primeHtml = prime.map((muscle) => `<span class="chip prime">Prime · ${LABELS[muscle] || muscle}</span>`);
+      const secondaryHtml = secondary.map((muscle) => `<span class="chip secondary">Sec · ${LABELS[muscle] || muscle}</span>`);
+      chips.innerHTML = [...primeHtml, ...secondaryHtml].join("");
+    }
+
+    function renderList(prime, secondary){
+      const rows = [
+        ...prime.map((muscle) => `
+          <div class="muscle-row prime">
+            <span>${LABELS[muscle] || muscle}</span>
+            <em>principal</em>
+          </div>
+        `),
+        ...secondary.map((muscle) => `
+          <div class="muscle-row secondary">
+            <span>${LABELS[muscle] || muscle}</span>
+            <em>secundario</em>
+          </div>
+        `)
+      ];
+      list.innerHTML = rows.join("");
+    }
+
+    function applyState(key){
+      const conf = EX_MAP[key] || { prime: [], secondary: [] };
+      const prime = [...new Set(conf.prime || [])];
+      const secondary = [...new Set((conf.secondary || []).filter((muscle) => !prime.includes(muscle)))];
+
+      clearZones();
+      zones.forEach((zone) => {
+        const muscle = zone.dataset.muscle;
+        if(prime.includes(muscle)){
+          zone.classList.add("prime");
+        } else if(secondary.includes(muscle)){
+          zone.classList.add("secondary");
+        }
+      });
+
+      renderChips(prime, secondary);
+      renderList(prime, secondary);
+    }
+
+    select.addEventListener("change", () => applyState(select.value));
+    applyState(select.value);
   </script>
 </body>
 </html>
