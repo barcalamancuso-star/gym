@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Ω · Laboratorio Muñeco</title>
+  <style>
+    :root{
+      --bg:#090909;
+      --card:#111;
+      --line:#242424;
+      --txt:#d8d6d0;
+      --muted:#8f8b82;
+      --hi:#d8ba6b;
+      --hi2:#95d9ff;
+      --ok:#8aaa52;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:radial-gradient(circle at 20% 0%, #131313 0%, var(--bg) 52%);
+      color:var(--txt);
+      font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .wrap{
+      width:min(1200px,94vw);
+      margin:18px auto 26px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .top{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:10px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.015);
+      border-radius:12px;
+      padding:10px;
+    }
+    .tag{
+      letter-spacing:2px;
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+    }
+    select{
+      background:#101010;
+      color:var(--txt);
+      border:1px solid #303030;
+      border-radius:9px;
+      min-height:38px;
+      padding:0 12px;
+      font-size:14px;
+      min-width:230px;
+    }
+    .muscles{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.5;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .chip{
+      border:1px solid #2f2f2f;
+      border-radius:999px;
+      padding:2px 8px;
+      color:var(--txt);
+      background:rgba(255,255,255,.02);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+      gap:12px;
+    }
+    .card{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
+      border-radius:12px;
+      padding:10px;
+      min-height:460px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .card h2{
+      margin:0;
+      font-size:15px;
+      letter-spacing:.4px;
+      font-weight:600;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.4;
+      min-height:33px;
+    }
+    .stage{
+      flex:1;
+      border:1px solid #252525;
+      border-radius:10px;
+      background:radial-gradient(circle at 50% 0%, rgba(255,255,255,.03), rgba(0,0,0,.05));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      padding:8px;
+    }
+    svg{width:min(210px,85%);height:auto}
+    .skin{fill:rgba(220,215,205,.14)}
+    .outline{fill:none;stroke:rgba(210,208,200,.22);stroke-width:1}
+
+    .zone-a,.zone-b,.zone-c{
+      transition:all .25s ease;
+      opacity:.2;
+    }
+    .zone-a{fill:rgba(216,186,107,.08);stroke:rgba(216,186,107,.28);stroke-width:.8}
+    .zone-a.on{opacity:.95;fill:rgba(216,186,107,.42);stroke:rgba(216,186,107,.9)}
+
+    .zone-b{fill:rgba(149,217,255,.08);stroke:rgba(149,217,255,.28);stroke-width:.7}
+    .zone-b.on{opacity:.95;fill:rgba(149,217,255,.45);stroke:rgba(149,217,255,.92);filter:drop-shadow(0 0 7px rgba(149,217,255,.35))}
+
+    .zone-c{fill:none;stroke:rgba(138,170,82,.18);stroke-width:3;stroke-linecap:round}
+    .zone-c.on{opacity:1;stroke:rgba(138,170,82,.95);filter:drop-shadow(0 0 4px rgba(138,170,82,.35))}
+
+    .legend{
+      font-size:11px;
+      color:var(--muted);
+      border-top:1px dashed #2b2b2b;
+      padding-top:8px;
+      line-height:1.5;
+    }
+    .legend strong{color:var(--txt);font-weight:600}
+    a{
+      color:var(--txt);
+      text-decoration:none;
+      border-bottom:1px solid #333;
+      padding-bottom:1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <span class="tag">Laboratorio visual · muñeco muscular</span>
+      <select id="exercise-select">
+        <option value="press_banca">Press de banca</option>
+        <option value="dominadas">Dominadas</option>
+        <option value="remo">Remo</option>
+        <option value="sentadilla">Sentadilla</option>
+        <option value="peso_muerto">Peso muerto</option>
+        <option value="curl_biceps">Curl bíceps</option>
+        <option value="triceps_polea">Tríceps polea</option>
+        <option value="plancha">Plancha</option>
+      </select>
+      <div id="muscles-out" class="muscles"></div>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Opción A · Bloques Minimal</h2>
+        <div class="sub">Muy legible, estilo app actual. Buen balance entre claridad y poco ruido.</div>
+        <div class="stage">
+          <svg viewBox="0 0 170 290" id="svg-a" aria-label="opcion a">
+            <circle class="skin" cx="85" cy="20" r="14"/>
+            <rect class="skin" x="61" y="36" width="48" height="86" rx="18"/>
+            <rect class="skin" x="34" y="44" width="22" height="92" rx="10"/>
+            <rect class="skin" x="114" y="44" width="22" height="92" rx="10"/>
+            <rect class="skin" x="65" y="122" width="40" height="30" rx="12"/>
+            <rect class="skin" x="62" y="154" width="20" height="108" rx="10"/>
+            <rect class="skin" x="88" y="154" width="20" height="108" rx="10"/>
+            <circle class="outline" cx="85" cy="20" r="14"/>
+            <rect class="outline" x="61" y="36" width="48" height="86" rx="18"/>
+            <rect class="outline" x="34" y="44" width="22" height="92" rx="10"/>
+            <rect class="outline" x="114" y="44" width="22" height="92" rx="10"/>
+            <rect class="outline" x="65" y="122" width="40" height="30" rx="12"/>
+            <rect class="outline" x="62" y="154" width="20" height="108" rx="10"/>
+            <rect class="outline" x="88" y="154" width="20" height="108" rx="10"/>
+
+            <rect class="zone-a" data-muscle="trapecios" x="69" y="38" width="32" height="11" rx="5"/>
+            <circle class="zone-a" data-muscle="hombros" cx="55" cy="53" r="11"/>
+            <circle class="zone-a" data-muscle="hombros" cx="115" cy="53" r="11"/>
+            <rect class="zone-a" data-muscle="pecho" x="66" y="53" width="38" height="19" rx="8"/>
+            <rect class="zone-a" data-muscle="espalda" x="67" y="74" width="36" height="18" rx="7"/>
+            <rect class="zone-a" data-muscle="espinales" x="81" y="72" width="8" height="46" rx="4"/>
+            <rect class="zone-a" data-muscle="core" x="70" y="96" width="30" height="22" rx="8"/>
+            <rect class="zone-a" data-muscle="biceps" x="39" y="62" width="12" height="22" rx="6"/>
+            <rect class="zone-a" data-muscle="biceps" x="119" y="62" width="12" height="22" rx="6"/>
+            <rect class="zone-a" data-muscle="triceps" x="39" y="86" width="12" height="22" rx="6"/>
+            <rect class="zone-a" data-muscle="triceps" x="119" y="86" width="12" height="22" rx="6"/>
+            <rect class="zone-a" data-muscle="gluteo" x="69" y="124" width="32" height="19" rx="9"/>
+            <rect class="zone-a" data-muscle="cuadriceps" x="64" y="158" width="16" height="46" rx="8"/>
+            <rect class="zone-a" data-muscle="cuadriceps" x="90" y="158" width="16" height="46" rx="8"/>
+            <rect class="zone-a" data-muscle="isquios" x="64" y="204" width="16" height="22" rx="8"/>
+            <rect class="zone-a" data-muscle="isquios" x="90" y="204" width="16" height="22" rx="8"/>
+            <rect class="zone-a" data-muscle="gemelos" x="65" y="230" width="14" height="32" rx="8"/>
+            <rect class="zone-a" data-muscle="gemelos" x="91" y="230" width="14" height="32" rx="8"/>
+          </svg>
+        </div>
+        <div class="legend"><strong>Uso sugerido:</strong> versión productiva rápida para Omega.</div>
+      </section>
+
+      <section class="card">
+        <h2>Opción B · Heat Dots</h2>
+        <div class="sub">Más “biofeedback”. Marca foco con puntos calientes, ideal para efecto gamer suave.</div>
+        <div class="stage">
+          <svg viewBox="0 0 170 290" id="svg-b" aria-label="opcion b">
+            <circle class="skin" cx="85" cy="20" r="14"/>
+            <rect class="skin" x="61" y="36" width="48" height="86" rx="18"/>
+            <rect class="skin" x="34" y="44" width="22" height="92" rx="10"/>
+            <rect class="skin" x="114" y="44" width="22" height="92" rx="10"/>
+            <rect class="skin" x="65" y="122" width="40" height="30" rx="12"/>
+            <rect class="skin" x="62" y="154" width="20" height="108" rx="10"/>
+            <rect class="skin" x="88" y="154" width="20" height="108" rx="10"/>
+            <circle class="outline" cx="85" cy="20" r="14"/>
+            <rect class="outline" x="61" y="36" width="48" height="86" rx="18"/>
+            <rect class="outline" x="34" y="44" width="22" height="92" rx="10"/>
+            <rect class="outline" x="114" y="44" width="22" height="92" rx="10"/>
+            <rect class="outline" x="65" y="122" width="40" height="30" rx="12"/>
+            <rect class="outline" x="62" y="154" width="20" height="108" rx="10"/>
+            <rect class="outline" x="88" y="154" width="20" height="108" rx="10"/>
+
+            <circle class="zone-b" data-muscle="trapecios" cx="85" cy="44" r="9"/>
+            <circle class="zone-b" data-muscle="hombros" cx="54" cy="54" r="10"/>
+            <circle class="zone-b" data-muscle="hombros" cx="116" cy="54" r="10"/>
+            <circle class="zone-b" data-muscle="pecho" cx="85" cy="63" r="13"/>
+            <circle class="zone-b" data-muscle="espalda" cx="85" cy="84" r="12"/>
+            <ellipse class="zone-b" data-muscle="espinales" cx="85" cy="96" rx="5" ry="16"/>
+            <ellipse class="zone-b" data-muscle="core" cx="85" cy="108" rx="12" ry="9"/>
+            <circle class="zone-b" data-muscle="biceps" cx="45" cy="74" r="8"/>
+            <circle class="zone-b" data-muscle="biceps" cx="125" cy="74" r="8"/>
+            <circle class="zone-b" data-muscle="triceps" cx="45" cy="98" r="8"/>
+            <circle class="zone-b" data-muscle="triceps" cx="125" cy="98" r="8"/>
+            <ellipse class="zone-b" data-muscle="gluteo" cx="85" cy="134" rx="15" ry="9"/>
+            <ellipse class="zone-b" data-muscle="cuadriceps" cx="72" cy="181" rx="8" ry="19"/>
+            <ellipse class="zone-b" data-muscle="cuadriceps" cx="98" cy="181" rx="8" ry="19"/>
+            <ellipse class="zone-b" data-muscle="isquios" cx="72" cy="213" rx="8" ry="9"/>
+            <ellipse class="zone-b" data-muscle="isquios" cx="98" cy="213" rx="8" ry="9"/>
+            <ellipse class="zone-b" data-muscle="gemelos" cx="72" cy="245" rx="8" ry="12"/>
+            <ellipse class="zone-b" data-muscle="gemelos" cx="98" cy="245" rx="8" ry="12"/>
+          </svg>
+        </div>
+        <div class="legend"><strong>Uso sugerido:</strong> para sensación “activo/energía” durante la serie.</div>
+      </section>
+
+      <section class="card">
+        <h2>Opción C · Trazos Anatómicos</h2>
+        <div class="sub">Más elegante y técnico. Menos “bloque”, más “línea de tensión”.</div>
+        <div class="stage">
+          <svg viewBox="0 0 170 290" id="svg-c" aria-label="opcion c">
+            <circle class="skin" cx="85" cy="20" r="14"/>
+            <rect class="skin" x="61" y="36" width="48" height="86" rx="18"/>
+            <rect class="skin" x="34" y="44" width="22" height="92" rx="10"/>
+            <rect class="skin" x="114" y="44" width="22" height="92" rx="10"/>
+            <rect class="skin" x="65" y="122" width="40" height="30" rx="12"/>
+            <rect class="skin" x="62" y="154" width="20" height="108" rx="10"/>
+            <rect class="skin" x="88" y="154" width="20" height="108" rx="10"/>
+            <circle class="outline" cx="85" cy="20" r="14"/>
+            <rect class="outline" x="61" y="36" width="48" height="86" rx="18"/>
+            <rect class="outline" x="34" y="44" width="22" height="92" rx="10"/>
+            <rect class="outline" x="114" y="44" width="22" height="92" rx="10"/>
+            <rect class="outline" x="65" y="122" width="40" height="30" rx="12"/>
+            <rect class="outline" x="62" y="154" width="20" height="108" rx="10"/>
+            <rect class="outline" x="88" y="154" width="20" height="108" rx="10"/>
+
+            <path class="zone-c" data-muscle="trapecios" d="M72 47 L85 40 L98 47"/>
+            <path class="zone-c" data-muscle="hombros" d="M48 50 Q55 58 62 50"/>
+            <path class="zone-c" data-muscle="hombros" d="M108 50 Q115 58 122 50"/>
+            <path class="zone-c" data-muscle="pecho" d="M68 66 Q85 54 102 66"/>
+            <path class="zone-c" data-muscle="espalda" d="M70 84 Q85 92 100 84"/>
+            <path class="zone-c" data-muscle="espinales" d="M85 70 L85 118"/>
+            <path class="zone-c" data-muscle="core" d="M74 104 Q85 114 96 104"/>
+            <path class="zone-c" data-muscle="biceps" d="M43 68 L43 86"/>
+            <path class="zone-c" data-muscle="biceps" d="M127 68 L127 86"/>
+            <path class="zone-c" data-muscle="triceps" d="M47 88 L47 108"/>
+            <path class="zone-c" data-muscle="triceps" d="M123 88 L123 108"/>
+            <path class="zone-c" data-muscle="gluteo" d="M72 132 Q85 142 98 132"/>
+            <path class="zone-c" data-muscle="cuadriceps" d="M72 164 L72 202"/>
+            <path class="zone-c" data-muscle="cuadriceps" d="M98 164 L98 202"/>
+            <path class="zone-c" data-muscle="isquios" d="M72 206 L72 222"/>
+            <path class="zone-c" data-muscle="isquios" d="M98 206 L98 222"/>
+            <path class="zone-c" data-muscle="gemelos" d="M72 232 L72 258"/>
+            <path class="zone-c" data-muscle="gemelos" d="M98 232 L98 258"/>
+          </svg>
+        </div>
+        <div class="legend"><strong>Uso sugerido:</strong> estilo premium minimal con foco anatómico.</div>
+      </section>
+    </div>
+
+    <div class="tag">Volver a <a href="./">Ω principal</a></div>
+  </div>
+
+  <script>
+    const EX_MAP={
+      press_banca:['pecho','hombros','triceps'],
+      dominadas:['espalda','biceps','trapecios'],
+      remo:['espalda','espinales','biceps','trapecios'],
+      sentadilla:['cuadriceps','gluteo','core'],
+      peso_muerto:['espinales','gluteo','isquios','trapecios'],
+      curl_biceps:['biceps'],
+      triceps_polea:['triceps','hombros'],
+      plancha:['core','hombros']
+    };
+
+    const LABELS={
+      pecho:'pecho',
+      hombros:'hombros',
+      triceps:'tríceps',
+      espalda:'espalda',
+      espinales:'espinales',
+      biceps:'bíceps',
+      trapecios:'trapecios',
+      cuadriceps:'cuádriceps',
+      gluteo:'glúteos',
+      core:'core',
+      isquios:'isquios',
+      gemelos:'gemelos'
+    };
+
+    function renderMuscleChips(ms){
+      const out=document.getElementById('muscles-out');
+      out.innerHTML=ms.map(m=>`<span class="chip">${LABELS[m]||m}</span>`).join('');
+    }
+
+    function paintForExercise(key){
+      const muscles=EX_MAP[key]||[];
+      document.querySelectorAll('[data-muscle]').forEach(el=>{
+        const on=muscles.includes(el.dataset.muscle);
+        el.classList.toggle('on',on);
+      });
+      renderMuscleChips(muscles);
+    }
+
+    const sel=document.getElementById('exercise-select');
+    sel.addEventListener('change',()=>paintForExercise(sel.value));
+    paintForExercise(sel.value);
+  </script>
+</body>
+</html>
