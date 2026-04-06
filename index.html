@@ -58,15 +58,13 @@ input,select{-webkit-appearance:none;appearance:none;border-radius:0;
 }
 @keyframes splashSceneZoom{
   0%{transform:scale(1);filter:blur(0) contrast(100%) brightness(100%);}
-  24%{transform:scale(1.04);filter:blur(0) contrast(101%) brightness(101%);}
-  56%{transform:scale(1.46);filter:blur(.35px) contrast(104%) brightness(104%);}
-  82%{transform:scale(3.7);filter:blur(1.15px) contrast(108%) brightness(110%);}
-  100%{transform:scale(7.25);filter:blur(3.8px) contrast(113%) brightness(118%);}
+  28%{transform:scale(1.08);filter:blur(0) contrast(101%) brightness(101%);}
+  62%{transform:scale(1.78);filter:blur(.18px) contrast(104%) brightness(105%);}
+  100%{transform:scale(4.4);filter:blur(1.2px) contrast(108%) brightness(113%);}
 }
 @keyframes splashWhiteOut{
-  0%,62%{opacity:0;}
-  78%{opacity:.22;}
-  90%{opacity:.76;}
+  0%,66%{opacity:0;}
+  82%{opacity:.26;}
   100%{opacity:1;}
 }
 @keyframes nameLogoGlitch{0%,100%{text-shadow:none;filter:contrast(100%);}20%{text-shadow:-2px 0 rgba(110,255,170,.62),2px 0 rgba(120,190,255,.52);filter:contrast(112%);}45%{text-shadow:2px 0 rgba(110,255,170,.58),-2px 0 rgba(255,130,190,.46);filter:contrast(115%);}70%{text-shadow:-1px 0 rgba(120,190,255,.45),1px 0 rgba(255,130,190,.36);filter:contrast(108%);}}
@@ -154,13 +152,13 @@ input,select{-webkit-appearance:none;appearance:none;border-radius:0;
   position:absolute;inset:0;transform-origin:50% 42%;will-change:transform,filter,opacity;
 }
 #splash.scene-entering #splash-scene{
-  animation:splashSceneZoom 1.34s cubic-bezier(.1,.72,.16,1) forwards;
+  animation:splashSceneZoom .82s cubic-bezier(.18,.78,.24,1) forwards;
 }
 #splash-whiteout{
   position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:6;
 }
 #splash.scene-entering #splash-whiteout{
-  animation:splashWhiteOut 1.34s ease forwards;
+  animation:splashWhiteOut .82s ease forwards;
 }
 #splash-sym,#splash-name,#splash-status,#splash-welcome{z-index:1;}
 #splash-sym{top:42% !important;font-size:clamp(86px,24vw,142px) !important;transform:translate(-50%,-58%) !important;overflow:visible;}
@@ -5385,7 +5383,7 @@ function runSplashEnterMatrixFx(done){
     sp.classList.remove('scene-entering');
     _dismissSplashBusy=false;
     if(done)done();
-  },1360);
+  },860);
 }
 function dismissSplash(skipNamePrompt=false,opts={}){
   const sp=$('splash');
