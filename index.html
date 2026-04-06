@@ -592,6 +592,13 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   transition:border-color .2s ease,color .2s ease,background .2s ease;
 }
 .fin-dia-top:active{color:var(--re);opacity:1;border-color:rgba(176,120,56,.5);background:rgba(176,120,56,.08);}
+.back-s2-top{
+  background:transparent;border:none;color:var(--mu2);
+  min-height:30px;display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  padding:0 2px;opacity:.9;line-height:1;flex-shrink:0;
+}
+.back-s2-top:active{color:var(--tx);opacity:1;}
 
 /* día en la fila superior */
 .ej-col-day{display:none;}
@@ -1239,6 +1246,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 <div id="s2" class="screen">
   <div class="tbar" id="clock">
     <div class="tbar-main">
+      <button class="back-s2-top" onclick="backToRoutinePicker()">← volver</button>
       <div class="tnum" id="tnum">00:00</div>
       <button id="btn-fin-top" class="fin-dia-top" onclick="finishW()" style="display:none;">finalizar dia</button>
       <div style="flex:1;"></div>
@@ -3634,6 +3642,41 @@ function loadRutina(evt){
 }
 
 function goBlank(){startWorkout(tipoUiLabel(curType),[],curType,{},{},{});}
+
+function currentWorkoutHasProgress(){
+  if(started||Number(totalSec)>0)return true;
+  return Object.values(sesion||{}).some(rows=>
+    (Array.isArray(rows)?rows:[]).some(r=>serieHasPayload(r))
+  );
+}
+
+function backToRoutinePicker(){
+  const type=curType||(String(curDay&&curDay.id||'').split(':')[0]||'pull');
+  const hasProgress=currentWorkoutHasProgress();
+  const isActive=state==='work'||state==='prep'||state==='saving';
+  if(isActive||hasProgress){
+    const msg=hasProgress
+      ? '¿Volver a rutinas? La sesión actual quedará guardada para retomar.'
+      : '¿Volver a rutinas?';
+    if(!confirm(msg))return;
+  }
+
+  syncAllTimersToNow(false);
+  stopPrepCountdown();
+  clearInterval(iv);iv=null;
+  clearInterval(totalIv);totalIv=null;
+  _phaseLastTs=0;
+  _totalLastTs=0;
+
+  if(hasProgress){
+    if(state==='work'||state==='saving'||state==='prep')state='rest';
+    saveSessionDraft(true);
+  }else{
+    clearSessionDraft();
+  }
+
+  pick(type);
+}
 
 /* â•â• WORKOUT â•â• */
 function startWorkout(name,ejs,dayId,tiposIniciales,multsIniciales,agarresIniciales){
