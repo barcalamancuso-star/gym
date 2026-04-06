@@ -1074,6 +1074,20 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   display:none;gap:4px;grid-template-columns:repeat(2,minmax(0,1fr));
 }
 .fin-share-panel.on{display:grid;}
+.fin-share-status{
+  grid-column:1 / -1;
+  border:1px solid var(--br2);
+  border-radius:8px;
+  padding:7px 9px;
+  font-family:var(--mono);
+  font-size:9px;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  color:var(--mu2);
+  background:rgba(255,255,255,.015);
+}
+.fin-share-status.pending{border-color:rgba(216,186,107,.45);color:#d8ba6b;}
+.fin-share-status.ok{border-color:rgba(97,214,155,.4);color:var(--go);}
 .fin-note-panel{
   display:none;border:1px solid var(--br2);border-radius:8px;padding:7px 9px;
   background:rgba(255,255,255,.015);
@@ -1088,12 +1102,14 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   padding:0;font-size:8px;letter-spacing:2px;text-transform:uppercase;
   font-family:var(--mono);text-align:center;
   min-height:32px;display:flex;align-items:center;justify-content:center;}
+.finb.summary{border-color:#f0dfab;color:#f0dfab;}
 .finb.csv{border-color:var(--go);color:var(--go);}
 .finb.share{border-color:var(--go);color:var(--go);opacity:.6;}
 .finb.db{border-color:var(--re);color:var(--re);}
 .finb.dbshare{border-color:#67d8ff;color:#67d8ff;}
 .finb.rut{border-color:var(--ac);color:var(--ac);}
 .backup-info{
+  grid-column:1 / -1;
   border:1px solid var(--br2);
   border-radius:8px;
   padding:7px 9px;
@@ -1534,6 +1550,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
     <div class="fin-name" id="fin-name">Ω</div>
     <div class="fin-train-msg">estuviste <span class="fin-clock" id="fin-clock">00:00</span> entrenando</div>
     <div id="fin-vol" style="font-family:var(--mono);font-size:11px;color:var(--mu2);margin-top:2px;"></div>
+    <div id="fin-mev" style="font-family:var(--mono);font-size:11px;color:var(--mu2);margin-top:1px;"></div>
     <div id="fin-vol-comp" style="font-family:var(--mono);font-size:11px;margin-top:1px;"></div>
   </div>
   <div class="meta-window">
@@ -1550,11 +1567,14 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
       <input id="msg-manana-out" class="fin-note-input" placeholder="mensaje para mañana">
     </div>
     <div id="fin-share-panel" class="fin-share-panel">
-      <button class="finb csv" onclick="exportCSV()">CSV</button>
+      <div id="fin-share-status" class="fin-share-status pending">csv del día pendiente</div>
+      <button class="finb summary" onclick="shareSummaryCard()">Resumen</button>
+      <button class="finb csv" onclick="exportCSV()">CSV del día</button>
       <button class="finb share" onclick="shareCSV()">Compartir CSV</button>
-      <button class="finb db" onclick="exportDB()">JSON</button>
-      <button class="finb dbshare" onclick="shareDB()">Compartir JSON</button>
+      <button class="finb db" onclick="exportDB()">Guardar personal</button>
+      <button class="finb dbshare" onclick="shareDB()">Compartir personal</button>
       <button class="finb rut" onclick="saveRutina()">Guardar rutina</button>
+      <div id="backup-info" class="backup-info"></div>
     </div>
   </div>
 </div>
@@ -2147,6 +2167,7 @@ let sessionPersisted=false;
 const AUTO_DB_KEY='gym_codex_auto_db_v1';
 const SESSION_DRAFT_KEY='gym_codex_session_draft_v1';
 const APP_SESSION_KEY='gym_codex_app_session_v1';
+const CSV_DAY_PENDING_KEY='gym_codex_csv_day_pending_v1';
 const SESSION_DRAFT_RESTORE_MAX_MS=1000*60*60*2;
 let _lastDbLoadOk=false;
 let _splashAutoGoTimer=null;
@@ -2161,6 +2182,8 @@ let _totalLastTs=0;
 let _totalCarryMs=0;
 let _serieEditCtx=null;
 let _regTargetExercisePool=[];
+let _csvPendingMeta=null;
+let _currentSessionStats=null;
 const HAPTICS_ENABLED=true;
 let _hapticLastTs=0;
 
@@ -5056,24 +5079,15 @@ function finishW(){
   }
   const finSym=$('fin-sym');
   if(finSym) finSym.textContent='Ω';
-
-  // Volumen total
-  let vol=0;
-  for(const ej of ejList){
-    (sesion[ej]||[]).filter(s=>!s.deleted).forEach(s=>{
-      vol+=(s.kg||0)*(s.reps||0)*(s.mult||1);
-    });
-  }
-
-  const volEl=$('fin-vol');
-  if(volEl) volEl.textContent=vol>0?`vol ${vol.toLocaleString('es-AR')} kg`:'';
-
+  const stats=buildCurrentSessionStats();
+  _currentSessionStats=stats;
+  updateFinalSummaryUi(stats);
   // Comparar con sesión anterior del mismo tipo
   const compEl=$('fin-vol-comp');
   if(compEl){
     const prev=DB.history.find(h=>h.dayId&&h.dayId.startsWith(curType)&&h.volTotal);
-    if(prev&&prev.volTotal&&vol>0){
-      const diff=vol-prev.volTotal;
+    if(prev&&prev.volTotal&&stats.volTotal>0){
+      const diff=stats.volTotal-prev.volTotal;
       const pct=Math.round((diff/prev.volTotal)*100);
       const sign=diff>=0?'+':'';
       compEl.textContent=`${sign}${pct}% vs anterior`;
@@ -5101,13 +5115,18 @@ function finishW(){
   },1000);
 
   persistCurrentSessionToDb(true);
+  markCsvPending();
   clearSessionDraft();
   stopDraftAutoSave();
   renderFinBody();
   updateBackupInfo();
+  openFinSharePanel();
+  updateFinalShareStatus();
   show('s3');
 }
 function renderFinBody(){
+  const stats=buildCurrentSessionStats();
+  _currentSessionStats=stats;
   let html='';
   for(const name of ejList){
     const s=sesion[name];if(!s||!s.length)continue;
@@ -5115,6 +5134,10 @@ function renderFinBody(){
     const prevPRkg=(ejRec?.pr_kg?.val)||0;
     const grip=activeGripForExercise(name);
     const gripTag=grip?` <span style="font-size:10px;color:var(--ac);font-family:var(--mono);letter-spacing:.6px;">· ${fmtGripLabel(grip)}</span>`:'';
+    const exerciseStat=stats.exercises.find(x=>x.name===name)||null;
+    const mevTag=exerciseStat&&exerciseStat.mev>0
+      ?`<span style="font-size:10px;color:var(--go);font-family:var(--mono);letter-spacing:.6px;">+${fmtSetCount(exerciseStat.mev)} mev</span>`
+      :'';
     const seriesHtml=s.map((r,idx)=>{
       const kstr=formatSetInlineForExercise(name,r,'kg');
       let t=`S${r.serie}: ${kstr}`;
@@ -5134,11 +5157,12 @@ function renderFinBody(){
       </div>`;
     }).join('');
     html+=`<div class="fej">
-      <div class="fej-n">${name}${gripTag}</div>
+      <div class="fej-n"><span>${name}${gripTag}</span>${mevTag}</div>
       ${seriesHtml}
     </div>`;
   }
   $('fin-body').innerHTML=html||'<div style="color:var(--mu);font-size:11px">sin series</div>';
+  updateFinalSummaryUi(stats);
 }
 
 function toggleSerieDelete(name,idx){
@@ -5146,6 +5170,7 @@ function toggleSerieDelete(name,idx){
   sesion[name][idx].deleted=!sesion[name][idx].deleted;
   renderFinBody();
   saveSessionDraft(false);
+  updateFinalShareStatus();
 }
 
 function exitW(){
@@ -5153,6 +5178,163 @@ function exitW(){
   clearInterval(iv);clearInterval(totalIv);clearInterval(metaIv);clearAllEjRest();
   saveSessionDraft(false);
   show('s0');
+}
+
+function activeSeriesForExercise(name){
+  return (sesion[name]||[]).filter(r=>r&&!r.deleted);
+}
+
+function getCurrentSessionId(){
+  const user=(DB.usuario||'').trim().toLowerCase();
+  return [today(),curDay?.id||curType||'dia',startTime||'',user].join('|');
+}
+
+function loadCsvPendingMeta(){
+  try{
+    const raw=localStorage.getItem(CSV_DAY_PENDING_KEY);
+    _csvPendingMeta=raw?JSON.parse(raw):null;
+    return _csvPendingMeta;
+  }catch(_e){
+    _csvPendingMeta=null;
+    return null;
+  }
+}
+
+function saveCsvPendingMeta(meta){
+  _csvPendingMeta=meta||null;
+  try{
+    if(meta)localStorage.setItem(CSV_DAY_PENDING_KEY,JSON.stringify(meta));
+    else localStorage.removeItem(CSV_DAY_PENDING_KEY);
+  }catch(_e){
+    if(isStorageQuotaError(_e))notifyStorageQuota();
+  }
+}
+
+function markCsvPending(){
+  saveCsvPendingMeta({
+    id:getCurrentSessionId(),
+    date:today(),
+    dayId:curDay?.id||curType||'dia',
+    dayName:curDay?.name||'',
+    user:DB.usuario||null,
+    ts:Date.now()
+  });
+}
+
+function clearCsvPending(){
+  const meta=loadCsvPendingMeta();
+  if(!meta)return;
+  if(!curDay||meta.id===getCurrentSessionId())saveCsvPendingMeta(null);
+}
+
+function hasPendingCsvExport(){
+  const meta=loadCsvPendingMeta();
+  return !!(meta&&meta.id);
+}
+
+function isCurrentSessionCsvPending(){
+  const meta=loadCsvPendingMeta();
+  return !!(meta&&meta.id===getCurrentSessionId());
+}
+
+function updateFinalShareStatus(){
+  const el=$('fin-share-status');
+  if(!el)return;
+  const pending=isCurrentSessionCsvPending();
+  el.className=`fin-share-status ${pending?'pending':'ok'}`;
+  el.textContent=pending?'csv del día pendiente · exportalo antes de cerrar':'csv del día exportado';
+}
+
+function buildCurrentSessionStats(){
+  const exercises=[];
+  const workedSet=new Set();
+  const mevByMuscle={};
+  let volTotal=0;
+  let mevTotal=0;
+  let totalSeries=0;
+
+  for(const name of ejList){
+    const rows=activeSeriesForExercise(name);
+    if(!rows.length)continue;
+    const loads=muscleLoadsForExercise(name)||[];
+    const muscles=sortMusclesByPreferredOrder(loads.map(x=>x.m));
+    muscles.forEach(m=>workedSet.add(m));
+    const loadTotal=loads.reduce((acc,x)=>acc+(Number(x.w)||0),0);
+    let exVol=0;
+    let exMev=0;
+
+    rows.forEach(r=>{
+      totalSeries++;
+      const kg=Math.max(0,Number(r.kg)||0);
+      const reps=Math.max(0,Number(r.reps)||0);
+      const mult=Math.max(1,Number(r.mult)||1);
+      exVol+=kg*reps*mult;
+      let rowMev=Number(r.mevGainTotal);
+      if(!Number.isFinite(rowMev))rowMev=mevIsEffectiveSet(r)?loadTotal:0;
+      exMev+=rowMev;
+      if(mevIsEffectiveSet(r)){
+        loads.forEach(x=>{
+          mevByMuscle[x.m]=(Number(mevByMuscle[x.m])||0)+(Number(x.w)||0);
+        });
+      }
+    });
+
+    volTotal+=exVol;
+    mevTotal+=exMev;
+    exercises.push({
+      name,
+      grip:activeGripForExercise(name),
+      muscles,
+      series:rows.length,
+      volume:exVol,
+      mev:exMev
+    });
+  }
+
+  const muscles=sortMusclesByPreferredOrder([...workedSet]);
+  return {
+    id:getCurrentSessionId(),
+    date:today(),
+    dayName:curDay?.name||'',
+    user:DB.usuario||'',
+    userGreek:toGreek(DB.usuario)||'Ω',
+    totalSec,
+    totalTime:fmtHM(totalSec),
+    totalSeries,
+    volTotal,
+    mevTotal,
+    exercises,
+    muscles,
+    musclesLabel:muscles.length?muscles.join(' · '):'sin grupos detectados',
+    mevByMuscle
+  };
+}
+
+function updateFinalSummaryUi(statsArg){
+  const stats=statsArg||buildCurrentSessionStats();
+  _currentSessionStats=stats;
+  const volEl=$('fin-vol');
+  const mevEl=$('fin-mev');
+  const compEl=$('fin-vol-comp');
+  if(volEl)volEl.textContent=`vol ${stats.volTotal>0?stats.volTotal.toLocaleString('es-AR'):'0'} kg`;
+  if(mevEl)mevEl.textContent=`mev +${fmtSetCount(stats.mevTotal)}`;
+  if(compEl){
+    const prev=(DB.history||[]).find(h=>
+      h&&h.dayId&&h.dayId.startsWith(curType)&&h.volTotal&&!(
+        h.dayId===curDay?.id&&String(h.startTime||'')===String(startTime||'')&&h.date===stats.date
+      )
+    );
+    if(prev&&prev.volTotal&&stats.volTotal>0){
+      const diff=stats.volTotal-prev.volTotal;
+      const pct=Math.round((diff/prev.volTotal)*100);
+      const sign=diff>=0?'+':'';
+      compEl.textContent=`${sign}${pct}% vs anterior`;
+      compEl.style.color=diff>=0?'var(--go)':'var(--re)';
+    }else{
+      compEl.textContent='';
+      compEl.style.color='';
+    }
+  }
 }
 
 /* â•â• RUTINAS EN DB â•â• */
@@ -5179,6 +5361,152 @@ function smartName(){
   const months=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   return `gym_${user}_${d.getDate()}${months[d.getMonth()]}`;
 }
+function drawRoundRect(ctx,x,y,w,h,r){
+  const rr=Math.max(0,Math.min(r,Math.min(w,h)/2));
+  ctx.beginPath();
+  ctx.moveTo(x+rr,y);
+  ctx.arcTo(x+w,y,x+w,y+h,rr);
+  ctx.arcTo(x+w,y+h,x,y+h,rr);
+  ctx.arcTo(x,y+h,x,y,rr);
+  ctx.arcTo(x,y,x+w,y,rr);
+  ctx.closePath();
+}
+function wrapCanvasText(ctx,text,maxWidth){
+  const src=String(text||'').trim();
+  if(!src)return ['—'];
+  const words=src.split(/\s+/);
+  const lines=[];
+  let line='';
+  words.forEach(word=>{
+    const test=line?`${line} ${word}`:word;
+    if(!line||ctx.measureText(test).width<=maxWidth)line=test;
+    else{
+      lines.push(line);
+      line=word;
+    }
+  });
+  if(line)lines.push(line);
+  return lines;
+}
+function canvasToBlob(canvas){
+  return new Promise(resolve=>{
+    canvas.toBlob(blob=>resolve(blob||null),'image/png');
+  });
+}
+async function shareSummaryCard(){
+  const stats=buildCurrentSessionStats();
+  _currentSessionStats=stats;
+  const canvas=document.createElement('canvas');
+  canvas.width=1200;
+  canvas.height=1600;
+  const ctx=canvas.getContext('2d');
+  if(!ctx)return;
+
+  const bg=ctx.createLinearGradient(0,0,1200,1600);
+  bg.addColorStop(0,'#070808');
+  bg.addColorStop(.5,'#111110');
+  bg.addColorStop(1,'#080909');
+  ctx.fillStyle=bg;
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  const glow=ctx.createRadialGradient(600,220,40,600,220,420);
+  glow.addColorStop(0,'rgba(227,191,103,.22)');
+  glow.addColorStop(.55,'rgba(170,125,54,.07)');
+  glow.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=glow;
+  ctx.fillRect(0,0,canvas.width,620);
+
+  ctx.textAlign='center';
+  ctx.fillStyle='rgba(232,214,170,.14)';
+  ctx.font='600 220px serif';
+  ctx.fillText('Ω',600,260);
+
+  ctx.fillStyle='#f0dfab';
+  ctx.font='700 56px serif';
+  ctx.fillText(stats.userGreek||'Ω',600,170);
+
+  ctx.fillStyle='#a89f8c';
+  ctx.font='500 24px monospace';
+  ctx.fillText(`${stats.dayName||'entrenamiento'} · ${stats.date}`,600,214);
+
+  const cards=[
+    {x:86,y:290,w:320,h:138,label:'tiempo',value:stats.totalTime},
+    {x:440,y:290,w:320,h:138,label:'volumen',value:`${stats.volTotal.toLocaleString('es-AR')} kg`},
+    {x:794,y:290,w:320,h:138,label:'mev',value:`+${fmtSetCount(stats.mevTotal)}`}
+  ];
+  cards.forEach(card=>{
+    ctx.fillStyle='rgba(255,255,255,.025)';
+    ctx.strokeStyle='rgba(240,223,171,.18)';
+    ctx.lineWidth=2;
+    drawRoundRect(ctx,card.x,card.y,card.w,card.h,28);
+    ctx.fill();
+    ctx.stroke();
+    ctx.textAlign='left';
+    ctx.fillStyle='#9b9383';
+    ctx.font='500 20px monospace';
+    ctx.fillText(card.label.toUpperCase(),card.x+26,card.y+38);
+    ctx.fillStyle='#f5efe0';
+    ctx.font='600 38px serif';
+    ctx.fillText(card.value,card.x+26,card.y+92);
+  });
+
+  ctx.textAlign='left';
+  ctx.fillStyle='#f0dfab';
+  ctx.font='600 24px monospace';
+  ctx.fillText('MUSCULOS TRABAJADOS',86,492);
+  ctx.strokeStyle='rgba(240,223,171,.14)';
+  ctx.lineWidth=2;
+  drawRoundRect(ctx,86,518,1028,170,28);
+  ctx.stroke();
+
+  ctx.fillStyle='#e6ded0';
+  ctx.font='500 28px serif';
+  const muscleLines=wrapCanvasText(ctx,stats.musclesLabel.replace(/ · /g,'   ·   '),968).slice(0,4);
+  muscleLines.forEach((line,i)=>{
+    ctx.fillText(line,118,570+(i*40));
+  });
+
+  ctx.fillStyle='#f0dfab';
+  ctx.font='600 24px monospace';
+  ctx.fillText('SESION',86,758);
+
+  const shown=stats.exercises.slice(0,8);
+  shown.forEach((ex,i)=>{
+    const y=804+(i*86);
+    ctx.strokeStyle='rgba(240,223,171,.11)';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(86,y+54);
+    ctx.lineTo(1114,y+54);
+    ctx.stroke();
+    ctx.fillStyle='#f5efe0';
+    ctx.font='600 30px serif';
+    const gripTxt=ex.grip?` · ${fmtGripLabel(ex.grip)}`:'';
+    ctx.fillText(`${ex.name}${gripTxt}`,86,y);
+    ctx.fillStyle='#a89f8c';
+    ctx.font='500 20px monospace';
+    ctx.fillText(`${ex.series} series · ${ex.volume.toLocaleString('es-AR')} kg · +${fmtSetCount(ex.mev)} mev`,86,y+34);
+    const musc=ex.muscles.length?ex.muscles.join(' · '):grupoDeEj(ex.name);
+    ctx.fillStyle='#827b6d';
+    ctx.font='500 18px monospace';
+    ctx.fillText(musc,86,y+60);
+  });
+
+  if(stats.exercises.length>shown.length){
+    ctx.fillStyle='#9b9383';
+    ctx.font='500 20px monospace';
+    ctx.fillText(`+${stats.exercises.length-shown.length} ejercicios más`,86,804+(shown.length*86));
+  }
+
+  ctx.textAlign='center';
+  ctx.fillStyle='#7b7467';
+  ctx.font='500 18px monospace';
+  ctx.fillText('Omega',600,1526);
+
+  const blob=await canvasToBlob(canvas);
+  if(!blob)return;
+  await shareOnly(blob,`${smartName()}_resumen.png`,'image/png');
+}
 function askName(def){return prompt('Nombre del archivo:',def);}
 function dlBlob(blob,filename){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();}
 
@@ -5196,9 +5524,9 @@ async function shareOnly(blob,name,mime){
         title:shareTitle,
         text:shareBlurb
       });
-      return;
+      return true;
     }
-    catch(e){if(e.name==='AbortError')return;}
+    catch(e){if(e.name==='AbortError')return false;}
   }
   // Si no puede compartir archivos, intentar compartir el contenido como texto
   if(navigator.share&&shareText){
@@ -5207,14 +5535,17 @@ async function shareOnly(blob,name,mime){
         title:shareTitle,
         text:`${shareBlurb}\n\n${shareText}`
       });
-      return;
-    }catch(e){if(e.name==='AbortError')return;}
+      return true;
+    }catch(e){if(e.name==='AbortError')return false;}
   }
   // Último fallback: clipboard o descarga directa
   if(shareText){
     try{await navigator.clipboard.writeText(shareText);alert('Copiado al portapapeles');}
     catch{dlBlob(blob,name);}
-  } else dlBlob(blob,name);
+    return true;
+  }
+  dlBlob(blob,name);
+  return true;
 }
 
 function buildCSV(){
@@ -5241,19 +5572,25 @@ function exportCSV(){
   const def=`${smartName()}.csv`;
   const name=askName(def);if(!name)return;
   dlBlob(new Blob([buildCSV()],{type:'text/csv;charset=utf-8;'}),name.endsWith('.csv')?name:name+'.csv');
+  clearCsvPending();
+  updateFinalShareStatus();
 }
 
 async function shareCSV(){
-  await shareOnly(
+  const ok=await shareOnly(
     new Blob([buildCSV()],{type:'text/csv;charset=utf-8;'}),
     `${smartName()}.csv`,
     'text/csv;charset=utf-8;'
   );
+  if(ok){
+    clearCsvPending();
+    updateFinalShareStatus();
+  }
 }
 
 function exportDB(){
   persistCurrentSessionToDb(false);
-  const def=`${smartName()}_db.json`;
+  const def=`${smartName()}_personal.json`;
   const name=askName(def);if(!name)return;
   const dbObj=buildDbExportObject();
   dlBlob(new Blob([JSON.stringify(dbObj,null,2)],{type:'application/json'}),name.endsWith('.json')?name:name+'.json');
@@ -5263,7 +5600,7 @@ async function shareDB(){
   const dbObj=buildDbExportObject();
   await shareOnly(
     new Blob([JSON.stringify(dbObj,null,2)],{type:'application/json'}),
-    `${smartName()}_db.json`,
+    `${smartName()}_personal.json`,
     'application/json'
   );
 }
@@ -5293,12 +5630,12 @@ function updateBackupInfo(){
   let level='',msg='';
   if(size>=3.5*1024*1024){
     level='high';
-    msg=`JSON ${fmtBytes(size)} · alto: exportá JSON ahora y limpiá historial viejo.`;
+    msg=`guardado personal ${fmtBytes(size)} · alto: hacé backup y limpiá historial viejo.`;
   }else if(size>=2*1024*1024){
     level='warn';
-    msg=`JSON ${fmtBytes(size)} · recomendado: backup hoy y revisión de historial.`;
+    msg=`guardado personal ${fmtBytes(size)} · recomendado: backup hoy y revisión de historial.`;
   }else{
-    msg=`JSON ${fmtBytes(size)} · sugerido: backup semanal en Drive.`;
+    msg=`guardado personal ${fmtBytes(size)} · sugerido: backup semanal en Drive.`;
   }
   el.className=`backup-info${level?` ${level}`:''}`;
   el.textContent=msg;
@@ -5370,7 +5707,7 @@ function isStorageQuotaError(err){
 function notifyStorageQuota(){
   if(_storageQuotaWarned)return;
   _storageQuotaWarned=true;
-  alert('Memoria local llena. Exportá JSON/CSV para no perder datos.');
+  alert('Memoria local llena. Exportá guardado personal y CSV del día para no perder datos.');
 }
 function saveAutoDb(){
   if(_isHardResetting)return;
@@ -5656,6 +5993,16 @@ function closeFinSharePanel(){
   if(panel)panel.classList.remove('on');
   if(btn)btn.textContent='compartir';
 }
+function openFinSharePanel(){
+  const panel=$('fin-share-panel');
+  const btn=$('fin-share-toggle');
+  if(!panel)return;
+  closeFinNotePanel();
+  panel.classList.add('on');
+  if(btn)btn.textContent='cerrar';
+  updateFinalShareStatus();
+  updateBackupInfo();
+}
 function toggleFinSharePanel(){
   const panel=$('fin-share-panel');
   const btn=$('fin-share-toggle');
@@ -5664,6 +6011,10 @@ function toggleFinSharePanel(){
   const on=!panel.classList.contains('on');
   panel.classList.toggle('on',on);
   if(btn)btn.textContent=on?'cerrar':'compartir';
+  if(on){
+    updateFinalShareStatus();
+    updateBackupInfo();
+  }
 }
 function closeFinNotePanel(){
   const panel=$('fin-note-panel');
@@ -6099,11 +6450,15 @@ function onSplashLoad(e){
   },300);
 }
 
-window.addEventListener('beforeunload',()=>{
+window.addEventListener('beforeunload',(event)=>{
   if(_isHardResetting)return;
   syncAllTimersToNow(false);
   saveSessionDraft(false);
   saveAutoDb();
+  if(hasPendingCsvExport()){
+    event.preventDefault();
+    event.returnValue='';
+  }
 });
 document.addEventListener('visibilitychange',()=>{
   if(_isHardResetting)return;
@@ -6114,6 +6469,7 @@ document.addEventListener('visibilitychange',()=>{
   }else{
     syncAllTimersToNow(true);
     refreshEjRestDisplay();
+    updateFinalShareStatus();
   }
 });
 
