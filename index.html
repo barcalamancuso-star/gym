@@ -5183,14 +5183,35 @@ function dlBlob(blob,filename){const a=document.createElement('a');a.href=URL.cr
 
 async function shareOnly(blob,name,mime){
   const file=new File([blob],name,{type:mime});
-  // Web Share API — funciona en móvil (iOS Safari, Android Chrome)
+  const isTextLike=mime.includes('text')||mime.includes('json')||mime.includes('csv');
+  const shareText=isTextLike?await blob.text():null;
+  const shareTitle=name;
+  const shareBlurb=`${name}\nOmega`;
+  // Web Share API con archivo
   if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-    try{await navigator.share({files:[file],title:name});return;}
+    try{
+      await navigator.share({
+        files:[file],
+        title:shareTitle,
+        text:shareBlurb
+      });
+      return;
+    }
     catch(e){if(e.name==='AbortError')return;}
   }
-  // Fallback: clipboard en desktop
-  if(mime.includes('text')){
-    try{const t=await blob.text();await navigator.clipboard.writeText(t);alert('Copiado al portapapeles');}
+  // Si no puede compartir archivos, intentar compartir el contenido como texto
+  if(navigator.share&&shareText){
+    try{
+      await navigator.share({
+        title:shareTitle,
+        text:`${shareBlurb}\n\n${shareText}`
+      });
+      return;
+    }catch(e){if(e.name==='AbortError')return;}
+  }
+  // Último fallback: clipboard o descarga directa
+  if(shareText){
+    try{await navigator.clipboard.writeText(shareText);alert('Copiado al portapapeles');}
     catch{dlBlob(blob,name);}
   } else dlBlob(blob,name);
 }
