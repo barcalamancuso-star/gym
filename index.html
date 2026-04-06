@@ -1496,19 +1496,22 @@ const ALL_EJS=[
   "Press Militar","Press Arnold","Press Hombro Máquina","Cruces Polea Alta","Cruce de Poleas",
   "Aperturas Máquina","Aperturas Mancuernas","Pec Deck","Fondos","Extensión Soga","Tríceps Trasnuca",
   "Tríceps Polea Barra","Tríceps en banco plano","Extensión Unilateral Tríceps","Press Francés","Rompecráneos","Press Cerrado",
-  "Flexiones","Flexiones Diamante","Flexiones Inclinadas","Flexiones Declinadas","Flexiones Arqueras","Fondos en Paralelas",
+  "Flexiones","Flexiones Diamante","Flexiones Inclinadas","Flexiones Declinadas","Flexiones Arqueras","Flexiones Explosivas",
+  "Flexiones Hindúes","Pike Push Up","Handstand Push Up","Pseudo Planche Push Up","Fondos en Paralelas",
   "Jalón al Pecho","Jalón al Pecho (Neutro)","Jalón al Pecho (Prono)","Jalón Prono Abierto","Jalón Unilateral",
   "Jalón con Brazos Rectos","Remo Bajo","Remo Bajo (Polea)","Remo con Barra","Remo en T","Remo Pendlay","Serrucho",
-  "Pullover en Polea","Dominadas","Dominadas Asistidas","Dominadas Supinas","Dominadas Neutras","Bíceps Barra W","Curl Barra Recta","Curl Martillo","Curl Scott",
+  "Pullover en Polea","Dominadas","Dominadas Asistidas","Dominadas Supinas","Dominadas Neutras","Dominadas Arqueras",
+  "Remo Invertido","Muscle Up","Scapular Pull Up","Bíceps Barra W","Curl Barra Recta","Curl Martillo","Curl Scott",
   "Curl Inclinado Mancuernas","Curl Concentrado","Curl Predicador","Curl Inverso","Bíceps Polea","Vuelos Laterales",
   "Vuelos Frontales","Hombro Posterior","Deltoide Posterior","Face Pull","Elevaciones Laterales Unilaterales","Shrugs","Encogimientos con Barra",
   "Fondos en Silla",
   "Sentadilla","Sentadilla Frontal","Sentadilla Hack","Prensa de Piernas","Prensa 45","Prensa Pie Alto","Zancadas","Zancada Búlgara",
   "Extensión Cuádriceps","Leg Extension","Sillón Cuádriceps","Seated Leg Curl","Camilla Isquios","Isquios Máquina",
   "Peso Muerto Rumano","Peso Muerto Convencional","Hip Thrust","Patada de Glúteo","Abductores","Abductores (Forza)","Aductores",
+  "Sentadilla al Aire","Pistol Squat","Shrimp Squat","Nordic Curl","Puente de Glúteo","Hip Thrust Unilateral","Wall Sit",
   "Gemelos Sentado","Gemelos de Pie","Plancha","Plancha Lateral","Elevación de Piernas","Crunch en Polea","Crunch Máquina",
   "Abdominales banco inclinado","Rueda Abdominal","Russian Twist","Hollow Hold","Pallof Press","Dead Bug","Bird Dog",
-  "Espinales","Hyperextensiones","Negativa Fondos","Farmer Walk"
+  "L-Sit","V-Ups","Toes to Bar","Superman","Espinales","Hyperextensiones","Negativa Fondos","Farmer Walk"
 ];
 
 const TIPO_GROUPS={'pull':'Espalda · Bíceps','push':'Pecho · Hombros · Tríceps','legs':'Cuádriceps · Glúteo · Isquios'};
@@ -1551,28 +1554,34 @@ const EJ_GRUPOS={
   "Press de Banca":"Pecho","Press Inclinado":"Pecho","Press Declinado":"Pecho","Press Plano Mancuernas":"Pecho","Press Inclinado Mancuernas":"Pecho",
   "Cruces Polea Alta":"Pecho","Cruce de Poleas":"Pecho","Aperturas Máquina":"Pecho","Aperturas Mancuernas":"Pecho","Pec Deck":"Pecho","Fondos":"Pecho",
   "Flexiones":"Pecho","Flexiones Inclinadas":"Pecho","Flexiones Declinadas":"Pecho","Flexiones Arqueras":"Pecho","Fondos en Paralelas":"Pecho",
+  "Flexiones Explosivas":"Pecho","Flexiones Hindúes":"Pecho","Pseudo Planche Push Up":"Pecho",
   "Flexiones Diamante":"Tríceps",
   "Press Militar":"Hombros","Press Arnold":"Hombros","Press Hombro Máquina":"Hombros","Vuelos Laterales":"Hombros","Vuelos Frontales":"Hombros",
   "Hombro Posterior":"Hombros","Deltoide Posterior":"Hombros","Face Pull":"Hombros","Elevaciones Laterales Unilaterales":"Hombros",
+  "Pike Push Up":"Hombros","Handstand Push Up":"Hombros",
   "Shrugs":"Trapecios","Encogimientos con Barra":"Trapecios",
+  "Scapular Pull Up":"Trapecios",
   "Extensión Soga":"Tríceps","Tríceps Trasnuca":"Tríceps","Tríceps Polea Barra":"Tríceps","Tríceps en banco plano":"Tríceps",
   "Extensión Unilateral Tríceps":"Tríceps","Press Francés":"Tríceps","Rompecráneos":"Tríceps","Press Cerrado":"Tríceps",
   "Jalón al Pecho":"Espalda","Jalón al Pecho (Neutro)":"Espalda","Jalón al Pecho (Prono)":"Espalda","Jalón Prono Abierto":"Espalda",
   "Jalón Unilateral":"Espalda","Jalón con Brazos Rectos":"Espalda","Remo Bajo":"Espalda","Remo Bajo (Polea)":"Espalda",
   "Remo con Barra":"Espalda","Remo en T":"Espalda","Remo Pendlay":"Espalda","Serrucho":"Espalda","Pullover en Polea":"Espalda",
-  "Dominadas":"Espalda","Dominadas Asistidas":"Espalda","Dominadas Supinas":"Espalda","Dominadas Neutras":"Espalda","Espinales":"Espinales","Hyperextensiones":"Espinales",
+  "Dominadas":"Espalda","Dominadas Asistidas":"Espalda","Dominadas Supinas":"Espalda","Dominadas Neutras":"Espalda","Dominadas Arqueras":"Espalda",
+  "Remo Invertido":"Espalda","Muscle Up":"Espalda","Espinales":"Espinales","Hyperextensiones":"Espinales","Superman":"Espinales",
   "Bíceps Barra W":"Bíceps","Curl Barra Recta":"Bíceps","Curl Martillo":"Bíceps","Curl Scott":"Bíceps","Curl Inclinado Mancuernas":"Bíceps",
   "Curl Concentrado":"Bíceps","Curl Predicador":"Bíceps","Curl Inverso":"Bíceps","Bíceps Polea":"Bíceps",
   "Fondos en Silla":"Tríceps",
   "Sentadilla":"Cuádriceps","Sentadilla Frontal":"Cuádriceps","Sentadilla Hack":"Cuádriceps","Prensa de Piernas":"Cuádriceps",
   "Prensa 45":"Cuádriceps","Prensa Pie Alto":"Glúteo","Zancadas":"Cuádriceps","Zancada Búlgara":"Cuádriceps",
+  "Sentadilla al Aire":"Cuádriceps","Pistol Squat":"Cuádriceps","Shrimp Squat":"Cuádriceps","Wall Sit":"Cuádriceps",
   "Extensión Cuádriceps":"Cuádriceps","Leg Extension":"Cuádriceps","Sillón Cuádriceps":"Cuádriceps",
   "Seated Leg Curl":"Isquios","Camilla Isquios":"Isquios","Isquios Máquina":"Isquios","Peso Muerto Rumano":"Isquios","Peso Muerto Convencional":"Isquios",
-  "Hip Thrust":"Glúteo","Patada de Glúteo":"Glúteo","Abductores":"Glúteo","Abductores (Forza)":"Glúteo","Aductores":"Aductores",
+  "Nordic Curl":"Isquios","Hip Thrust":"Glúteo","Patada de Glúteo":"Glúteo","Abductores":"Glúteo","Abductores (Forza)":"Glúteo","Aductores":"Aductores",
+  "Puente de Glúteo":"Glúteo","Hip Thrust Unilateral":"Glúteo",
   "Gemelos Sentado":"Gemelos","Gemelos de Pie":"Gemelos",
   "Plancha":"Core","Plancha Lateral":"Core","Elevación de Piernas":"Core","Crunch en Polea":"Core","Crunch Máquina":"Core",
   "Abdominales banco inclinado":"Core","Rueda Abdominal":"Core","Russian Twist":"Core","Hollow Hold":"Core","Pallof Press":"Core",
-  "Dead Bug":"Core","Bird Dog":"Core","Negativa Fondos":"Core","Farmer Walk":"Antebrazos"
+  "Dead Bug":"Core","Bird Dog":"Core","Negativa Fondos":"Core","L-Sit":"Core","V-Ups":"Core","Toes to Bar":"Core","Farmer Walk":"Antebrazos"
 };
 
 const EJ_NAME_ALIAS={
@@ -1587,6 +1596,18 @@ const EJ_NAME_ALIAS={
   'flexiones inclinadas':'Flexiones Inclinadas',
   'flexiones declinadas':'Flexiones Declinadas',
   'flexiones arqueras':'Flexiones Arqueras',
+  'flexiones explosivas':'Flexiones Explosivas',
+  'clap push up':'Flexiones Explosivas',
+  'clap push-up':'Flexiones Explosivas',
+  'flexiones hindu':'Flexiones Hindúes',
+  'hindu push up':'Flexiones Hindúes',
+  'hindu push-up':'Flexiones Hindúes',
+  'pike push up':'Pike Push Up',
+  'pike push-up':'Pike Push Up',
+  'handstand push up':'Handstand Push Up',
+  'handstand push-up':'Handstand Push Up',
+  'pseudo planche push up':'Pseudo Planche Push Up',
+  'pseudo planche push-up':'Pseudo Planche Push Up',
   'fondos paralelas':'Fondos en Paralelas',
   'fondos en paralelas':'Fondos en Paralelas',
   'dominada':'Dominadas',
@@ -1595,6 +1616,17 @@ const EJ_NAME_ALIAS={
   'chin-up':'Dominadas Supinas',
   'dominadas neutras':'Dominadas Neutras',
   'dominada neutra':'Dominadas Neutras',
+  'dominadas arqueras':'Dominadas Arqueras',
+  'archer pull up':'Dominadas Arqueras',
+  'archer pull-up':'Dominadas Arqueras',
+  'remo invertido':'Remo Invertido',
+  'australian pull up':'Remo Invertido',
+  'australian pull-up':'Remo Invertido',
+  'remo australiano':'Remo Invertido',
+  'muscle up':'Muscle Up',
+  'muscle-up':'Muscle Up',
+  'scapular pull up':'Scapular Pull Up',
+  'scapular pull-up':'Scapular Pull Up',
   'fondos en silla':'Fondos en Silla',
   'fondos silla':'Fondos en Silla',
   'fondos en banco':'Fondos en Silla',
@@ -1621,6 +1653,26 @@ const EJ_NAME_ALIAS={
   'abductores forza':'Abductores (Forza)',
   'camilla femoral':'Camilla Isquios',
   'sillon cuadriceps':'Sillón Cuádriceps',
+  'sentadilla al aire':'Sentadilla al Aire',
+  'air squat':'Sentadilla al Aire',
+  'air squats':'Sentadilla al Aire',
+  'pistol squat':'Pistol Squat',
+  'sentadilla pistol':'Pistol Squat',
+  'shrimp squat':'Shrimp Squat',
+  'nordic curl':'Nordic Curl',
+  'curl nordico':'Nordic Curl',
+  'puente de gluteo':'Puente de Glúteo',
+  'glute bridge':'Puente de Glúteo',
+  'hip thrust unilateral':'Hip Thrust Unilateral',
+  'wall sit':'Wall Sit',
+  'sentadilla isometrica':'Wall Sit',
+  'l-sit':'L-Sit',
+  'lsit':'L-Sit',
+  'v-ups':'V-Ups',
+  'v ups':'V-Ups',
+  'toes to bar':'Toes to Bar',
+  'toes-to-bar':'Toes to Bar',
+  'superman':'Superman',
   'press banca':'Press de Banca',
   'pec deck':'Pec Deck',
   'pullover':'Pullover en Polea',
@@ -4551,7 +4603,14 @@ function autoDetectTipo(q){
   else if(ql.includes('mancuerna')||ql.includes('martillo')||ql.includes('vuelo')||ql.includes('serrucho'))setTipoModal('manc',$('tb-manc'));
   else if(ql.includes('barra')||ql.includes('press de banca')||ql.includes('remo en t'))setTipoModal('barra',$('tb-barra'));
   else if(ql.includes('máquina')||ql.includes('maquina')||ql.includes('prensa')||ql.includes('extensión'))setTipoModal('maq',$('tb-maq'));
-  else if(ql.includes('fondos')||ql.includes('dominadas')||ql.includes('plancha')||ql.includes('abdominal'))setTipoModal('pc',$('tb-pc'));
+  else if(
+    ql.includes('fondos')||ql.includes('dominadas')||ql.includes('plancha')||ql.includes('abdominal')||
+    ql.includes('lagart')||ql.includes('flexion')||ql.includes('push up')||ql.includes('push-up')||
+    ql.includes('muscle up')||ql.includes('muscle-up')||ql.includes('remo invertido')||ql.includes('australian')||
+    ql.includes('sentadilla al aire')||ql.includes('pistol')||ql.includes('shrimp')||ql.includes('nordic')||
+    ql.includes('puente de gluteo')||ql.includes('glute bridge')||ql.includes('wall sit')||
+    ql.includes('l-sit')||ql.includes('lsit')||ql.includes('toes to bar')||ql.includes('superman')
+  )setTipoModal('pc',$('tb-pc'));
 }
 
 function selP(n){
