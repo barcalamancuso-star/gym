@@ -18,6 +18,7 @@
   --bg:#0b0b0b;--c1:#111;--br:#1e1e1e;--br2:#2a2a2a;
   --tx:#ccc9c3;--mu:#555;--mu2:#888;
   --go:#8aaa52;--re:#b07838;--ac:#6a6a99;
+  --omega-lit:#f4d3a7;--omega-halo:rgba(225,182,125,.32);--omega-halo-soft:rgba(225,182,125,.14);
   --serif:'Noto Serif JP',serif;--mono:'IBM Plex Mono',monospace;
   --touch:44px;
 }
@@ -45,11 +46,25 @@ input,select{-webkit-appearance:none;appearance:none;border-radius:0;
 @keyframes breathe{0%,100%{opacity:1}50%{opacity:0.65}}
 @keyframes splashIn{0%{opacity:0;filter:blur(9px) contrast(145%)}70%{opacity:1;filter:blur(1px) contrast(115%)}100%{opacity:1;filter:blur(0) contrast(100%)}}
 @keyframes splashGlow{0%,100%{text-shadow:none;opacity:1;filter:contrast(100%);}7%,8.2%{text-shadow:-2px 0 rgba(110,255,170,.68),2px 0 rgba(120,190,255,.52);opacity:.95;filter:contrast(112%);}8.3%,11.5%{text-shadow:none;opacity:1;filter:contrast(100%);}41%,42.2%{text-shadow:2px 0 rgba(110,255,170,.58),-2px 0 rgba(255,130,190,.48);opacity:.94;filter:contrast(110%);}42.3%,69%{text-shadow:none;opacity:1;filter:contrast(100%);}69.2%,70.1%{text-shadow:-2px 0 rgba(120,190,255,.45),2px 0 rgba(255,130,190,.38);opacity:.96;}70.2%,100%{text-shadow:none;opacity:1;filter:contrast(100%);}}
+@keyframes omegaPulseGlow{
+  0%,100%{color:var(--tx);text-shadow:0 0 0 transparent,0 0 0 transparent,0 0 0 transparent;}
+  50%{color:var(--omega-lit);text-shadow:0 0 12px var(--omega-halo),0 0 26px var(--omega-halo-soft),0 0 42px rgba(255,245,228,.08);}
+}
 @keyframes matrixNameDive{
   0%{opacity:0;transform:translate(-50%,-50%) scale(.92);filter:blur(0);}
   12%{opacity:1;transform:translate(-50%,-50%) scale(1);}
   72%{opacity:.94;transform:translate(-50%,-50%) scale(6.4);filter:blur(.35px);}
   100%{opacity:0;transform:translate(-50%,-50%) scale(12.2);filter:blur(2.8px);}
+}
+@keyframes splashSceneZoom{
+  0%{transform:scale(1);filter:blur(0) contrast(100%);}
+  62%{transform:scale(1.11);filter:blur(.35px) contrast(104%);}
+  100%{transform:scale(1.32);filter:blur(2.2px) contrast(107%);}
+}
+@keyframes splashWhiteOut{
+  0%,48%{opacity:0;}
+  84%{opacity:.78;}
+  100%{opacity:1;}
 }
 @keyframes nameLogoGlitch{0%,100%{text-shadow:none;filter:contrast(100%);}20%{text-shadow:-2px 0 rgba(110,255,170,.62),2px 0 rgba(120,190,255,.52);filter:contrast(112%);}45%{text-shadow:2px 0 rgba(110,255,170,.58),-2px 0 rgba(255,130,190,.46);filter:contrast(115%);}70%{text-shadow:-1px 0 rgba(120,190,255,.45),1px 0 rgba(255,130,190,.36);filter:contrast(108%);}}
 @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -123,12 +138,17 @@ input,select{-webkit-appearance:none;appearance:none;border-radius:0;
   position:absolute;inset:0;pointer-events:none;display:none;opacity:.92;z-index:0;
 }
 #splash.matrix-on #splash-matrix{display:block;}
-#splash.matrix-entering #splash-sym,
-#splash.matrix-entering #splash-name,
-#splash.matrix-entering #splash-status,
-#splash.matrix-entering #splash-welcome{
-  opacity:0 !important;
-  transition:opacity .45s ease;
+#splash-scene{
+  position:absolute;inset:0;transform-origin:center center;will-change:transform,filter,opacity;
+}
+#splash.scene-entering #splash-scene{
+  animation:splashSceneZoom 1.12s cubic-bezier(.12,.74,.18,1) forwards;
+}
+#splash-whiteout{
+  position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:6;
+}
+#splash.scene-entering #splash-whiteout{
+  animation:splashWhiteOut 1.12s ease forwards;
 }
 #splash-sym,#splash-name,#splash-status,#splash-welcome{z-index:1;}
 #splash-sym{top:42% !important;font-size:clamp(86px,24vw,142px) !important;transform:translate(-50%,-58%) !important;overflow:visible;}
@@ -220,7 +240,7 @@ input,select{-webkit-appearance:none;appearance:none;border-radius:0;
 .logo-top{display:flex;align-items:center;justify-content:center;gap:10px;}
 .logo-sym{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--tx);
   display:inline-block;
-  animation:logoIn 0.5s ease-out forwards, breathe 5s ease-in-out 0.7s infinite;
+  animation:logoIn 0.5s ease-out forwards, breathe 5s ease-in-out 0.7s infinite, omegaPulseGlow 6.8s ease-in-out 1.1s infinite;
   transition:opacity 0.4s;cursor:pointer;}
 .logo-sym.flip{transform:rotateY(90deg);opacity:0;animation:none;}
 .logo-name-main{font-family:var(--serif);font-size:24px;font-weight:700;letter-spacing:2px;color:var(--tx);line-height:1;}
@@ -237,7 +257,7 @@ input,select{-webkit-appearance:none;appearance:none;border-radius:0;
   top:10px;left:50%;transform:translateX(-50%);opacity:.92;transition:top .28s ease,right .28s ease,left .28s ease,bottom .28s ease,opacity .25s ease,transform .25s ease;
   pointer-events:auto;cursor:pointer;user-select:none;}
 #global-brand-sym{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--tx);
-  line-height:1;display:inline-block;animation:breathe 4.2s ease-in-out infinite;}
+  line-height:1;display:inline-block;animation:breathe 4.2s ease-in-out infinite, omegaPulseGlow 7.2s ease-in-out .9s infinite;}
 #global-brand-name{font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:1px;color:var(--tx);text-transform:uppercase;white-space:nowrap;line-height:1;}
 body.screen-s0 #global-brand{opacity:0;pointer-events:none;transform:translateY(-8px);}
 body.screen-s1 #global-brand{top:10px;left:50%;right:auto;bottom:auto;opacity:.92;transform:translateX(-50%);}
@@ -340,11 +360,15 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 .s0-mid{
   flex:1;
   min-height:0;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  padding:8px 20px 0;
+  overflow:hidden;
+  display:flex;
+  padding:8px 20px 8px;
 }
 .hist-frame{
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
   border-top:1px solid var(--br2);
   border-left:1px solid var(--br);
   border-right:1px solid var(--br);
@@ -352,6 +376,13 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   border-radius:10px;
   padding:8px 10px 6px;
   background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,0));
+}
+#hist-area{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding-right:2px;
 }
 .hist-title{
   font-family:var(--mono);
@@ -386,7 +417,8 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 .hist-item.hist-week-off .hi-vol{color:var(--mu)!important;}
 .hist-item.hist-week-off .hi-groups{color:var(--mu)!important;}
 .s0-foot{
-  padding:14px 20px max(18px,calc(env(safe-area-inset-bottom) + 12px));
+  margin-top:auto;
+  padding:10px 20px max(14px,calc(env(safe-area-inset-bottom) + 10px));
   border-top:none;
   flex-shrink:0;
 }
@@ -890,7 +922,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;}
 .fin-sym{font-family:var(--serif);font-size:86px;font-weight:600;letter-spacing:1px;color:var(--tx);
   line-height:0.9;opacity:0;filter:blur(8px);
-  animation:omegaReveal .55s ease-out .04s both;}
+  animation:omegaReveal .55s ease-out .04s both, omegaPulseGlow 7.4s ease-in-out .82s infinite;}
 .fin-name{font-family:var(--serif);font-size:16px;font-weight:700;letter-spacing:10px;color:var(--mu2);
   margin-top:-2px;opacity:0;animation:fadeIn .45s ease-out .12s both;}
 .fin-train-msg{font-family:var(--mono);font-size:12px;color:var(--mu2);letter-spacing:1px;}
@@ -1037,35 +1069,38 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 
 <!-- SPLASH -->
 <div id="splash" style="position:fixed;inset:0;background:var(--bg);z-index:500;">
-  <canvas id="splash-matrix"></canvas>
-  <!-- Logo fijo en el centro, nunca se mueve -->
-  <div id="splash-sym" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-family:'Noto Serif JP',serif;font-size:142px;font-weight:500;letter-spacing:1px;color:var(--tx);opacity:0;filter:blur(8px);transition:opacity .45s ease,filter .45s ease;line-height:1;text-rendering:geometricPrecision;">Ω</div>
-  <!-- Nombre griego — aparece debajo del logo, fijo -->
-  <div id="splash-name" style="position:absolute;top:calc(50% + 80px);width:100%;text-align:center;font-family:'Noto Serif JP',serif;font-size:20px;font-weight:700;letter-spacing:10px;color:var(--mu2);opacity:0;transition:opacity 0.6s ease;"></div>
-  <!-- Status -->
-  <div id="splash-status" style="position:absolute;top:calc(50% + 130px);width:100%;display:flex;flex-direction:column;align-items:center;opacity:0;transition:opacity 0.5s ease;">
-    <div id="splash-status-txt" style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--mu);text-transform:uppercase;"></div>
-    <button id="splash-btn-load" onclick="onSplashEnter()" style="display:none;opacity:.94;">entrar</button>
-    <div id="splash-enter-menu">
-      <button class="splash-choice-btn" onclick="splashPickLoad()">cargar base JSON</button>
-      <button class="splash-choice-btn" onclick="splashPickNombre()">usuario nuevo</button>
-      <button id="splash-btn-install" class="splash-choice-btn" onclick="installApp()" style="display:none;">instalar app</button>
+  <div id="splash-scene">
+    <canvas id="splash-matrix"></canvas>
+    <!-- Logo fijo en el centro, nunca se mueve -->
+    <div id="splash-sym" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-family:'Noto Serif JP',serif;font-size:142px;font-weight:500;letter-spacing:1px;color:var(--tx);opacity:0;filter:blur(8px);transition:opacity .45s ease,filter .45s ease;line-height:1;text-rendering:geometricPrecision;">Ω</div>
+    <!-- Nombre griego — aparece debajo del logo, fijo -->
+    <div id="splash-name" style="position:absolute;top:calc(50% + 80px);width:100%;text-align:center;font-family:'Noto Serif JP',serif;font-size:20px;font-weight:700;letter-spacing:10px;color:var(--mu2);opacity:0;transition:opacity 0.6s ease;"></div>
+    <!-- Status -->
+    <div id="splash-status" style="position:absolute;top:calc(50% + 130px);width:100%;display:flex;flex-direction:column;align-items:center;opacity:0;transition:opacity 0.5s ease;">
+      <div id="splash-status-txt" style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--mu);text-transform:uppercase;"></div>
+      <button id="splash-btn-load" onclick="onSplashEnter()" style="display:none;opacity:.94;">entrar</button>
+      <div id="splash-enter-menu">
+        <button class="splash-choice-btn" onclick="splashPickLoad()">cargar base JSON</button>
+        <button class="splash-choice-btn" onclick="splashPickNombre()">usuario nuevo</button>
+        <button id="splash-btn-install" class="splash-choice-btn" onclick="installApp()" style="display:none;">instalar app</button>
+      </div>
+      <button id="splash-omit" onclick="onSplashOmit()" style="display:none;">omitir</button>
+      <input type="file" id="fi-splash" accept=".json" onchange="onSplashLoad(event)" style="display:none">
     </div>
-    <button id="splash-omit" onclick="onSplashOmit()" style="display:none;">omitir</button>
-    <input type="file" id="fi-splash" accept=".json" onchange="onSplashLoad(event)" style="display:none">
-  </div>
-  <!-- Pantalla bienvenida usuario nuevo -->
-  <div id="splash-welcome" style="display:none;position:absolute;inset:0;background:var(--bg);flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:60px 32px 40px;animation:fadeIn 0.4s ease-out both;">
-    <div style="font-size:9px;letter-spacing:4px;color:var(--mu);text-transform:uppercase;margin-bottom:20px;">nombre</div>
-    <input id="splash-nombre" type="text" inputmode="text" autocomplete="off" placeholder="nombre"
-      style="background:transparent;border:none;border-bottom:1px solid var(--mu2);color:var(--tx);font-family:'Noto Serif JP',serif;font-size:32px;padding:8px 0;width:100%;outline:none;letter-spacing:2px;"
-      onkeydown="if(event.key==='Enter')confirmSplashNombre()" oninput="updateNombrePreview(this.value)">
-    <div id="splash-nombre-preview" style="font-family:'Noto Serif JP',serif;font-size:14px;letter-spacing:6px;color:var(--mu2);margin-top:16px;min-height:24px;"></div>
-    <div style="display:flex;gap:12px;align-items:center;margin-top:14px;">
-      <button onclick="splashCancelNombre()" style="background:transparent;border:none;border-bottom:1px solid var(--br2);color:var(--mu2);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:8px 0;min-width:110px;text-align:left;">cancelar</button>
-      <button onclick="confirmSplashNombre()" style="background:transparent;border:none;border-bottom:1px solid var(--tx);color:var(--tx);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;padding:8px 0;min-width:110px;text-align:left;">cargar</button>
+    <!-- Pantalla bienvenida usuario nuevo -->
+    <div id="splash-welcome" style="display:none;position:absolute;inset:0;background:var(--bg);flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:60px 32px 40px;animation:fadeIn 0.4s ease-out both;">
+      <div style="font-size:9px;letter-spacing:4px;color:var(--mu);text-transform:uppercase;margin-bottom:20px;">nombre</div>
+      <input id="splash-nombre" type="text" inputmode="text" autocomplete="off" placeholder="nombre"
+        style="background:transparent;border:none;border-bottom:1px solid var(--mu2);color:var(--tx);font-family:'Noto Serif JP',serif;font-size:32px;padding:8px 0;width:100%;outline:none;letter-spacing:2px;"
+        onkeydown="if(event.key==='Enter')confirmSplashNombre()" oninput="updateNombrePreview(this.value)">
+      <div id="splash-nombre-preview" style="font-family:'Noto Serif JP',serif;font-size:14px;letter-spacing:6px;color:var(--mu2);margin-top:16px;min-height:24px;"></div>
+      <div style="display:flex;gap:12px;align-items:center;margin-top:14px;">
+        <button onclick="splashCancelNombre()" style="background:transparent;border:none;border-bottom:1px solid var(--br2);color:var(--mu2);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:8px 0;min-width:110px;text-align:left;">cancelar</button>
+        <button onclick="confirmSplashNombre()" style="background:transparent;border:none;border-bottom:1px solid var(--tx);color:var(--tx);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;padding:8px 0;min-width:110px;text-align:left;">cargar</button>
+      </div>
     </div>
   </div>
+  <div id="splash-whiteout"></div>
 </div>
 
 <!-- S0 -->
@@ -1734,6 +1769,7 @@ let sessionPersisted=false;
 const AUTO_DB_KEY='gym_codex_auto_db_v1';
 const SESSION_DRAFT_KEY='gym_codex_session_draft_v1';
 const APP_SESSION_KEY='gym_codex_app_session_v1';
+const SESSION_DRAFT_RESTORE_MAX_MS=1000*60*60*2;
 let _lastDbLoadOk=false;
 let _splashAutoGoTimer=null;
 let _dismissSplashBusy=false;
@@ -2066,16 +2102,24 @@ function renderHomeRecovery(){
   el.className='home-rec-table';
   el.innerHTML=rows;
 }
+function getHomeHistoryEntries(maxDays=3){
+  const out=[];
+  const seenDates=new Set();
+  (DB.history||[]).forEach((entry)=>{
+    const date=String(entry&&entry.date||'').trim();
+    if(!date||seenDates.has(date)||out.length>=maxDays)return;
+    seenDates.add(date);
+    out.push(entry);
+  });
+  return out;
+}
 function renderHome(){
   renderHomeRecovery();
   const el=$('hist-area');
   if(!DB.history.length){
-    // Mostrar días vacíos con mismo diseño
-    const dias=['Lun','Mar','Mié','Jue','Vie','Sáb'];
+    // Mostrar 3 días vacíos con mismo diseño
+    const dias=['Hoy','Ayer','Previo'];
     const tipos=[
-      {t:tipoUiLabel('pull'),c:'var(--go)'},
-      {t:tipoUiLabel('push'),c:'var(--ac)'},
-      {t:tipoUiLabel('legs'),c:'var(--re)'},
       {t:tipoUiLabel('pull'),c:'var(--go)'},
       {t:tipoUiLabel('push'),c:'var(--ac)'},
       {t:tipoUiLabel('legs'),c:'var(--re)'}
@@ -2105,7 +2149,9 @@ function renderHome(){
     return total;
   };
 
-  el.innerHTML=DB.history.slice(0,6).map((h,idx)=>{
+  const homeHistory=getHomeHistoryEntries(3);
+
+  el.innerHTML=homeHistory.map((h,idx)=>{
     const typeKey=h.dayId?h.dayId.split('-')[0]:'';
     const type=tipoUiLabel(typeKey);
     const inMevWeek=mevDateInWindow(h.date,MEV_WINDOW_DAYS);
@@ -4870,16 +4916,51 @@ function hasStartedAppSession(){
     return !!(parsed&&parsed.active);
   }catch(_e){return false;}
 }
+function sessionDraftHasStarted(draft){
+  if(!draft||typeof draft!=='object')return false;
+  if(draft.started)return true;
+  if((Number(draft.totalSec)||0)>0)return true;
+  const ses=(draft.sesion&&typeof draft.sesion==='object')?draft.sesion:{};
+  return Object.values(ses).some(rows=>
+    (Array.isArray(rows)?rows:[]).some(s=>{
+      if(!s||s.deleted)return false;
+      return (Number(s.reps)||0)>0||(Number(s.kg)||0)>0||!!s.helped||!!s.rir||!!s.nota||!!s.dskg||!!s.dsreps;
+    })
+  );
+}
+function sessionDraftStartMs(draft){
+  const st=Date.parse(String(draft&&draft.startTime||''));
+  if(Number.isFinite(st)&&st>0)return st;
+  const ts=Number(draft&&draft.ts);
+  return Number.isFinite(ts)&&ts>0?ts:0;
+}
+function removeStoredSessionDraft(){
+  try{localStorage.removeItem(SESSION_DRAFT_KEY);}catch(_e){}
+}
 function getStoredSessionDraft(){
   try{
     const raw=localStorage.getItem(SESSION_DRAFT_KEY);
     if(!raw)return null;
     const d=JSON.parse(raw);
-    if(!d||!d.curDay||!Array.isArray(d.ejList)||!d.ejList.length)return null;
+    if(!d||!d.curDay||!Array.isArray(d.ejList)||!d.ejList.length){
+      removeStoredSessionDraft();
+      return null;
+    }
     if(d.user&&DB.usuario&&String(d.user)!==String(DB.usuario))return null;
-    if(d.ts&&(Date.now()-Number(d.ts)>(1000*60*60*72)))return null;
+    if(!sessionDraftHasStarted(d)){
+      removeStoredSessionDraft();
+      return null;
+    }
+    const startedAt=sessionDraftStartMs(d);
+    if(!startedAt||(Date.now()-startedAt>SESSION_DRAFT_RESTORE_MAX_MS)){
+      removeStoredSessionDraft();
+      return null;
+    }
     return d;
-  }catch(_e){return null;}
+  }catch(_e){
+    removeStoredSessionDraft();
+    return null;
+  }
 }
 function shouldAutoEnterFromSplash(){
   if(getStoredSessionDraft())return true;
@@ -5287,27 +5368,13 @@ function runSplashEnterMatrixFx(done){
   if(_dismissSplashBusy)return;
   _dismissSplashBusy=true;
   try{startSplashMatrix();}catch(_e){}
-  sp.classList.add('matrix-on','matrix-entering');
-
-  const srcName=$('splash-name');
-  const txt=(srcName&&String(srcName.textContent||'').trim())||(toGreek(DB.usuario||'')||'Ω');
-  const fx=document.createElement('div');
-  fx.className='splash-enter-zoom';
-  fx.textContent=txt;
-
-  const r=srcName&&srcName.getBoundingClientRect?srcName.getBoundingClientRect():null;
-  if(r&&r.width>0&&r.height>0){
-    fx.style.left=`${r.left+(r.width*0.5)}px`;
-    fx.style.top=`${r.top+(r.height*0.5)}px`;
-  }
-  sp.appendChild(fx);
-  requestAnimationFrame(()=>fx.classList.add('run'));
+  sp.classList.add('matrix-on','scene-entering');
 
   setTimeout(()=>{
-    try{fx.remove();}catch(_e){}
+    sp.classList.remove('scene-entering');
     _dismissSplashBusy=false;
     if(done)done();
-  },1520);
+  },1140);
 }
 function dismissSplash(skipNamePrompt=false,opts={}){
   const sp=$('splash');
@@ -5479,7 +5546,7 @@ function animateNameReveal(el, greekName, realName, onDone){
     sym.style.animation='splashIn 0.85s ease-out forwards';
     setTimeout(()=>{
       sym.style.filter='blur(0)';
-      sym.style.animation='splashGlow 6.2s linear infinite';
+      sym.style.animation='splashGlow 6.2s linear infinite, omegaPulseGlow 7.6s ease-in-out infinite';
     },900);
   },100);
   // Mostrar botón de entrada apenas inicia el splash (sin espera artificial)
