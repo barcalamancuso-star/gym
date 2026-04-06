@@ -1043,6 +1043,49 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 .preset-group{
   font-size:9px;color:var(--mu);letter-spacing:.9px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;
 }
+.modal-preview{
+  display:none;
+  border:1px solid var(--br2);
+  background:rgba(255,255,255,.02);
+  padding:10px;
+  gap:8px;
+}
+.modal-preview.on{display:flex;flex-direction:column;}
+.modal-preview-head{
+  display:flex;justify-content:space-between;align-items:baseline;gap:10px;min-width:0;
+}
+.modal-preview-name{
+  font-family:var(--serif);font-size:14px;color:var(--tx);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.modal-preview-group{
+  font-family:var(--mono);font-size:9px;color:var(--mu2);letter-spacing:1.4px;text-transform:uppercase;white-space:nowrap;
+}
+.modal-preview-grid{
+  display:grid;gap:6px;
+}
+.modal-preview-row{
+  display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;
+  border-top:1px solid rgba(255,255,255,.04);padding-top:6px;
+}
+.modal-preview-row:first-child{border-top:none;padding-top:0;}
+.modal-preview-muscle{
+  min-width:0;display:flex;flex-direction:column;gap:1px;
+}
+.modal-preview-muscle strong{
+  font-family:var(--mono);font-size:11px;color:var(--tx);font-weight:500;letter-spacing:.3px;
+}
+.modal-preview-muscle span{
+  font-family:var(--mono);font-size:9px;color:var(--mu);letter-spacing:.4px;text-transform:uppercase;
+}
+.modal-preview-mev{
+  font-family:var(--mono);font-size:11px;color:var(--mu2);white-space:nowrap;
+}
+.modal-preview-state{
+  font-family:var(--mono);font-size:10px;letter-spacing:.8px;text-transform:uppercase;white-space:nowrap;
+}
+.modal-preview-state.ready{color:var(--go);}
+.modal-preview-state.rest{color:var(--ac);}
+.modal-preview-state.fresh{color:var(--re);}
 .tipo-row{display:flex;gap:4px;}
 .tipo-btn{flex:1;background:var(--c1);border:1px solid var(--br2);color:var(--mu2);
   min-height:var(--touch);font-size:10px;letter-spacing:1px;text-transform:uppercase;
@@ -1413,6 +1456,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
     <input class="modal-in" id="modal-in" placeholder="Buscar..." oninput="filterPresets(this.value)" onkeydown="if(event.key==='Enter')mok()">
     <div class="modal-group-wrap" id="modal-group-wrap"></div>
     <div class="presets" id="presets"></div>
+    <div class="modal-preview" id="modal-preview"></div>
     <div class="tipo-row">
       <button class="tipo-btn tipo-main-btn on" id="tb-manc"  onclick="setTipoModal('manc',this)">MANC</button>
       <button class="tipo-btn tipo-main-btn"   id="tb-barra" onclick="setTipoModal('barra',this)">BARRA</button>
@@ -1793,6 +1837,57 @@ function setModalGroupFilter(key){
   modalGroupFilter=key||'all';
   renderModalGroupChips();
   filterPresets($('modal-in')?.value||'');
+}
+
+function renderModalExercisePreview(name){
+  const host=$('modal-preview');
+  if(!host)return;
+  const canon=canonicalEjName(name);
+  if(!canon){
+    host.classList.remove('on');
+    host.innerHTML='';
+    return;
+  }
+  const loads=sortMusclesByPreferredOrder((muscleLoadsForExercise(canon)||[]).map(x=>x.m));
+  if(!loads.length){
+    host.classList.remove('on');
+    host.innerHTML='';
+    return;
+  }
+  const snap=computeMevSnapshot(true);
+  const now=Date.now();
+  const rows=loads.map((m)=>{
+    const count=Number((snap.counts||{})[m]||0);
+    const target=mevTargetForMuscle(m);
+    const ts=Number((snap.latestTs||{})[m]||0);
+    const hasTs=Number.isFinite(ts)&&ts>0;
+    const hours=hasTs?Math.max(0,(now-ts)/3600000):999;
+    let stateLabel='listo';
+    let stateClass='ready';
+    if(hasTs&&hours<RECOVERY_HOURS_WARN){
+      stateLabel=`${Math.ceil(Math.max(0,RECOVERY_HOURS_OK-hours))}h`;
+      stateClass='fresh';
+    }else if(hasTs&&hours<RECOVERY_HOURS_OK){
+      stateLabel=`${Math.ceil(Math.max(0,RECOVERY_HOURS_OK-hours))}h`;
+      stateClass='rest';
+    }
+    const primary=(muscleLoadsForExercise(canon)||[]).find(x=>x.m===m)?.w||0;
+    const role=primary>=0.75?'principal':'sec';
+    return `<div class="modal-preview-row">
+      <div class="modal-preview-muscle">
+        <strong>${m}</strong>
+        <span>${role}</span>
+      </div>
+      <div class="modal-preview-mev">${fmtSetCount(count)}/${target.max}</div>
+      <div class="modal-preview-state ${stateClass}">${stateLabel}</div>
+    </div>`;
+  }).join('');
+  host.classList.add('on');
+  host.innerHTML=`<div class="modal-preview-head">
+    <div class="modal-preview-name">${canon}</div>
+    <div class="modal-preview-group">${grupoDeEj(canon)}</div>
+  </div>
+  <div class="modal-preview-grid">${rows}</div>`;
 }
 
 
@@ -4676,6 +4771,7 @@ function openModal(){
   $('tb-manc').classList.add('on');
   $('tb-x2').classList.add('on');$('tb-x1').classList.remove('on');
   refreshGripModal();
+  renderModalExercisePreview('');
   const activeKeys=new Set((ejList||[]).map(x=>ejNameKey(cleanModalEjName(x))));
   _allPresets=sortModalPresetEntries(
     buildModalPresetList([...allEjsKnown,...ALL_EJS])
@@ -4717,6 +4813,7 @@ function autoDetectTipo(q){
 function selP(n){
   $('modal-in').value=n;
   autoDetectTipo(n);
+  renderModalExercisePreview(n);
   // Resaltar el seleccionado
   document.querySelectorAll('.preset').forEach(el=>{
     const on=el.dataset.name===n;
