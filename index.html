@@ -1729,6 +1729,9 @@ const BODYWEIGHT_EXERCISES=new Set([
   'Elevación de Piernas','Abdominales banco inclinado','Rueda Abdominal','Russian Twist','Hollow Hold','Plancha Copenhague',
   'Dead Bug','Bird Dog','L-Sit','V-Ups','Toes to Bar','Superman','Gemelos de Pie'
 ]);
+const ISOMETRIC_EXERCISES=new Set([
+  'Plancha','Plancha Lateral','Wall Sit','Hollow Hold','L-Sit','Dead Hang','Plancha Copenhague'
+]);
 
 const EJ_GRUPOS={
   "Press de Banca":"Pecho","Press Inclinado":"Pecho","Press Declinado":"Pecho","Press Plano Mancuernas":"Pecho","Press Inclinado Mancuernas":"Pecho",
@@ -1882,6 +1885,26 @@ function inferExerciseTipo(name){
   const canon=canonicalEjName(name);
   if(BODYWEIGHT_EXERCISES.has(canon))return 'pc';
   return null;
+}
+
+function exerciseUsesSeconds(name){
+  return ISOMETRIC_EXERCISES.has(canonicalEjName(name));
+}
+
+function formatSetValueForExercise(name,reps){
+  const n=Number(reps)||0;
+  if(!n)return '';
+  return exerciseUsesSeconds(name)?`${n}s`:`${n}r`;
+}
+
+function formatSetInlineForExercise(name,s,kgLabel='kg'){
+  if(!s)return '—';
+  const repTxt=formatSetValueForExercise(name,s.reps);
+  if(s.kg){
+    if(repTxt)return `${s.kg}${kgLabel}×${repTxt}`;
+    return `${s.kg}${kgLabel}`;
+  }
+  return repTxt||'—';
 }
 
 function dedupeNamesStable(arr){
@@ -3936,8 +3959,8 @@ function loadEj(i){
   let prev='<span style="color:var(--mu)">sin datos previos</span>';
   if(ejRec?.series&&ejRec.series.length){
     prev=ejRec.series.map((s,j)=>{
-      if(s.kg)return `${s.kg}×${s.reps}`;
-      if(s.reps)return `${s.reps}r`;
+      if(s.kg)return `${s.kg}×${formatSetValueForExercise(name,s.reps)}`;
+      if(s.reps)return formatSetValueForExercise(name,s.reps);
       return '—';
     }).join('<span style="color:#444"> · </span>')+` <span style="color:#555;font-size:12px">${ejRec.fecha||''}</span>${gripFromRec?` <span style="color:var(--ac);font-size:11px">· ${fmtGripLabel(gripFromRec)}</span>`:''}`;
   } else {
@@ -3955,8 +3978,8 @@ function loadEj(i){
           }
         }
         prev=filtered.map((s,j)=>{
-          if(s.kg)return `${s.kg}×${s.reps}`;
-          if(s.reps)return `${s.reps}r`;
+          if(s.kg)return `${s.kg}×${formatSetValueForExercise(name,s.reps)}`;
+          if(s.reps)return formatSetValueForExercise(name,s.reps);
           return '—';
         }).join('<span style="color:#444"> · </span>')+` <span style="color:#555;font-size:12px">${h.date}</span>${gripFromRec?` <span style="color:var(--ac);font-size:11px">· ${fmtGripLabel(gripFromRec)}</span>`:''}`;
         break;
@@ -4004,7 +4027,7 @@ function renderLog(){
   if(!series.length){el.innerHTML='';return;}
   const last=series.length-1;
   el.innerHTML=series.map((s,idx)=>{
-    const kstr=s.kg?`${s.kg}${klbl}×${s.reps}`:(s.reps?`${s.reps}r`:'—');
+    const kstr=formatSetInlineForExercise(name,s,klbl);
     const multStr=s.mult&&s.mult>1?` <span style="color:var(--go)">×${s.mult}</span>`:'';
     let l=`<span class="lv">S${s.serie}</span> ${kstr}${multStr}`;
     if(s.rpe)l+=` <span style="color:var(--mu2)">${fmtRirLabel(s.rpe)}</span>`;
@@ -4453,12 +4476,13 @@ function fillSelect(elId,values,placeholder){
 function prepareRegisterPickers(tipoOverride){
   const name=ejList[curEjIdx];
   const tipo=tipoOverride||(ejTipos[name]||'maq');
+  const usesSeconds=exerciseUsesSeconds(name);
   const kgStep=getKgStep(tipo);
   const kgMax=tipo==='maq'?300:(tipo==='barra'?260:180);
   const kgVals=tipo==='pc'?[]:buildSelectRange(kgStep,kgMax,kgStep);
   fillSelect('reg-kg',kgVals,'KG');
   fillSelect('reg-dskg',kgVals,'DROP KG');
-  fillSelect('reg-reps',buildSelectRange(1,30,1),'REPS');
+  fillSelect('reg-reps',usesSeconds?buildSelectRange(1,180,1):buildSelectRange(1,30,1),usesSeconds?'SEG':'REPS');
   fillSelect('reg-helped',buildSelectRange(1,5,1),'AYUDA');
   const rirOpts=[
     {v:'F',label:'FALLO'},
@@ -4474,7 +4498,7 @@ function prepareRegisterPickers(tipoOverride){
     rirSel.innerHTML='<option value="">RIR</option>'+rirOpts.map(o=>`<option value="${o.v}">${o.label}</option>`).join('');
     if(prev&&rirOpts.some(o=>o.v===prev))rirSel.value=prev;
   }
-  fillSelect('reg-dsreps',buildSelectRange(1,20,1),'DROP REPS');
+  fillSelect('reg-dsreps',usesSeconds?buildSelectRange(1,180,1):buildSelectRange(1,20,1),usesSeconds?'DROP SEG':'DROP REPS');
 }
 
 function regStep(id, delta){
@@ -5091,7 +5115,7 @@ function renderFinBody(){
     const grip=activeGripForExercise(name);
     const gripTag=grip?` <span style="font-size:10px;color:var(--ac);font-family:var(--mono);letter-spacing:.6px;">· ${fmtGripLabel(grip)}</span>`:'';
     const seriesHtml=s.map((r,idx)=>{
-      const kstr=r.kg?r.kg+'kg×'+r.reps:(r.reps?r.reps+'r':'—');
+      const kstr=formatSetInlineForExercise(name,r,'kg');
       let t=`S${r.serie}: ${kstr}`;
       if(r.mult&&r.mult>1)t+=` ×${r.mult}`;
       if(r.rpe)t+=` ${fmtRirLabel(r.rpe)}`;
