@@ -273,7 +273,7 @@ input,select{-webkit-appearance:none;appearance:none;border-radius:0;
 #global-brand-name{font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:1px;color:var(--tx);text-transform:uppercase;white-space:nowrap;line-height:1;}
 body.screen-s0 #global-brand{opacity:0;pointer-events:none;transform:translateY(-8px);}
 body.screen-s1 #global-brand{top:10px;left:50%;right:auto;bottom:auto;opacity:.92;transform:translateX(-50%);}
-body.screen-s2 #global-brand{top:10px;left:50%;right:auto;bottom:auto;opacity:.92;transform:translateX(-50%);}
+body.screen-s2 #global-brand{opacity:0;pointer-events:none;transform:translateY(-8px);}
 body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(-8px);}
 
 /* â•â• S0 â•â• */
@@ -592,13 +592,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   transition:border-color .2s ease,color .2s ease,background .2s ease;
 }
 .fin-dia-top:active{color:var(--re);opacity:1;border-color:rgba(176,120,56,.5);background:rgba(176,120,56,.08);}
-.back-s2-top{
-  background:transparent;border:none;color:var(--mu2);
-  min-height:30px;display:inline-flex;align-items:center;justify-content:center;
-  font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;
-  padding:0 2px;opacity:.9;line-height:1;flex-shrink:0;
-}
-.back-s2-top:active{color:var(--tx);opacity:1;}
+#btn-back-s2{display:none;}
 
 /* día en la fila superior */
 .ej-col-day{display:none;}
@@ -609,6 +603,90 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 .workout-body{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0;position:relative;}
 .workout-body>*{position:relative;z-index:1;}
 .workout-body>.muscle-hud-bg{z-index:0;}
+.s2-watermark{
+  position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  --wm-color:#d8ba6b;
+  --wm-glow:rgba(216,186,107,.26);
+  --wm-ghost-a:rgba(120,190,255,.1);
+  --wm-ghost-b:rgba(255,138,196,.08);
+  --wm-opacity:.12;
+}
+.s2-watermark-core,
+.s2-watermark::before,
+.s2-watermark::after{
+  position:absolute;
+  left:50%;
+  top:50%;
+  content:attr(data-sym);
+  font-family:var(--serif);
+  font-size:clamp(180px,52vw,340px);
+  font-weight:700;
+  line-height:1;
+  letter-spacing:0;
+}
+.s2-watermark-core{
+  color:var(--wm-color);
+  opacity:var(--wm-opacity);
+  text-shadow:0 0 22px var(--wm-glow),0 0 54px rgba(255,255,255,.04);
+  animation:s2WatermarkPulse 5.8s ease-in-out infinite,s2WatermarkGlitch 8.4s steps(1,end) infinite;
+}
+.s2-watermark::before,
+.s2-watermark::after{
+  opacity:calc(var(--wm-opacity) * .42);
+  filter:blur(.12px);
+}
+.s2-watermark::before{
+  color:var(--wm-ghost-a);
+  animation:s2WatermarkGhostA 8.4s steps(1,end) infinite;
+}
+.s2-watermark::after{
+  color:var(--wm-ghost-b);
+  animation:s2WatermarkGhostB 8.4s steps(1,end) infinite;
+}
+@keyframes s2WatermarkPulse{
+  0%,100%{opacity:calc(var(--wm-opacity) * .82);transform:translate(-50%,calc(-50% + 6px)) scale(.968);}
+  50%{opacity:calc(var(--wm-opacity) * 1.36);transform:translate(-50%,-50%) scale(1);}
+}
+@keyframes s2WatermarkGlitch{
+  0%,88%,100%{filter:blur(0);text-shadow:0 0 22px var(--wm-glow),0 0 54px rgba(255,255,255,.04);}
+  89%{filter:blur(.15px);text-shadow:-2px 0 var(--wm-ghost-a),2px 0 var(--wm-ghost-b),0 0 28px var(--wm-glow);}
+  90%{filter:blur(0);text-shadow:0 0 22px var(--wm-glow),0 0 54px rgba(255,255,255,.04);}
+  92%{filter:blur(.12px);text-shadow:2px 0 var(--wm-ghost-a),-2px 0 var(--wm-ghost-b),0 0 28px var(--wm-glow);}
+  93%{filter:blur(0);text-shadow:0 0 22px var(--wm-glow),0 0 54px rgba(255,255,255,.04);}
+}
+@keyframes s2WatermarkGhostA{
+  0%,88%,100%{transform:translate(-50%,calc(-50% + 4px)) scale(.972);opacity:calc(var(--wm-opacity) * .3);}
+  89%{transform:translate(calc(-50% - 3px),calc(-50% + 4px)) scale(.978);opacity:calc(var(--wm-opacity) * .62);}
+  92%{transform:translate(calc(-50% + 2px),calc(-50% + 2px)) scale(.984);opacity:calc(var(--wm-opacity) * .54);}
+}
+@keyframes s2WatermarkGhostB{
+  0%,88%,100%{transform:translate(-50%,calc(-50% + 4px)) scale(.972);opacity:calc(var(--wm-opacity) * .24);}
+  90%{transform:translate(calc(-50% + 3px),calc(-50% + 5px)) scale(.968);opacity:calc(var(--wm-opacity) * .58);}
+  93%{transform:translate(calc(-50% - 2px),calc(-50% + 3px)) scale(.98);opacity:calc(var(--wm-opacity) * .46);}
+}
+#s2.mode-idle .s2-watermark,
+#s2.mode-rest .s2-watermark{
+  --wm-color:#d8ba6b;
+  --wm-glow:rgba(216,186,107,.28);
+  --wm-ghost-a:rgba(255,227,167,.13);
+  --wm-ghost-b:rgba(120,190,255,.08);
+  --wm-opacity:.12;
+}
+#s2.mode-work .s2-watermark{
+  --wm-color:#8aaa52;
+  --wm-glow:rgba(138,170,82,.26);
+  --wm-ghost-a:rgba(169,234,154,.12);
+  --wm-ghost-b:rgba(120,190,255,.08);
+  --wm-opacity:.11;
+}
+#s2.mode-saving .s2-watermark{
+  --wm-color:#e0c28b;
+  --wm-glow:rgba(224,194,139,.3);
+  --wm-ghost-a:rgba(255,231,185,.14);
+  --wm-ghost-b:rgba(120,190,255,.08);
+  --wm-opacity:.13;
+}
 .muscle-hud-bg{
   position:absolute;inset:0;pointer-events:none;display:flex;align-items:flex-end;justify-content:flex-end;
   padding:6px 8px 10px;overflow:hidden;
@@ -767,7 +845,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 .wheel-item.sel{color:var(--tx);background:var(--c1);}
 .wheel-item:active{color:var(--go);}
 
-.ar{display:flex;justify-content:center;align-items:center;padding:14px 0 10px;}
+.ar{display:flex;justify-content:center;align-items:center;padding:8px 0 4px;transform:translateY(-4px);}
 .ar-row{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;}
 .ab3{
   width:148px;height:56px;border-radius:16px;
@@ -789,15 +867,22 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 .ab3 span:first-child{line-height:1;font-size:15px;opacity:.95;}
 .ab3:active{transform:translateY(1px) scale(.992);}
 .ab3.go{
-  border-color:rgba(118,212,255,.56);
-  color:#d7f2ff;
-  background:linear-gradient(180deg,rgba(63,132,156,.34),rgba(26,66,84,.24));
-  box-shadow:0 10px 26px rgba(0,0,0,.34), inset 0 0 0 1px rgba(140,220,255,.12);
+  width:92px;height:92px;border-radius:999px;
+  border-color:rgba(221,207,186,.34);
+  color:#efe6d5;
+  background:radial-gradient(circle at 50% 34%,rgba(255,255,255,.06),rgba(255,255,255,.012) 54%,rgba(255,255,255,0) 70%);
+  box-shadow:0 8px 20px rgba(0,0,0,.24), inset 0 0 0 1px rgba(255,255,255,.03);
+  gap:0;
+}
+.ab3.go::before{display:none;}
+.ab3.go::after{
+  content:'';position:absolute;inset:7px;border-radius:999px;
+  border:1px solid rgba(221,207,186,.18);pointer-events:none;
 }
 .ab3.go .go-txt{
   position:relative;z-index:2;
-  font-size:11px;letter-spacing:3px;font-family:var(--mono);line-height:1;
-  text-transform:uppercase;
+  font-size:12px;letter-spacing:1.8px;font-family:var(--serif);line-height:1;
+  text-transform:none;
 }
 .ab3.go:active{transform:translateY(1px) scale(.99);}
 .ab3.stop{
@@ -1251,7 +1336,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 <div id="s2" class="screen">
   <div class="tbar" id="clock">
     <div class="tbar-main">
-      <button class="back-s2-top" onclick="backToRoutinePicker()">← volver</button>
+      <button id="btn-back-s2" onclick="backToRoutinePicker()">← volver</button>
       <div class="tnum" id="tnum">00:00</div>
       <button id="btn-fin-top" class="fin-dia-top" onclick="finishW()" style="display:none;">finalizar dia</button>
       <div style="flex:1;"></div>
@@ -1275,6 +1360,9 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   </div>
 </div>
   <div class="workout-body">
+    <div class="s2-watermark" data-sym="Ω" aria-hidden="true">
+      <span class="s2-watermark-core">Ω</span>
+    </div>
     <div class="muscle-hud-bg">
       <div id="muscle-hud" class="muscle-hud">
         <svg viewBox="0 0 170 290" class="muscle-hud-svg" aria-hidden="true">
@@ -2266,18 +2354,18 @@ function show(id){
     closeFinSharePanel();
     closeFinNotePanel();
   }
-  if(id==='s2'){
+  {
     const gn=$('global-brand-name');
     const hasName=!!(DB.usuario&&String(DB.usuario).trim());
     if(gn){
-      if(hasName){
+      if(id==='s1'&&hasName){
         gn.style.display='inline';
         const greek=toGreek(DB.usuario);
         gn.textContent=greek;
         startNameDrift(gn,greek,{minMs:3000,maxMs:7000,holdMs:170,doubleChance:0.12});
       } else {
         stopNameDrift(gn);
-        gn.textContent='';
+        gn.textContent=hasName?toGreek(DB.usuario):'';
         gn.style.display='none';
       }
     }
@@ -4216,15 +4304,12 @@ function syncS2StateUi(){
 
 function renderAr(){
   const name=ejList[curEjIdx];
-  const n=name?(sesion[name]||[]).length+1:1;
   const el=$('ar');
-  const canUndo=!!name&&(sesion[name]||[]).some(s=>s&&!s.deleted);
-  const undoBtn=canUndo?`<button class="action-pill" onclick="undoLastSerieCurrent()">deshacer</button>`:'';
   if(state==='prep'){
     el.innerHTML=`<div class="ar-row"><button class="ab3 go" style="opacity:.5;pointer-events:none;"><span class="go-txt">${prepLeft>0?prepLeft:'...'}</span></button></div>`;
   }
   else if(state==='idle'||state==='rest'){
-    el.innerHTML=`<div class="ar-row"><button class="ab3 go" onclick="hAct()"><span class="go-txt">inicio</span></button>${undoBtn}</div>`;
+    el.innerHTML=`<div class="ar-row"><button class="ab3 go" onclick="hAct()"><span class="go-txt">inicio</span></button></div>`;
   }
   else if(state==='work')
     el.innerHTML=`<button class="ab3 stop" onclick="hAct()"><span style="font-size:20px;font-weight:300;">✓</span><span>listo</span></button>`;
