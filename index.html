@@ -1020,12 +1020,29 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 .modal-in{width:100%;background:var(--c1);border:1px solid var(--br2);color:var(--tx);
   font-family:var(--mono);font-size:16px;padding:12px;outline:none;border-radius:0;
   min-height:var(--touch);}
+.modal-group-wrap{
+  display:flex;gap:4px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding-bottom:2px;
+}
+.modal-group-wrap::-webkit-scrollbar{display:none;}
+.modal-group-chip{
+  flex:0 0 auto;background:var(--c1);border:1px solid var(--br2);color:var(--mu2);
+  padding:0 10px;min-height:32px;font-size:9px;letter-spacing:1.6px;text-transform:uppercase;
+  font-family:var(--mono);display:inline-flex;align-items:center;justify-content:center;
+}
+.modal-group-chip.on{
+  border-color:var(--tx);color:var(--tx);background:rgba(255,255,255,.03);
+}
 .presets{display:flex;flex-wrap:wrap;gap:5px;max-height:110px;overflow-y:auto;
   -webkit-overflow-scrolling:touch;}
 .preset{background:var(--c1);border:1px solid var(--br2);color:var(--mu2);
   padding:7px 11px;font-size:12px;cursor:pointer;min-height:36px;
-  display:flex;align-items:center;}
+  display:flex;align-items:center;gap:8px;justify-content:space-between;min-width:0;}
 .preset:active{border-color:var(--tx);color:var(--tx);}
+.preset-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.preset-group{
+  font-size:9px;color:var(--mu);letter-spacing:.9px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;
+}
 .tipo-row{display:flex;gap:4px;}
 .tipo-btn{flex:1;background:var(--c1);border:1px solid var(--br2);color:var(--mu2);
   min-height:var(--touch);font-size:10px;letter-spacing:1px;text-transform:uppercase;
@@ -1394,6 +1411,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   <div class="modal">
     <div style="display:flex;justify-content:space-between;align-items:center;"><div class="modal-lbl">Agregar ejercicio</div><button class="theme-btn" onclick="toggleTheme()" style="font-size:10px;">◑</button></div>
     <input class="modal-in" id="modal-in" placeholder="Buscar..." oninput="filterPresets(this.value)" onkeydown="if(event.key==='Enter')mok()">
+    <div class="modal-group-wrap" id="modal-group-wrap"></div>
     <div class="presets" id="presets"></div>
     <div class="tipo-row">
       <button class="tipo-btn tipo-main-btn on" id="tb-manc"  onclick="setTipoModal('manc',this)">MANC</button>
@@ -1726,6 +1744,57 @@ function buildModalPresetList(list){
   return out;
 }
 
+function modalGroupForExercise(name){
+  const canon=canonicalEjName(name);
+  return EJ_GRUPOS[canon]||EJ_GRUPOS[name]||'Otros';
+}
+
+function modalGroupKey(group){
+  if(!group)return 'otros';
+  const found=MODAL_GROUP_OPTIONS.find(opt=>opt.group===group);
+  return found?found.key:'otros';
+}
+
+function sortModalPresetEntries(entries){
+  return [...(entries||[])].sort((a,b)=>{
+    const ra=MODAL_GROUP_ORDER_KEYS.indexOf(modalGroupKey(a.group));
+    const rb=MODAL_GROUP_ORDER_KEYS.indexOf(modalGroupKey(b.group));
+    if(ra!==rb)return ra-rb;
+    return a.name.localeCompare(b.name,'es',{sensitivity:'base'});
+  });
+}
+
+function renderModalGroupChips(){
+  const host=$('modal-group-wrap');
+  if(!host)return;
+  host.innerHTML=MODAL_GROUP_OPTIONS.map(opt=>{
+    const on=opt.key===modalGroupFilter?' on':'';
+    return `<button class="modal-group-chip${on}" onclick="setModalGroupFilter('${opt.key}')">${opt.label}</button>`;
+  }).join('');
+}
+
+function renderPresetEntries(entries){
+  const host=$('presets');
+  if(!host)return;
+  if(!(entries||[]).length){
+    host.innerHTML='<div class="hist-empty" style="padding:8px 0;">sin ejercicios en ese grupo</div>';
+    return;
+  }
+  host.innerHTML=(entries||[]).map(p=>{
+    const safeName=p.name.replace(/'/g,"\\'");
+    return `<div class="preset" data-name="${p.name.replace(/"/g,'&quot;')}" onclick="selP('${safeName}')">
+      <span class="preset-name">${p.name}</span>
+      <span class="preset-group">${p.group}</span>
+    </div>`;
+  }).join('');
+}
+
+function setModalGroupFilter(key){
+  modalGroupFilter=key||'all';
+  renderModalGroupChips();
+  filterPresets($('modal-in')?.value||'');
+}
+
 
 function normalizeEjTiposMap(m){
   const out={};
@@ -1987,6 +2056,28 @@ function resetWheels(){
 /* â•â• MULT â€” modal + toggle desde encabezado â•â• */
 let multModal=1;
 let ejMultipliers={};
+let modalGroupFilter='all';
+let _allPresets=[];
+
+const MODAL_GROUP_OPTIONS=[
+  {key:'all',label:'Todos',group:null},
+  {key:'pecho',label:'Pecho',group:'Pecho'},
+  {key:'espalda',label:'Espalda',group:'Espalda'},
+  {key:'hombros',label:'Hombros',group:'Hombros'},
+  {key:'trapecios',label:'Trapecios',group:'Trapecios'},
+  {key:'espinales',label:'Espinales',group:'Espinales'},
+  {key:'triceps',label:'Tríceps',group:'Tríceps'},
+  {key:'biceps',label:'Bíceps',group:'Bíceps'},
+  {key:'antebrazos',label:'Antebrazos',group:'Antebrazos'},
+  {key:'core',label:'Core',group:'Core'},
+  {key:'cuadriceps',label:'Cuádriceps',group:'Cuádriceps'},
+  {key:'gluteo',label:'Glúteo',group:'Glúteo'},
+  {key:'isquios',label:'Isquios',group:'Isquios'},
+  {key:'aductores',label:'Aductores',group:'Aductores'},
+  {key:'gemelos',label:'Gemelos',group:'Gemelos'},
+  {key:'otros',label:'Otros',group:'Otros'}
+];
+const MODAL_GROUP_ORDER_KEYS=MODAL_GROUP_OPTIONS.map(opt=>opt.key);
 
 /* Mult por defecto según tipo */
 function defaultMult(tipo){
@@ -4515,7 +4606,7 @@ function saveSerie(){
 }
 
 /* â•â• MODAL EJERCICIO â•â• */
-let tipoModal='manc',gripModal='',_allPresets=[];
+let tipoModal='manc',gripModal='';
 const GRIP_PRESETS={
   polea:[
     {v:'',label:'Sin'},
@@ -4580,20 +4671,30 @@ function setTipoModal(tipo,btn){
 }
 
 function openModal(){
-  $('modal-in').value='';tipoModal='manc';multModal=2;gripModal=''; // manc default ×2
+  $('modal-in').value='';tipoModal='manc';multModal=2;gripModal='';modalGroupFilter='all'; // manc default ×2
   document.querySelectorAll('.tipo-main-btn').forEach(b=>b.classList.remove('on'));
   $('tb-manc').classList.add('on');
   $('tb-x2').classList.add('on');$('tb-x1').classList.remove('on');
   refreshGripModal();
   const activeKeys=new Set((ejList||[]).map(x=>ejNameKey(cleanModalEjName(x))));
-  _allPresets=buildModalPresetList([...allEjsKnown,...ALL_EJS]).filter(p=>!activeKeys.has(ejNameKey(p)));
-  $('presets').innerHTML=_allPresets.map(p=>`<div class="preset" onclick="selP('${p.replace(/'/g,"\\'")}')">${p}</div>`).join('');
+  _allPresets=sortModalPresetEntries(
+    buildModalPresetList([...allEjsKnown,...ALL_EJS])
+      .filter(p=>!activeKeys.has(ejNameKey(p)))
+      .map(name=>({name,group:modalGroupForExercise(name)}))
+  );
+  renderModalGroupChips();
+  renderPresetEntries(_allPresets);
   $('modal').classList.add('on');setTimeout(()=>$('modal-in').focus(),100);
 }
 
 function filterPresets(q){
-  const f=q.trim()===''?_allPresets:_allPresets.filter(p=>p.toLowerCase().includes(q.toLowerCase()));
-  $('presets').innerHTML=f.map(p=>`<div class="preset" onclick="selP('${p.replace(/'/g,"\\'")}')">${p}</div>`).join('');
+  const qq=ejNameKey(q);
+  const f=_allPresets.filter(p=>{
+    if(modalGroupFilter!=='all'&&modalGroupKey(p.group)!==modalGroupFilter)return false;
+    if(!qq)return true;
+    return ejNameKey(p.name).includes(qq)||ejNameKey(p.group).includes(qq);
+  });
+  renderPresetEntries(f);
   autoDetectTipo(q);
 }
 
@@ -4618,7 +4719,7 @@ function selP(n){
   autoDetectTipo(n);
   // Resaltar el seleccionado
   document.querySelectorAll('.preset').forEach(el=>{
-    const on=el.textContent===n;
+    const on=el.dataset.name===n;
     el.style.borderColor=on?'var(--tx)':'var(--br2)';
     el.style.color=on?'var(--tx)':'var(--mu2)';
     el.style.background=on?'var(--c1)':'transparent';
