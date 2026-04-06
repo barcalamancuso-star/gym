@@ -2197,12 +2197,12 @@ function buzz(pattern,minGap=45){
 }
 
 function haptic(kind='tap'){
-  if(kind==='tap'){buzz(10);return;}
-  if(kind==='medium'){buzz(18);return;}
-  if(kind==='phase'){buzz([14,26,14],80);return;}
-  if(kind==='alert'){buzz([24,36,24],120);return;}
-  if(kind==='success'){buzz([16,28,22],100);return;}
-  buzz(10);
+  if(kind==='tap'){buzz(18,35);return;}
+  if(kind==='medium'){buzz(28,45);return;}
+  if(kind==='phase'){buzz([18,34,22],90);return;}
+  if(kind==='alert'){buzz([28,42,32],130);return;}
+  if(kind==='success'){buzz([20,34,28],110);return;}
+  buzz(18,35);
 }
 
 /* â•â• RUEDAS â•â• */
@@ -2237,6 +2237,7 @@ function selectWheelKg(id,v){
     el.className='wheel-item'+(parseFloat(el.dataset.v)===v?' sel':'')
   );
   $(id).classList.remove('open');
+  haptic('tap');
 }
 
 function kgFromWheels(){return wheelVals.kg??null;}
@@ -2278,6 +2279,7 @@ const WHEEL_MAP={
 function toggleWheel(id){
   document.querySelectorAll('.wheel-popup.open').forEach(p=>{if(p.id!==id)p.classList.remove('open');});
   $(id).classList.toggle('open');
+  haptic('tap');
 }
 
 function selectWheel(id,v){
@@ -2302,6 +2304,7 @@ function selectWheel(id,v){
     el.className='wheel-item'+(el.dataset.v===v?' sel':'')
   );
   $(id).classList.remove('open');
+  haptic('tap');
 }
 
 document.addEventListener('click',e=>{
@@ -5037,6 +5040,7 @@ function selP(n){
   $('modal-in').value=n;
   autoDetectTipo(n);
   renderModalExercisePreview(n);
+  haptic('tap');
   // Resaltar el seleccionado
   document.querySelectorAll('.preset').forEach(el=>{
     const on=el.dataset.name===n;
@@ -5054,6 +5058,7 @@ function mok(){
   ejMultipliers[n]=multModal; // ya viene del modal
   if(!sesion[n])sesion[n]=[];
   saveSessionDraft(false);
+  haptic('success');
   mclose();loadEj(ejList.length-1);
 }
 function mclose(){$('modal').classList.remove('on');}
@@ -6011,6 +6016,7 @@ function toggleFinSharePanel(){
   const on=!panel.classList.contains('on');
   panel.classList.toggle('on',on);
   if(btn)btn.textContent=on?'cerrar':'compartir';
+  haptic('tap');
   if(on){
     updateFinalShareStatus();
     updateBackupInfo();
@@ -6030,6 +6036,7 @@ function toggleFinNotePanel(){
   const on=!panel.classList.contains('on');
   panel.classList.toggle('on',on);
   if(btn)btn.textContent=on?'cerrar':'nota';
+  haptic('tap');
 }
 function goHome(){clearInterval(metaIv);closeFinSharePanel();closeFinNotePanel();show('s0');renderHome();}
 renderHome();
