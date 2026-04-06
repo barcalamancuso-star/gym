@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Ω Rutinas</title>
+  <style>
+    :root{
+      --bg:#080909;
+      --bg2:#0f1010;
+      --tx:#f4ead4;
+      --mu:#9f9787;
+      --mu2:#7b7467;
+      --br:rgba(255,255,255,.08);
+      --br2:rgba(255,255,255,.12);
+      --go:#61d69b;
+      --ac:#d8ba6b;
+      --re:#c4864e;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at top, rgba(216,186,107,.08), transparent 28%),
+        linear-gradient(180deg,var(--bg),var(--bg2));
+      color:var(--tx);
+      font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      min-height:100vh;
+    }
+    .wrap{
+      max-width:940px;
+      margin:0 auto;
+      padding:24px 18px 40px;
+    }
+    .hero{
+      border:1px solid var(--br);
+      padding:22px 18px 18px;
+      background:rgba(255,255,255,.02);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-bottom:18px;
+    }
+    .omega{
+      font-family:serif;
+      font-size:68px;
+      line-height:1;
+      color:var(--tx);
+      text-shadow:0 0 26px rgba(216,186,107,.2);
+    }
+    .title{
+      font-family:serif;
+      font-size:26px;
+      letter-spacing:2px;
+    }
+    .sub{
+      font-size:12px;
+      color:var(--mu);
+      line-height:1.6;
+      max-width:680px;
+    }
+    .top-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:4px;
+    }
+    .btn{
+      border:1px solid var(--br2);
+      background:transparent;
+      color:var(--tx);
+      min-height:38px;
+      padding:0 14px;
+      letter-spacing:1.7px;
+      text-transform:uppercase;
+      font-size:10px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      cursor:pointer;
+    }
+    .btn:active{background:rgba(255,255,255,.04)}
+    .btn.ac{border-color:rgba(216,186,107,.45);color:var(--ac)}
+    .btn.go{border-color:rgba(97,214,155,.45);color:var(--go)}
+    .guide{
+      display:grid;
+      gap:8px;
+      border:1px solid var(--br);
+      padding:14px 16px;
+      margin-bottom:18px;
+      background:rgba(255,255,255,.015);
+    }
+    .guide strong{
+      font-size:10px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      color:var(--mu2);
+    }
+    .guide p{
+      margin:0;
+      font-size:12px;
+      line-height:1.7;
+      color:var(--mu);
+    }
+    .section{
+      margin-top:22px;
+    }
+    .section h2{
+      margin:0 0 10px;
+      font-family:serif;
+      font-size:22px;
+      letter-spacing:1px;
+    }
+    .section-tag{
+      margin-bottom:12px;
+      color:var(--mu2);
+      font-size:10px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:12px;
+    }
+    .card{
+      border:1px solid var(--br);
+      background:rgba(255,255,255,.02);
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height:100%;
+    }
+    .card-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .card-title{
+      font-size:12px;
+      letter-spacing:1.8px;
+      text-transform:uppercase;
+      color:var(--tx);
+    }
+    .chip{
+      border:1px solid var(--br2);
+      color:var(--mu2);
+      padding:3px 7px;
+      font-size:9px;
+      letter-spacing:1.4px;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .list{
+      margin:0;
+      padding-left:16px;
+      color:var(--mu);
+      font-size:12px;
+      line-height:1.7;
+    }
+    .card-actions{
+      display:flex;
+      gap:8px;
+      margin-top:auto;
+      flex-wrap:wrap;
+    }
+    .hint{
+      margin-top:20px;
+      color:var(--mu2);
+      font-size:11px;
+      line-height:1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="omega">Ω</div>
+      <div class="title">Repositorio de Rutinas</div>
+      <div class="sub">Acá van empezando a vivir las rutinas descargables de Omega. Podés bajar una rutina sola para usar en <strong>Cargar rutina</strong> o bajar el pack completo para sumarlas a tu base personal.</div>
+      <div class="top-actions">
+        <a class="btn" href="./index.html">Entrar a Omega</a>
+        <button class="btn ac" onclick="downloadFullPack()">Descargar pack completo</button>
+      </div>
+    </section>
+
+    <section class="guide">
+      <strong>Cómo se usa</strong>
+      <p>Rutina individual: descargás el JSON, entrás al bloque correcto en Omega y usás <strong>Cargar rutina</strong>.</p>
+      <p>Pack completo: descargás el JSON grande y lo podés cargar como base personal al entrar a la app.</p>
+    </section>
+
+    <div id="repo"></div>
+
+    <div class="hint">Esto es una primera base. Después podemos agregar autores, tags, nivel, equipamiento y una curaduría mucho más grande.</div>
+  </div>
+
+  <script>
+    const ROUTINES = {
+      pull: {
+        'Hipertrofia': ['Jalón al Pecho (Neutro)', 'Remo Bajo (Polea)', 'Serrucho', 'Remo en T', 'Bíceps Barra W', 'Curl Martillo'],
+        'Fuerza': ['Jalón al Pecho (Neutro)', 'Remo en T', 'Dominadas', 'Remo Bajo (Barra)', 'Curl Scott'],
+        'Mantenimiento': ['Jalón al Pecho (Neutro)', 'Remo Bajo (Polea)', 'Bíceps Barra W', 'Curl Martillo'],
+        'Peso corporal': ['Dominadas', 'Remo Invertido', 'Dominadas Supinas', 'Scapular Pull Up', 'Dead Hang', 'Superman'],
+      },
+      push: {
+        'Hipertrofia': ['Press de Banca', 'Press Inclinado', 'Cruces Polea Alta', 'Press Militar', 'Vuelos Laterales', 'Extensión Soga'],
+        'Fuerza': ['Press de Banca', 'Press Inclinado', 'Press Militar', 'Fondos'],
+        'Mantenimiento': ['Press de Banca', 'Press Militar', 'Vuelos Laterales', 'Extensión Soga'],
+        'Peso corporal': ['Flexiones', 'Flexiones Diamante', 'Pike Push Up', 'Fondos en Silla', 'Pseudo Planche Push Up', 'L-Sit'],
+      },
+      legs: {
+        'Hipertrofia': ['Prensa de Piernas', 'Extensión Cuádriceps', 'Isquios Máquina', 'Abductores', 'Patada de Glúteo', 'Gemelos Sentado'],
+        'Fuerza': ['Sentadilla', 'Peso Muerto Rumano', 'Prensa de Piernas', 'Extensión Cuádriceps'],
+        'Mantenimiento': ['Prensa de Piernas', 'Isquios Máquina', 'Gemelos Sentado', 'Abductores'],
+        'Peso corporal': ['Sentadilla al Aire', 'Pistol Squat', 'Nordic Curl', 'Puente de Glúteo', 'Gemelos de Pie', 'Plancha Copenhague'],
+      }
+    };
+
+    const TYPE_LABEL = {pull:'Tirón', push:'Empuje', legs:'Piernas'};
+
+    function downloadJSON(data, filename){
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+    }
+
+    function routinePayload(type,name,ejs){
+      return {
+        [type]: {
+          name,
+          ejs: [...ejs]
+        }
+      };
+    }
+
+    function buildFullPackPayload(){
+      const rutinas = {};
+      const allEjs = [];
+      Object.entries(ROUTINES).forEach(([type, packs])=>{
+        Object.entries(packs).forEach(([name, ejs])=>{
+          rutinas[`${type}:${name}`] = [...ejs];
+          ejs.forEach(ej=>allEjs.push(ej));
+        });
+      });
+      return {
+        rutinas,
+        allEjs: [...new Set(allEjs)],
+        theme: 'dark'
+      };
+    }
+
+    function downloadRoutine(type,name){
+      const ejs = ROUTINES[type][name];
+      const safe = `${type}_${name}`.toLowerCase().replace(/\s+/g,'_').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+      downloadJSON(routinePayload(type,name,ejs), `omega_${safe}.json`);
+    }
+
+    function downloadFullPack(){
+      downloadJSON(buildFullPackPayload(), 'omega_rutinas_pack.json');
+    }
+
+    function renderRepo(){
+      const host = document.getElementById('repo');
+      host.innerHTML = Object.entries(ROUTINES).map(([type,packs])=>{
+        const cards = Object.entries(packs).map(([name,ejs])=>`
+          <article class="card">
+            <div class="card-top">
+              <div class="card-title">${name}</div>
+              <div class="chip">${TYPE_LABEL[type]}</div>
+            </div>
+            <ol class="list">
+              ${ejs.map(ej=>`<li>${ej}</li>`).join('')}
+            </ol>
+            <div class="card-actions">
+              <button class="btn go" onclick="downloadRoutine('${type}','${name.replace(/'/g,"\\'")}')">Descargar JSON</button>
+            </div>
+          </article>
+        `).join('');
+        return `
+          <section class="section">
+            <h2>${TYPE_LABEL[type]}</h2>
+            <div class="section-tag">rutinas listas para descargar</div>
+            <div class="grid">${cards}</div>
+          </section>
+        `;
+      }).join('');
+    }
+
+    renderRepo();
+  </script>
+</body>
+</html>

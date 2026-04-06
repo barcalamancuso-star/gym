@@ -472,8 +472,8 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   padding:12px 14px;font-size:12px;font-family:var(--mono);text-align:left;min-height:var(--touch);}
 .rut-btn:active{background:var(--c1);color:var(--tx);}
 .rut-del{background:transparent;border:1px solid var(--br2);color:var(--mu);
-  padding:12px 14px;font-size:16px;font-family:var(--mono);min-height:var(--touch);
-  display:flex;align-items:center;}
+  padding:12px 12px;font-size:9px;letter-spacing:1.6px;text-transform:uppercase;font-family:var(--mono);min-height:var(--touch);
+  display:flex;align-items:center;justify-content:center;min-width:78px;}
 .rut-del:active{color:var(--re);border-color:var(--re);}
 .btn-back{background:transparent;border:none;color:var(--mu2);font-size:10px;
   letter-spacing:3px;text-transform:uppercase;font-family:var(--mono);
@@ -1063,6 +1063,13 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   display:inline-flex;align-items:center;justify-content:center;opacity:.9;
 }
 .fin-share-toggle:active{border-color:var(--tx);color:var(--tx);background:var(--c1);}
+.fin-rut-btn{
+  background:transparent;border:1px solid rgba(216,186,107,.4);color:var(--ac);
+  border-radius:999px;min-height:24px;padding:0 10px;
+  font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  display:inline-flex;align-items:center;justify-content:center;opacity:.95;
+}
+.fin-rut-btn:active{border-color:var(--ac);color:var(--tx);background:var(--c1);}
 .fin-note-toggle{
   background:transparent;border:1px solid var(--br2);color:var(--mu2);
   border-radius:999px;min-height:24px;padding:0 10px;
@@ -1343,6 +1350,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
     <div class="rut-list" id="rut-list"></div>
     <button class="s1-opt" onclick="document.getElementById('fi-rut').click()">Cargar rutina</button>
     <input type="file" id="fi-rut" accept=".json" onchange="loadRutina(event)">
+    <button class="s1-opt" onclick="openRutinasRepo()">Repositorio de rutinas</button>
     <button class="s1-opt" onclick="goBlank()">En blanco</button>
   </div>
   <button class="btn-back" onclick="show('s0')">← volver</button>
@@ -1560,6 +1568,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   <div class="fin-scroll" id="fin-body"></div>
   <div class="fin-foot">
     <div class="fin-foot-top">
+      <button id="fin-rut-btn" class="fin-rut-btn" onclick="saveRutina()">rutina</button>
       <button id="fin-note-toggle" class="fin-note-toggle" onclick="toggleFinNotePanel()">nota</button>
       <button id="fin-share-toggle" class="fin-share-toggle" onclick="toggleFinSharePanel()">compartir</button>
     </div>
@@ -1573,7 +1582,6 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
       <button class="finb share" onclick="shareCSV()">Compartir CSV</button>
       <button class="finb db" onclick="exportDB()">Guardar personal</button>
       <button class="finb dbshare" onclick="shareDB()">Compartir personal</button>
-      <button class="finb rut" onclick="saveRutina()">Guardar rutina</button>
       <div id="backup-info" class="backup-info"></div>
     </div>
   </div>
@@ -3622,9 +3630,14 @@ function renderRutinas(){
         <div style="font-size:11px;color:var(--tx)">${name}</div>
         <div style="font-size:10px;color:var(--mu2)">${ejs.slice(0,3).join(' · ')}${ejs.length>3?'…':''}</div>
       </button>
-      <button class="rut-del" onclick="deleteRutina('${k.replace(/'/g,"\\'")}')">×</button>
+      <button class="rut-del" onclick="deleteRutina('${k.replace(/'/g,"\\'")}')">borrar</button>
     </div>`;
   }).join('');
+}
+
+function openRutinasRepo(){
+  haptic('tap');
+  window.open('./rutinas.html','_blank');
 }
 
 function splitRutinaKey(key){
@@ -3755,12 +3768,15 @@ function goLast(){
 function loadRutinaDB(key){
   const ejs=DB.rutinas[key]||[];
   const name=key.split(':')[1];
+  haptic('success');
   startWorkout(name,ejs,curType,{},{},{});
 }
 
 function deleteRutina(key){
   if(!confirm('¿Eliminar rutina "'+key.split(':')[1]+'"?'))return;
   delete DB.rutinas[key];
+  saveAutoDb();
+  haptic('alert');
   renderRutinas();
 }
 
@@ -5344,6 +5360,7 @@ function updateFinalSummaryUi(statsArg){
 
 /* â•â• RUTINAS EN DB â•â• */
 function saveRutina(){
+  haptic('tap');
   $('rut-name-in').value=curDay.name;
   $('modal-rut').classList.add('on');
   setTimeout(()=>$('rut-name-in').focus(),100);
@@ -5355,7 +5372,9 @@ function confirmSaveRutina(){
   if(!DB.rutinas)DB.rutinas={};
   DB.rutinas[key]=[...ejList];
   saveAutoDb();
+  haptic('success');
   $('modal-rut').classList.remove('on');
+  renderRutinas();
   alert(`Rutina "${name}" guardada. Se incluirá en la próxima DB.`);
 }
 
