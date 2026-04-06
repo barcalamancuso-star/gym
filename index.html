@@ -1092,6 +1092,11 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 .modal-preview-muscle span{
   font-family:var(--mono);font-size:9px;color:var(--mu);letter-spacing:.4px;text-transform:uppercase;
 }
+.modal-preview-muscle em{
+  font-style:normal;
+  color:var(--ac);
+  letter-spacing:.2px;
+}
 .modal-preview-mev{
   font-family:var(--mono);font-size:11px;color:var(--mu2);white-space:nowrap;
 }
@@ -1912,7 +1917,7 @@ function renderModalExercisePreview(name){
     return `<div class="modal-preview-row">
       <div class="modal-preview-muscle">
         <strong>${m}</strong>
-        <span>${role}</span>
+        <span>${role} · <em>+${fmtSetCount(primary)}</em></span>
       </div>
       <div class="modal-preview-mev">${fmtSetCount(count)}/${target.max}</div>
       <div class="modal-preview-state ${stateClass}">${stateLabel}</div>
