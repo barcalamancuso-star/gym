@@ -2177,6 +2177,7 @@ const SESSION_DRAFT_KEY='gym_codex_session_draft_v1';
 const APP_SESSION_KEY='gym_codex_app_session_v1';
 const CSV_DAY_PENDING_KEY='gym_codex_csv_day_pending_v1';
 const SESSION_DRAFT_RESTORE_MAX_MS=1000*60*60*2;
+const APP_SESSION_RESTORE_MAX_MS=1000*60*60*2;
 let _lastDbLoadOk=false;
 let _splashAutoGoTimer=null;
 let _dismissSplashBusy=false;
@@ -5761,8 +5762,20 @@ function hasStartedAppSession(){
     const raw=localStorage.getItem(APP_SESSION_KEY);
     if(!raw)return false;
     const parsed=JSON.parse(raw);
-    return !!(parsed&&parsed.active);
-  }catch(_e){return false;}
+    const ts=Number(parsed&&parsed.ts);
+    if(!(parsed&&parsed.active&&Number.isFinite(ts)&&ts>0)){
+      localStorage.removeItem(APP_SESSION_KEY);
+      return false;
+    }
+    if(Date.now()-ts>APP_SESSION_RESTORE_MAX_MS){
+      localStorage.removeItem(APP_SESSION_KEY);
+      return false;
+    }
+    return true;
+  }catch(_e){
+    try{localStorage.removeItem(APP_SESSION_KEY);}catch(__e){}
+    return false;
+  }
 }
 function sessionDraftHasStarted(draft){
   if(!draft||typeof draft!=='object')return false;
