@@ -1656,6 +1656,7 @@ const fmtT=(ms)=>{
   return `${m}<span style="display:inline-block;letter-spacing:0;margin:0 -1px;">:</span>${String(ss).padStart(2,'0')}<span style="font-size:0.34em;opacity:0.64;margin-left:1px;">.${d}</span>`;
 };
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;};
+const DEFAULT_BODY_WEIGHT_KG=69;
 // Fecha estilo "Vie 20/3"
 const fmtD=iso=>{
   const dt=new Date(iso+'T12:00:00');
@@ -1761,6 +1762,16 @@ const BODYWEIGHT_EXERCISES=new Set([
 const ISOMETRIC_EXERCISES=new Set([
   'Plancha','Plancha Lateral','Wall Sit','Hollow Hold','L-Sit','Dead Hang','Plancha Copenhague'
 ]);
+const BODYWEIGHT_LOAD_FACTORS={
+  'Flexiones':0.64,'Flexiones Diamante':0.66,'Flexiones Inclinadas':0.5,'Flexiones Declinadas':0.72,'Flexiones Arqueras':0.78,
+  'Flexiones Explosivas':0.64,'Flexiones Hindúes':0.66,'Pike Push Up':0.72,'Handstand Push Up':0.95,'Pseudo Planche Push Up':0.82,
+  'Fondos en Paralelas':0.92,'Fondos en Silla':0.72,'Dominadas':1,'Dominadas Asistidas':0.7,'Dominadas Supinas':1,'Dominadas Neutras':1,
+  'Dominadas Arqueras':1.08,'Remo Invertido':0.62,'Muscle Up':1.05,'Scapular Pull Up':0.9,'Dead Hang':1,
+  'Sentadilla al Aire':0.82,'Pistol Squat':0.9,'Shrimp Squat':0.88,'Nordic Curl':0.75,'Puente de Glúteo':0.55,'Hip Thrust Unilateral':0.6,
+  'Wall Sit':0.75,'Gemelos de Pie':0.9,'Plancha':0.62,'Plancha Lateral':0.55,'Elevación de Piernas':0.35,'Abdominales banco inclinado':0.32,
+  'Rueda Abdominal':0.7,'Russian Twist':0.2,'Hollow Hold':0.35,'Plancha Copenhague':0.4,'Dead Bug':0.18,'Bird Dog':0.15,'L-Sit':0.68,
+  'V-Ups':0.35,'Toes to Bar':0.72,'Superman':0.16,'Espinales':0.22,'Hyperextensiones':0.22,'Negativa Fondos':0.72
+};
 
 const EJ_GRUPOS={
   "Press de Banca":"Pecho","Press Inclinado":"Pecho","Press Declinado":"Pecho","Press Plano Mancuernas":"Pecho","Press Inclinado Mancuernas":"Pecho",
@@ -1948,6 +1959,79 @@ function formatSetInlineForExercise(name,s,kgLabel='kg'){
   return repTxt||'—';
 }
 
+function getCurrentBodyWeightKg(){
+  const n=Number(DB&&DB.perfil_fisico&&DB.perfil_fisico.peso_kg_actual);
+  return Number.isFinite(n)&&n>0?n:DEFAULT_BODY_WEIGHT_KG;
+}
+
+function bodyweightFactorForExercise(name){
+  const canon=canonicalEjName(name);
+  return BODYWEIGHT_LOAD_FACTORS[canon]||1;
+}
+
+function buildBodyweightLoadForExercise(name,tipo,bwKgOverride=null){
+  if(tipo!=='pc')return {bw_kg:null,bw_factor:null,effective_kg:null};
+  const bwRaw=Number(bwKgOverride);
+  const bwKg=Number.isFinite(bwRaw)&&bwRaw>0?bwRaw:getCurrentBodyWeightKg();
+  const bwFactor=bodyweightFactorForExercise(name);
+  const effectiveKg=Math.round((bwKg*bwFactor)*10)/10;
+  return {
+    bw_kg:bwKg,
+    bw_factor:bwFactor,
+    effective_kg:effectiveKg
+  };
+}
+
+function seriesEffectiveKg(name,s){
+  const row=s||{};
+  const tipo=row.tipo||ejTipos[name]||inferExerciseTipo(name)||'maq';
+  if(tipo==='pc'){
+    const stored=Number(row.effective_kg);
+    const factor=Number(row.bw_factor);
+    const bw=Number(row.bw_kg);
+    const base=Number.isFinite(stored)&&stored>0
+      ? stored
+      : ((Number.isFinite(bw)&&bw>0?bw:getCurrentBodyWeightKg()) * (Number.isFinite(factor)&&factor>0?factor:bodyweightFactorForExercise(name)));
+    return Math.round(base*10)/10 * Math.max(1,Number(row.mult)||1);
+  }
+  return (Number(row.kg)||0) * Math.max(1,Number(row.mult)||1);
+}
+
+function calcSeriesVolume(name,s){
+  return Math.round((seriesEffectiveKg(name,s) * (Number(s&&s.reps)||0))*10)/10;
+}
+
+function parseTimerTextToSec(txt){
+  const raw=String(txt||'').trim();
+  if(!raw)return 0;
+  const mmss=raw.match(/^(\d+):(\d{2})$/);
+  if(mmss)return (parseInt(mmss[1],10)*60)+parseInt(mmss[2],10);
+  const seg=raw.match(/(\d+)\s*(?:s|seg|segs|segundos?)/i);
+  if(seg)return parseInt(seg[1],10)||0;
+  return 0;
+}
+
+function normalizeSeriesMetricsForExercise(name,row,bwKgOverride=null){
+  const next=(row&&typeof row==='object')?{...row}:{};
+  const tipo=(next.tipo||'').toString().trim().toLowerCase()||inferExerciseTipo(name)||'maq';
+  next.tipo=tipo;
+  if(exerciseUsesSeconds(name)){
+    const current=Number(next.reps)||0;
+    if(current<=1){
+      const secs=parseTimerTextToSec(next.nota)||parseTimerTextToSec(next.tWork);
+      if(secs>1)next.reps=secs;
+    }
+  }
+  if(tipo==='pc'){
+    const bwData=buildBodyweightLoadForExercise(name,tipo,bwKgOverride);
+    next.kg=null;
+    next.bw_kg=bwData.bw_kg;
+    next.bw_factor=bwData.bw_factor;
+    next.effective_kg=bwData.effective_kg;
+  }
+  return next;
+}
+
 function dedupeNamesStable(arr){
   const seen=new Set();
   const out=[];
@@ -2101,14 +2185,37 @@ function normalizeEjAgarresMap(m){
   return out;
 }
 
-function normalizeExercisesMap(exercises){
+function normalizePerfilFisico(src){
+  const row=(src&&typeof src==='object')?{...src}:{};
+  const peso=Number(row.peso_kg_actual);
+  row.peso_kg_actual=Number.isFinite(peso)&&peso>0?Math.round(peso*10)/10:DEFAULT_BODY_WEIGHT_KG;
+  const altura=Number(row.altura_cm);
+  row.altura_cm=Number.isFinite(altura)&&altura>0?Math.round(altura):null;
+  row.sexo=row.sexo?String(row.sexo).trim().toLowerCase():null;
+  return row;
+}
+
+function normalizeBiometricHistory(list,currentWeight){
+  const out=(Array.isArray(list)?list:[])
+    .map(x=>({
+      fecha:String(x&&x.fecha||'').trim()||today(),
+      peso_kg:Number.isFinite(Number(x&&x.peso_kg))&&Number(x&&x.peso_kg)>0?Math.round(Number(x&&x.peso_kg)*10)/10:null
+    }))
+    .filter(x=>x.peso_kg);
+  if(!out.length&&currentWeight){
+    out.push({fecha:today(),peso_kg:currentWeight});
+  }
+  return out;
+}
+
+function normalizeExercisesMap(exercises,bwKgOverride=null){
   const out={};
   Object.entries(exercises||{}).forEach(([name,series])=>{
     const canon=canonicalEjName(name);
     if(!canon)return;
     if(!out[canon])out[canon]=[];
     (Array.isArray(series)?series:[]).forEach((s,idx)=>{
-      const row=(s&&typeof s==='object')?{...s}:{};
+      const row=normalizeSeriesMetricsForExercise(canon,s,bwKgOverride);
       if(!row.serie)row.serie=out[canon].length+1;
       out[canon].push(row);
     });
@@ -2122,10 +2229,13 @@ function normalizeExercisesMap(exercises){
 function normalizeDbData(db){
   const src=(db&&typeof db==='object')?db:{};
   const out={...src};
+  out.perfil_fisico=normalizePerfilFisico(src.perfil_fisico||{});
+  out.historial_biometrico=normalizeBiometricHistory(src.historial_biometrico||[],out.perfil_fisico.peso_kg_actual);
+  const bwKg=out.perfil_fisico.peso_kg_actual;
 
   out.history=Array.isArray(src.history)?src.history.map(h=>{
     const row={...(h||{})};
-    row.exercises=normalizeExercisesMap(row.exercises||{});
+    row.exercises=normalizeExercisesMap(row.exercises||{},bwKg);
     row.ejTipos=normalizeEjTiposMap(row.ejTipos||{});
     row.ejAgarres=normalizeEjAgarresMap(row.ejAgarres||{});
     return row;
@@ -2136,13 +2246,19 @@ function normalizeDbData(db){
   Object.entries(src.ejercicios||{}).forEach(([name,rec])=>{
     const canon=canonicalEjName(name);
     const row=(rec&&typeof rec==='object')?{...rec}:{};
-    row.series=Array.isArray(row.series)?row.series.map((s,i)=>({...(s||{}),serie:(s&&s.serie)||i+1})):[];
+    row.series=Array.isArray(row.series)?row.series.map((s,i)=>({
+      ...normalizeSeriesMetricsForExercise(canon,s,bwKg),
+      serie:(s&&s.serie)||i+1
+    })):[];
     if(row.byGrip&&typeof row.byGrip==='object'){
       const byGrip={};
       Object.entries(row.byGrip).forEach(([g,gr])=>{
         const grip=normalizedGripValue(g);
         const grRow=(gr&&typeof gr==='object')?{...gr}:{};
-        grRow.series=Array.isArray(grRow.series)?grRow.series.map((s,i)=>({...(s||{}),serie:(s&&s.serie)||i+1})):[];
+        grRow.series=Array.isArray(grRow.series)?grRow.series.map((s,i)=>({
+          ...normalizeSeriesMetricsForExercise(canon,s,bwKg),
+          serie:(s&&s.serie)||i+1
+        })):[];
         if(grip)byGrip[grip]=grRow;
       });
       row.byGrip=byGrip;
@@ -3719,6 +3835,8 @@ function buildInitialDb(){
     ejercicios:{},
     allEjs:[...ALL_EJS],
     usuario:null,
+    perfil_fisico:{peso_kg_actual:DEFAULT_BODY_WEIGHT_KG,altura_cm:null,sexo:null},
+    historial_biometrico:[{fecha:today(),peso_kg:DEFAULT_BODY_WEIGHT_KG}],
     msgManana:null,
     theme:'dark'
   });
@@ -4107,9 +4225,10 @@ function updateLiveVol(){
   let vol=0;
   for(const ej of ejList){
     (sesion[ej]||[]).filter(s=>!s.deleted).forEach(s=>{
-      vol+=(s.kg||0)*(s.reps||0)*(s.mult||1);
+      vol+=calcSeriesVolume(ej,s);
     });
   }
+  vol=Math.round(vol*10)/10;
   const el=$('tbar-vol');
   if(el){
     if(vol>0){
@@ -4851,6 +4970,7 @@ function applySerieEdit(){
   const grip=activeGripForExercise(targetName)||null;
   const mult=ejMultipliers[targetName]||1;
   const mevData=buildMevGainForExercise(targetName);
+  const bwData=buildBodyweightLoadForExercise(targetName,targetTipo);
   const updated={
     ...originRow,
     kg:v.kg,
@@ -4864,6 +4984,9 @@ function applySerieEdit(){
     tipo:targetTipo,
     grip,
     mult,
+    bw_kg:bwData.bw_kg,
+    bw_factor:bwData.bw_factor,
+    effective_kg:bwData.effective_kg,
     mevGain:mevData.mevGain,
     mevGainTotal:mevData.mevGainTotal,
     deleted:false
@@ -4942,9 +5065,16 @@ function saveSerie(){
   const mevData=buildMevGainForExercise(name);
   const mevGain=mevData.mevGain;
   const mevGainTotal=mevData.mevGainTotal;
+  const bwData=buildBodyweightLoadForExercise(name,tipo);
   if(!sesion[name])sesion[name]=[];
   const serie=sesion[name].length+1;
-  sesion[name].push({serie,kg,reps,rpe,helped,grip,mult,dskg,dsreps,dsrpe,nota,tWork:tW,tRest:tR,tipo,ts,mevGain,mevGainTotal,deleted:false});
+  sesion[name].push({
+    serie,kg,reps,rpe,helped,grip,mult,dskg,dsreps,dsrpe,nota,tWork:tW,tRest:tR,tipo,ts,
+    bw_kg:bwData.bw_kg,
+    bw_factor:bwData.bw_factor,
+    effective_kg:bwData.effective_kg,
+    mevGain,mevGainTotal,deleted:false
+  });
   haptic('medium');
   collapseInp();
   state='rest';$('clock').className='tbar rest';
@@ -5299,10 +5429,7 @@ function buildCurrentSessionStats(){
 
     rows.forEach(r=>{
       totalSeries++;
-      const kg=Math.max(0,Number(r.kg)||0);
-      const reps=Math.max(0,Number(r.reps)||0);
-      const mult=Math.max(1,Number(r.mult)||1);
-      exVol+=kg*reps*mult;
+      exVol+=calcSeriesVolume(name,r);
       let rowMev=Number(r.mevGainTotal);
       if(!Number.isFinite(rowMev))rowMev=mevIsEffectiveSet(r)?loadTotal:0;
       exMev+=rowMev;
@@ -5320,7 +5447,7 @@ function buildCurrentSessionStats(){
       grip:activeGripForExercise(name),
       muscles,
       series:rows.length,
-      volume:exVol,
+      volume:Math.round(exVol*10)/10,
       mev:exMev
     });
   }
@@ -5335,7 +5462,7 @@ function buildCurrentSessionStats(){
     totalSec,
     totalTime:fmtHM(totalSec),
     totalSeries,
-    volTotal,
+    volTotal:Math.round(volTotal*10)/10,
     mevTotal,
     exercises,
     muscles,
@@ -5592,7 +5719,7 @@ async function shareOnly(blob,name,mime){
 
 function buildCSV(){
   const active=ej=>sesion[ej]?sesion[ej].filter(s=>!s.deleted):[];
-  let csv='fecha;dia;ejercicio;tipo;mult;serie;kg;reps;rpe;helped;ds_kg;ds_reps;ds_rpe;nota;t_trabajo;t_descanso;descanso_real_seg\n';
+  let csv='fecha;dia;ejercicio;tipo;mult;serie;kg;reps;rpe;helped;ds_kg;ds_reps;ds_rpe;bw_kg;bw_factor;effective_kg;nota;t_trabajo;t_descanso;descanso_real_seg\n';
   for(const ej of ejList){
     const series=active(ej);
     series.forEach((s,idx)=>{
@@ -5604,6 +5731,7 @@ function buildCSV(){
       csv+=[today(),curDay.name,`"${ej}"`,s.tipo||'',s.mult||1,s.serie,
         s.kg??'',s.reps??'',s.rpe??'',s.helped??'',
         s.dskg??'',s.dsreps??'',s.dsrpe??'',
+        s.bw_kg??'',s.bw_factor??'',s.effective_kg??'',
         s.nota?`"${s.nota}"`:'',s.tWork,s.tRest,descReal].join(';')+'\n';
     });
   }
@@ -5975,9 +6103,10 @@ function persistCurrentSessionToDb(withToast){
   let volTotal=0;
   for(const ej of ejList){
     (sesion[ej]||[]).filter(r=>!r.deleted).forEach(s=>{
-      volTotal+=(s.kg||0)*(s.reps||0)*(s.mult||1);
+      volTotal+=calcSeriesVolume(ej,s);
     });
   }
+  volTotal=Math.round(volTotal*10)/10;
 
   const newSes={
     date:today(),
@@ -5999,16 +6128,23 @@ function persistCurrentSessionToDb(withToast){
     const series=(sesion[ej]||[]).filter(r=>!r.deleted&&r.reps);
     if(!series.length)continue;
     const maxKgSerie=series.reduce((mx,s)=>{
-      const v=(s.kg||0)*(s.mult||1);
+      const v=seriesEffectiveKg(ej,s);
       return v>mx?v:mx;
     },0);
-    const bestSerie=series.find(s=>(s.kg||0)*(s.mult||1)===maxKgSerie)||null;
+    const bestSerie=series.find(s=>seriesEffectiveKg(ej,s)===maxKgSerie)||null;
     const rec=(ejData[ej]&&typeof ejData[ej]==='object')?{...ejData[ej]}:{};
     const todayIso=today();
+    const bestKgValue=bestSerie
+      ? ((Number.isFinite(Number(bestSerie.kg))&&Number(bestSerie.kg)>0)
+          ? Number(bestSerie.kg)
+          : (Number.isFinite(Number(bestSerie.effective_kg))&&Number(bestSerie.effective_kg)>0
+              ? Number(bestSerie.effective_kg)
+              : null))
+      : null;
 
     const prevPRBase=(rec.pr_kg?.val)||0;
     const pr_kg=maxKgSerie>prevPRBase
-      ? {val:maxKgSerie,kg:bestSerie?.kg,fecha:todayIso}
+      ? {val:maxKgSerie,kg:bestKgValue,fecha:todayIso}
       : (rec.pr_kg||null);
 
     rec.series=series;
@@ -6021,7 +6157,7 @@ function persistCurrentSessionToDb(withToast){
       const byGrip=(rec.byGrip&&typeof rec.byGrip==='object')?{...rec.byGrip}:{};
       const prevGrip=(byGrip[grip]?.pr_kg?.val)||0;
       const prGrip=maxKgSerie>prevGrip
-        ? {val:maxKgSerie,kg:bestSerie?.kg,fecha:todayIso}
+        ? {val:maxKgSerie,kg:bestKgValue,fecha:todayIso}
         : (byGrip[grip]?.pr_kg||null);
       byGrip[grip]={series,fecha:todayIso,pr_kg:prGrip};
       rec.byGrip=byGrip;
