@@ -1,0 +1,226 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Actividades</title>
+  <style>
+    :root{--bg:#0b0b0c;--panel:#141416;--ink:#f3f1eb;--muted:#8a877f;--gold:#c7a562;--line:rgba(199,165,98,.2)}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:Segoe UI,Arial,sans-serif}
+    .wrap{max-width:900px;margin:0 auto;padding:12px;display:grid;gap:12px}
+    .box{background:var(--panel);border:1px solid var(--line);padding:10px}
+    h2{margin:0 0 8px;font-size:11px;letter-spacing:1px;color:var(--gold);text-transform:uppercase;border-bottom:1px solid var(--line);padding-bottom:4px}
+    label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}
+    input,select,button{width:100%;padding:8px;background:#0a0a0b;color:var(--ink);border:1px solid var(--line);margin-top:4px}
+    .btn-main{background:var(--gold);color:#1b160c;font-weight:700;cursor:pointer}
+    .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .list{display:grid;gap:6px;max-height:300px;overflow:auto}
+    .it{display:flex;justify-content:space-between;gap:8px;border:1px solid var(--line);padding:6px;background:#0c0c0d}
+    .del{width:auto;padding:4px 8px;background:#2a1111;border:1px solid #5f3535;color:#d69f9f;cursor:pointer}
+    .tiny{font-size:10px;color:var(--muted)}
+    .actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .actions2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+    @media (max-width:900px){.row,.actions,.actions2{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="box">
+      <h2>Biometricos Del Dia</h2>
+      <div class="row">
+        <label>Fecha<input id="bioDate" type="date"></label>
+        <label>Hora levantada<select id="wakeTime"></select></label>
+        <label>Peso al levantarte (kg)<input id="wakeWeight" type="number" step="0.1" value="80"></label>
+      </div>
+      <div class="row">
+        <label>Hora que me dormi<select id="sleepTime"></select></label>
+      </div>
+      <button id="saveBio" class="btn-main">Guardar biometricos</button>
+      <small id="bioStatus" class="tiny"></small>
+    </section>
+
+    <section class="box">
+      <h2>Cargar Actividad</h2>
+      <div class="row">
+        <label>Fecha<input id="date" type="date"></label>
+        <label>Actividad<select id="type"><option>caminar</option><option>correr</option><option>bailar</option><option>entrenar</option><option>estudiar</option><option>otra</option></select></label>
+        <label>Duracion (min)<input id="dur" type="number" value="30" step="1"></label>
+      </div>
+      <div class="row">
+        <label>Kcal activas<input id="kcal" type="number" value="150" step="1"></label>
+        <label>Fuente<select id="source"><option>manual</option><option>reloj</option><option>app-salud</option></select></label>
+        <label>Nota<input id="note" placeholder="opcional"></label>
+      </div>
+      <button id="add" class="btn-main">Agregar actividad</button>
+      <small id="status" class="tiny"></small>
+    </section>
+
+    <section class="box">
+      <h2>Eventos Del Dia</h2>
+      <div id="list" class="list"></div>
+    </section>
+
+    <section class="box">
+      <h2>Exportar Para App Nutricion</h2>
+      <div class="actions">
+        <button id="saveLocal">Guardar local</button>
+        <button id="exportJson" class="btn-main">Exportar JSON</button>
+        <button id="exportCsv">Exportar CSV</button>
+      </div>
+      <div class="actions2">
+        <button id="saveAsJson">Guardar como... JSON</button>
+        <button id="saveAsCsv">Guardar como... CSV</button>
+      </div>
+      <small class="tiny">Archivo recomendado para la app de nutricion: <b>actividades.export.json</b></small>
+    </section>
+  </div>
+
+  <script>
+    const LS_EVENTS = "actividades_builder_v1";
+    const LS_BIO = "actividades_bio_v1";
+    let events = JSON.parse(localStorage.getItem(LS_EVENTS) || "[]");
+    let biometricos = JSON.parse(localStorage.getItem(LS_BIO) || "{}");
+
+    const $ = (id) => document.getElementById(id);
+    const fmt = (v) => Number(v).toFixed(0);
+
+    function today(){
+      const d = new Date();
+      const m = String(d.getMonth()+1).padStart(2,"0");
+      const day = String(d.getDate()).padStart(2,"0");
+      return `${d.getFullYear()}-${m}-${day}`;
+    }
+
+    function save(){ localStorage.setItem(LS_EVENTS, JSON.stringify(events)); }
+    function saveBio(){ localStorage.setItem(LS_BIO, JSON.stringify(biometricos)); }
+
+    function render(){
+      $("list").innerHTML = events.length
+        ? events.slice().reverse().map(e => `<div class="it"><div><b>${e.activity_type}</b> <span class="tiny">${e.date} | ${e.duration_min} min | ${e.kcal_active} kcal</span><div class="tiny">${e.source}${e.note ? " | " + e.note : ""}</div></div><button class="del" onclick="delEvt('${e.id}')">x</button></div>`).join("")
+        : `<span class="tiny">Sin actividades cargadas.</span>`;
+      const total = events.reduce((a,e)=>a+(Number(e.kcal_active)||0),0);
+      $("status").textContent = `Eventos: ${events.length} | Kcal activas totales: ${fmt(total)}`;
+      $("bioStatus").textContent = biometricos.date
+        ? `Bio guardados: ${biometricos.date} | Levantada: ${biometricos.wake_time || "-"} | Dormi: ${biometricos.sleep_time || "-"} | Peso: ${biometricos.wake_weight_kg || "-"} kg`
+        : "Sin biometricos guardados.";
+    }
+
+    function add(){
+      const e = {
+        id: `evt_${Date.now()}_${Math.random().toString(36).slice(2,7)}`,
+        date: $("date").value || today(),
+        activity_type: $("type").value,
+        duration_min: Number($("dur").value) || 0,
+        kcal_active: Number($("kcal").value) || 0,
+        source: $("source").value || "manual",
+        note: $("note").value || ""
+      };
+      events.push(e);
+      save();
+      render();
+    }
+
+    function delEvt(id){ events = events.filter(x => x.id !== id); save(); render(); }
+    window.delEvt = delEvt;
+
+    function download(filename, text, type){
+      const blob = new Blob([text], {type});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function saveAsText(filename, text, mime, ext){
+      if (!window.showSaveFilePicker) {
+        download(filename, text, mime);
+        return;
+      }
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: filename,
+          types: [{ description: mime, accept: { [mime]: [ext] } }]
+        });
+        const writable = await handle.createWritable();
+        await writable.write(text);
+        await writable.close();
+      } catch (err) {
+        if (err && err.name === "AbortError") return;
+        download(filename, text, mime);
+      }
+    }
+
+    function buildJsonPayload(){
+      return {
+        version: "1.1",
+        date: today(),
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Argentina/Buenos_Aires",
+        source_app: "actividades.html",
+        biometricos,
+        events
+      };
+    }
+
+    function buildCsvText(){
+      const head = "id,date,activity_type,duration_min,kcal_active,source,note,wake_time,sleep_time,wake_weight_kg";
+      const rows = events.map(e => `${e.id},${e.date},${e.activity_type},${e.duration_min},${e.kcal_active},${e.source},${(e.note||"").replace(/,/g," ")},${biometricos.wake_time || ""},${biometricos.sleep_time || ""},${biometricos.wake_weight_kg || ""}`);
+      return [head, ...rows].join("\n");
+    }
+
+    function exportJson(){
+      const payload = buildJsonPayload();
+      download("actividades.export.json", JSON.stringify(payload, null, 2), "application/json");
+    }
+
+    function exportCsv(){
+      download("actividades.export.csv", buildCsvText(), "text/csv");
+    }
+
+    function saveBiometricosForm(){
+      biometricos = {
+        date: $("bioDate").value || today(),
+        wake_time: $("wakeTime").value || "",
+        sleep_time: $("sleepTime").value || "",
+        wake_weight_kg: Number($("wakeWeight").value) || 0
+      };
+      saveBio();
+      render();
+    }
+
+    function fillTimeOptions(selectId){
+      const sel = $(selectId);
+      const opts = [];
+      for(let h=0; h<24; h++){
+        for(let m=0; m<60; m+=15){
+          const hh = String(h).padStart(2, "0");
+          const mm = String(m).padStart(2, "0");
+          const v = `${hh}:${mm}`;
+          opts.push(`<option value="${v}">${v}</option>`);
+        }
+      }
+      sel.innerHTML = opts.join("");
+    }
+
+    $("date").value = today();
+    fillTimeOptions("wakeTime");
+    fillTimeOptions("sleepTime");
+    $("bioDate").value = biometricos.date || today();
+    $("wakeTime").value = biometricos.wake_time || "07:00";
+    $("sleepTime").value = biometricos.sleep_time || "23:00";
+    $("wakeWeight").value = biometricos.wake_weight_kg || 80;
+    $("add").onclick = add;
+    $("saveBio").onclick = saveBiometricosForm;
+    $("saveLocal").onclick = () => { save(); render(); };
+    $("exportJson").onclick = exportJson;
+    $("exportCsv").onclick = exportCsv;
+    $("saveAsJson").onclick = async () => {
+      const payload = buildJsonPayload();
+      await saveAsText("actividades.export.json", JSON.stringify(payload, null, 2), "application/json", ".json");
+    };
+    $("saveAsCsv").onclick = async () => {
+      await saveAsText("actividades.export.csv", buildCsvText(), "text/csv", ".csv");
+    };
+    render();
+  </script>
+</body>
+</html>

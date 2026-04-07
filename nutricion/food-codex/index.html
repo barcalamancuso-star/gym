@@ -1,0 +1,463 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Pa Cocinar y Crecer</title>
+  <style>
+    :root { --bg:#0b0b0c; --panel:#141416; --ink:#f3f1eb; --muted:#8a877f; --gold:#c7a562; --line:rgba(199,165,98,.2); }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:Segoe UI,Arial,sans-serif}
+    .wrap{max-width:1200px;margin:0 auto;padding:12px;display:grid;gap:12px;grid-template-columns:360px 1fr}
+    .box{background:var(--panel);border:1px solid var(--line);padding:10px}
+    h2{margin:0 0 8px;font-size:11px;letter-spacing:1px;color:var(--gold);text-transform:uppercase;border-bottom:1px solid var(--line);padding-bottom:4px}
+    label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}
+    input,select,button{width:100%;padding:8px;background:#0a0a0b;color:var(--ink);border:1px solid var(--line);margin-top:4px}
+    button{cursor:pointer} .btn-main{background:var(--gold);color:#1b160c;font-weight:700}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .olla{display:grid;gap:6px;max-height:230px;overflow:auto}
+    .it{display:flex;justify-content:space-between;gap:8px;border:1px solid var(--line);padding:6px;background:#0c0c0d}
+    .it small{display:block;color:var(--muted)}
+    .del{width:auto;padding:4px 8px;background:#2a1111;border:1px solid #5f3535;color:#d69f9f}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+    .card{border:1px solid var(--line);padding:8px;background:#0c0c0d}
+    .card .k{font-size:10px;color:var(--muted)} .card .v{font-size:16px;color:var(--gold);font-weight:700}
+    .substats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+    .sub{border:1px solid var(--line);padding:6px;background:#0c0c0d;color:var(--muted);font-size:10px}
+    .sections{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .metric{margin-bottom:8px}
+    .meta{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)} .meta b{color:var(--gold)}
+    .bar{height:10px;background:#1c1c1f;border:1px solid rgba(255,255,255,.05);display:flex;overflow:hidden;position:relative}
+    .bar::after{content:"";position:absolute;top:-1px;bottom:-1px;left:calc(100% - 1px);width:2px;background:#c7a562;opacity:.9}
+    .seg{height:100%}
+    .tiny{display:block;margin-top:4px;color:var(--muted);font-size:10px}
+    .legend{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 0}
+    .dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:middle}
+    .mtor{padding:8px;border:1px solid var(--line);background:#0c0c0d;font-size:11px;line-height:1.4}
+    @media (max-width:980px){.wrap{grid-template-columns:1fr}.cards,.sections,.row,.row3,.substats{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="box">
+      <h2>Perfil</h2>
+      <div class="row3">
+        <label>Peso (kg)<input id="peso" type="number" value="80" step="0.1"></label>
+        <label>Altura (cm)<input id="altura" type="number" value="175" step="1"></label>
+        <label>Edad<input id="edad" type="number" value="30" step="1"></label>
+      </div>
+      <div class="row">
+        <label>Sexo<select id="sexo"><option value="m">Masculino</option><option value="f">Femenino</option></select></label>
+        <label>Fase<select id="fase"><option value="hipertrofia">Hipertrofia</option><option value="mantenimiento">Mantenimiento</option><option value="definicion">Definicion</option></select></label>
+      </div>
+      <button id="guardarPerfil" class="btn-main">Guardar Perfil</button>
+      <small id="perfilInfo" class="tiny"></small>
+
+      <h2>Base De Alimentos</h2>
+      <label>Archivo externo (JSON o CSV)
+        <input id="dbFile" type="file" accept=".json,.csv,application/json,text/csv">
+      </label>
+      <button id="recargarDB">Recargar Archivo Externo</button>
+      <small id="dbStatus" class="tiny">Cargando base...</small>
+
+      <h2>Actividad Externa</h2>
+      <small class="tiny">Cargador manual: <a href="./actividades.html" style="color:#c7a562">abrir actividades.html</a></small>
+      <label>Archivo actividades (JSON o CSV)
+        <input id="actFile" type="file" accept=".json,.csv,application/json,text/csv">
+      </label>
+      <small id="actStatus" class="tiny">Sin actividades cargadas.</small>
+
+      <h2>Entrada</h2>
+      <label>Buscar alimento<input id="buscar" placeholder="arroz, pollo, huevo..."></label>
+      <label>Alimento<select id="food"></select></label>
+      <div class="row">
+        <label>Modo<select id="modo"></select></label>
+        <label>Cantidad<input id="cantidad" type="number" value="100" step="0.1"></label>
+      </div>
+      <button id="agregar" class="btn-main">Agregar a la Olla</button>
+      <button id="limpiar">Reset Dia</button>
+
+      <h2>Olla Del Dia</h2>
+      <div id="olla" class="olla"></div>
+    </section>
+
+    <section class="box">
+      <h2>Macros Principales</h2>
+      <div id="cards" class="cards"></div>
+      <div id="substats" class="substats"></div>
+
+      <h2>Indicador mTOR (minimo)</h2>
+      <div id="mtor" class="mtor"></div>
+
+      <div class="sections">
+        <div>
+          <h2>Aminoacidos</h2>
+          <div id="aminoBox"></div>
+        </div>
+        <div>
+          <h2>Micros</h2>
+          <div id="microBox"></div>
+        </div>
+      </div>
+
+      <h2>Leyenda De Colores (alimentos)</h2>
+      <div id="legend" class="legend"></div>
+    </section>
+  </div>
+
+  <script>
+    const LS_PROFILE = "app_profile_v3";
+    const LS_LOG = "app_log_v3";
+    const LS_DB = "app_db_v3";
+    const LS_ACT = "app_activities_v3";
+
+    let DB = [];
+    let perfil = JSON.parse(localStorage.getItem(LS_PROFILE) || '{"peso":80,"altura":175,"edad":30,"sexo":"m","fase":"hipertrofia"}');
+    let log = JSON.parse(localStorage.getItem(LS_LOG) || "[]");
+    let activities = JSON.parse(localStorage.getItem(LS_ACT) || "[]");
+
+    const AMINO_COEF = { leu:80, lys:70, met:25, val:50, iso:45, phe:45, thr:40, trp:12, his:25 };
+    const DEF_TARGETS = { p:1.8, c:3.0, g:0.9, f:30, fe:18, mg:420, zn:11, pot:4700, na:2300, vitc:90 };
+
+    const $ = (id) => document.getElementById(id);
+    const buscar = $("buscar"), foodSel = $("food"), modoSel = $("modo"), cantidad = $("cantidad");
+
+    function setStatus(id,msg){ $(id).textContent = msg; }
+    function num(v){ const n = Number(v); return Number.isFinite(n) ? n : 0; }
+    function fmt(v){ return Math.abs(v)>=100 ? v.toFixed(0) : Math.abs(v)>=10 ? v.toFixed(1) : v.toFixed(2); }
+
+    function hashColor(s){
+      let h = 0; for(let i=0;i<s.length;i++) h = ((h<<5)-h) + s.charCodeAt(i);
+      const hue = Math.abs(h)%360;
+      return `hsl(${hue} 62% 56%)`;
+    }
+
+    function normalizeFood(raw){
+      const modos = {};
+      const inModos = raw.modos || {};
+      Object.keys(inModos).forEach((m) => {
+        const n = inModos[m] || {};
+        modos[m] = {
+          kcal: num(n.kcal), p: num(n.p ?? n.proteina), c: num(n.c ?? n.carbos), g: num(n.g ?? n.grasas), f: num(n.f ?? n.fibra),
+          fe: num(n.fe), mg: num(n.mg), zn: num(n.zn), pot: num(n.pot), na: num(n.na), vitc: num(n.vitc),
+          leu: num(n.leu), lys: num(n.lys), met: num(n.met), val: num(n.val), iso: num(n.iso), phe: num(n.phe), thr: num(n.thr), trp: num(n.trp), his: num(n.his)
+        };
+      });
+      return { id:String(raw.id || "food_"+Math.random().toString(36).slice(2)), nombre:String(raw.nombre||"Sin nombre"), categoria:String(raw.categoria||"General"), modos };
+    }
+
+    function normalizeDB(list){
+      return (Array.isArray(list)?list:[]).map(normalizeFood).filter(f => f.nombre && Object.keys(f.modos).length>0);
+    }
+
+    function parseCSV(text){
+      const lines = text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+      if (lines.length < 2) return [];
+      const headers = lines[0].split(",").map(h=>h.trim().toLowerCase());
+      const idx = (n) => headers.indexOf(n);
+      const map = {};
+      for(let i=1;i<lines.length;i++){
+        const c = lines[i].split(",").map(x=>x.trim());
+        const id = c[idx("id")] || `csv_${i}`;
+        const item = map[id] || {id, nombre:c[idx("nombre")]||"Sin nombre", categoria:c[idx("categoria")]||"General", modos:{}};
+        const modo = c[idx("modo")] || "crudo";
+        item.modos[modo] = {
+          kcal:num(c[idx("kcal")]), p:num(c[idx("p")])||num(c[idx("proteina")]), c:num(c[idx("c")])||num(c[idx("carbos")]),
+          g:num(c[idx("g")])||num(c[idx("grasas")]), f:num(c[idx("f")])||num(c[idx("fibra")]), fe:num(c[idx("fe")]), mg:num(c[idx("mg")]), zn:num(c[idx("zn")]), pot:num(c[idx("pot")]), na:num(c[idx("na")]), vitc:num(c[idx("vitc")]),
+          leu:num(c[idx("leu")]), lys:num(c[idx("lys")]), met:num(c[idx("met")]), val:num(c[idx("val")]), iso:num(c[idx("iso")]), phe:num(c[idx("phe")]), thr:num(c[idx("thr")]), trp:num(c[idx("trp")]), his:num(c[idx("his")])
+        };
+        map[id] = item;
+      }
+      return Object.values(map);
+    }
+
+    async function loadDefaultExternalDB(){
+      try {
+        const r = await fetch("./alimentos.base.es.json", {cache:"no-store"});
+        if (r.ok){
+          DB = normalizeDB(await r.json());
+          localStorage.setItem(LS_DB, JSON.stringify(DB));
+          setStatus("dbStatus", `Base cargada: ${DB.length} alimentos (json)`);
+          return;
+        }
+      } catch(_) {}
+      const cached = normalizeDB(JSON.parse(localStorage.getItem(LS_DB)||"[]"));
+      DB = cached;
+      setStatus("dbStatus", DB.length ? `Base desde cache: ${DB.length} alimentos` : "No se pudo cargar base externa");
+    }
+
+    function foodsFiltrados(){
+      const q = (buscar.value||"").trim().toLowerCase();
+      return DB.filter(f => f.nombre.toLowerCase().includes(q)).sort((a,b)=>a.nombre.localeCompare(b.nombre,"es"));
+    }
+
+    function renderFoods(){
+      const list = foodsFiltrados();
+      foodSel.innerHTML = list.map(f => `<option value="${f.id}">${f.nombre} - ${f.categoria}</option>`).join("");
+      renderModos();
+    }
+
+    function renderModos(){
+      const f = DB.find(x => x.id === foodSel.value);
+      if(!f){ modoSel.innerHTML = ""; return; }
+      const modos = Object.keys(f.modos);
+      modoSel.innerHTML = modos.map(m => `<option value="${m}">${m}</option>`).join("");
+      if (modos.includes("cocido")) modoSel.value = "cocido";
+      cantidad.value = modoSel.value === "unidad" ? 1 : 100;
+    }
+
+    function factor(modo,cant){ return (modo==="unidad"||modo==="ml") ? cant : cant/100; }
+
+    function add(){
+      const f = DB.find(x => x.id === foodSel.value);
+      const m = modoSel.value;
+      const cant = num(cantidad.value);
+      if(!f || !m || cant<=0) return;
+      log.push({ id:Date.now()+Math.random(), foodId:f.id, nombre:f.nombre, color:hashColor(f.id), modo:m, cantidad:cant, n:f.modos[m], ts:new Date().toISOString() });
+      localStorage.setItem(LS_LOG, JSON.stringify(log));
+      renderAll();
+    }
+
+    function rem(id){ log = log.filter(x => x.id !== id); localStorage.setItem(LS_LOG, JSON.stringify(log)); renderAll(); }
+    function clearAll(){ if(!confirm("Reset del dia?")) return; log=[]; localStorage.setItem(LS_LOG,"[]"); renderAll(); }
+
+    function tmb(){
+      const p = perfil;
+      const base = 10*p.peso + 6.25*p.altura - 5*p.edad;
+      return p.sexo === "m" ? base + 5 : base - 161;
+    }
+
+    function kcalObjetivo(){
+      const b = tmb() * 1.35;
+      if (perfil.fase === "hipertrofia") return b * 1.12;
+      if (perfil.fase === "definicion") return b * 0.85;
+      return b;
+    }
+
+    function saveProfile(){
+      perfil = { peso:num($("peso").value)||80, altura:num($("altura").value)||175, edad:num($("edad").value)||30, sexo:$("sexo").value||"m", fase:$("fase").value||"mantenimiento" };
+      localStorage.setItem(LS_PROFILE, JSON.stringify(perfil));
+      renderAll();
+    }
+
+    function totals(){
+      const t = {kcal:0,p:0,c:0,g:0,f:0,fe:0,mg:0,zn:0,pot:0,na:0,vitc:0,leu:0,lys:0,met:0,val:0,iso:0,phe:0,thr:0,trp:0,his:0};
+      const contrib = {}; // nutrient -> foodId -> value
+
+      function addC(nutrient, foodId, val){
+        if(!contrib[nutrient]) contrib[nutrient] = {};
+        contrib[nutrient][foodId] = (contrib[nutrient][foodId]||0) + val;
+      }
+
+      for(const it of log){
+        const fac = factor(it.modo, it.cantidad);
+        const n = it.n || {};
+        const protein = num(n.p);
+        const aa = {
+          leu: num(n.leu) || protein*AMINO_COEF.leu,
+          lys: num(n.lys) || protein*AMINO_COEF.lys,
+          met: num(n.met) || protein*AMINO_COEF.met,
+          val: num(n.val) || protein*AMINO_COEF.val,
+          iso: num(n.iso) || protein*AMINO_COEF.iso,
+          phe: num(n.phe) || protein*AMINO_COEF.phe,
+          thr: num(n.thr) || protein*AMINO_COEF.thr,
+          trp: num(n.trp) || protein*AMINO_COEF.trp,
+          his: num(n.his) || protein*AMINO_COEF.his,
+        };
+
+        const keys = ["kcal","p","c","g","f","fe","mg","zn","pot","na","vitc"];
+        for(const k of keys){
+          const val = num(n[k]) * fac;
+          t[k] += val;
+          addC(k, it.foodId, val);
+        }
+
+        for(const k of Object.keys(aa)){
+          const val = aa[k] * fac;
+          t[k] += val;
+          addC(k, it.foodId, val);
+        }
+      }
+
+      return { t, contrib };
+    }
+
+    function activityKcal(){
+      return activities.reduce((acc, e) => acc + num(e.kcal_active), 0);
+    }
+
+    function goals(){
+      const kg = perfil.peso || 80;
+      return {
+        kcal: kcalObjetivo(), p: kg*DEF_TARGETS.p, c: kg*DEF_TARGETS.c, g: kg*DEF_TARGETS.g, f: DEF_TARGETS.f,
+        fe: DEF_TARGETS.fe, mg: DEF_TARGETS.mg, zn: DEF_TARGETS.zn, pot: DEF_TARGETS.pot, na: DEF_TARGETS.na, vitc: DEF_TARGETS.vitc,
+        leu: kg*39, lys: kg*30, met: kg*15, val: kg*26, iso: kg*20, phe: kg*25, thr: kg*15, trp: kg*4, his: kg*10
+      };
+    }
+
+    function stackedBar(goal, contribMap){
+      const safeGoal = Math.max(num(goal), 1);
+      const entries = Object.entries(contribMap || {}).sort((a,b)=>b[1]-a[1]);
+      if (!entries.length) return `<div class="bar"></div>`;
+      const segs = entries.map(([foodId,val]) => {
+        const w = Math.max((val/safeGoal)*100, 0.8);
+        return `<div class="seg" title="${foodId}: ${fmt(val)}" style="width:${w}%;background:${hashColor(foodId)}"></div>`;
+      }).join("");
+      return `<div class="bar">${segs}</div>`;
+    }
+
+    function topContrib(contribMap, goal){
+      const safeGoal = Math.max(num(goal), 1);
+      const items = Object.entries(contribMap || {}).sort((a,b)=>b[1]-a[1]).slice(0,3);
+      if (!items.length) return "";
+      return items.map(([foodId,val]) => {
+        const f = DB.find(x => x.id === foodId);
+        const name = f ? f.nombre : foodId;
+        const pct = (val / safeGoal) * 100;
+        return `${name} ${fmt(pct)}%`;
+      }).join(" | ");
+    }
+
+    function metric(key, label, unit, t, g, contrib){
+      const v = num(t[key]), goal = Math.max(num(g[key]), 1), r = v/goal;
+      const used = Math.min(r*100,160), barStack = stackedBar(goal, contrib[key]);
+      const tops = topContrib(contrib[key], goal);
+      return `<div class="metric"><div class="meta"><span>${label}</span><b>${fmt(v)} / ${fmt(goal)} ${unit} (${Math.round(r*100)}%)</b></div>${barStack}<div class="tiny">Cobertura: ${fmt(used)}%</div><div class="tiny">Top: ${tops || "sin datos"}</div></div>`;
+    }
+
+    function renderLegend(){
+      const ids = [...new Set(log.map(x => x.foodId))];
+      $("legend").innerHTML = ids.slice(0,24).map(id => {
+        const f = DB.find(x => x.id===id);
+        const name = f ? f.nombre : id;
+        return `<span class="tiny"><span class="dot" style="background:${hashColor(id)}"></span>${name}</span>`;
+      }).join("");
+    }
+
+    function renderMtor(t){
+      const leucina = t.leu/1000;
+      const prot = t.p;
+      let maxLeuIngesta = 0, maxProtIngesta = 0;
+      for (const it of log){
+        const fac = factor(it.modo, it.cantidad), n = it.n || {}, p = num(n.p) * fac;
+        const leu = (num(n.leu) || (num(n.p) * AMINO_COEF.leu)) * fac / 1000;
+        if (leu > maxLeuIngesta) maxLeuIngesta = leu;
+        if (p > maxProtIngesta) maxProtIngesta = p;
+      }
+
+      let msg = `Dia: leucina ${fmt(leucina)} g | proteina ${fmt(prot)} g. Ingesta max: leucina ${fmt(maxLeuIngesta)} g | proteina ${fmt(maxProtIngesta)} g.`;
+      if (leucina < 8) msg += " Falta señal mTOR diaria (subi proteína completa).";
+      if (maxLeuIngesta < 2) msg += " Ninguna ingesta llega a ~2 g de leucina.";
+      if (maxProtIngesta > (perfil.peso*0.6)) msg += " Una ingesta tiene proteína muy alta; posible rendimiento decreciente.";
+      if (prot > (perfil.peso*2.4)) msg += " Proteína diaria alta; revisá eficiencia.";
+      $("mtor").textContent = msg;
+    }
+
+    function renderAll(){
+      $("peso").value = perfil.peso; $("altura").value = perfil.altura; $("edad").value = perfil.edad; $("sexo").value = perfil.sexo; $("fase").value = perfil.fase;
+
+      const {t, contrib} = totals();
+      const g = goals();
+      const burned = activityKcal();
+      const net = t.kcal - burned;
+
+      setStatus("perfilInfo", `TMB: ${fmt(tmb())} | Objetivo fase: ${fmt(g.kcal)} kcal`);
+
+      $("olla").innerHTML = log.length
+        ? log.slice().reverse().map(it => `<div class="it"><div><strong style="color:${it.color}">${it.nombre}</strong><small>${it.cantidad} ${it.modo}</small></div><button class="del" onclick="rem(${it.id})">x</button></div>`).join("")
+        : `<small class="tiny">Todavia no agregaste ingredientes.</small>`;
+
+      $("cards").innerHTML = [
+        ["Kcal", metric("kcal","Kcal","kcal",t,g,contrib)],
+        ["Proteina", metric("p","Proteina","g",t,g,contrib)],
+        ["Carbohidratos", metric("c","Carbos","g",t,g,contrib)]
+      ].map(x => `<div class="card"><div class="k">${x[0]}</div>${x[1]}</div>`).join("");
+
+      $("substats").innerHTML = [
+        `<div class="sub">Kcal gastadas: <b>${fmt(burned)}</b> kcal</div>`,
+        `<div class="sub">Balance neto: <b>${fmt(net)}</b> kcal</div>`
+      ].join("");
+
+      $("aminoBox").innerHTML = [
+        metric("leu","Leucina","mg",t,g,contrib), metric("lys","Lisina","mg",t,g,contrib), metric("met","Metionina","mg",t,g,contrib),
+        metric("val","Valina","mg",t,g,contrib), metric("iso","Isoleucina","mg",t,g,contrib), metric("phe","Fenilalanina","mg",t,g,contrib),
+        metric("thr","Treonina","mg",t,g,contrib), metric("trp","Triptofano","mg",t,g,contrib), metric("his","Histidina","mg",t,g,contrib)
+      ].join("");
+
+      $("microBox").innerHTML = [
+        metric("fe","Hierro","mg",t,g,contrib), metric("mg","Magnesio","mg",t,g,contrib), metric("zn","Zinc","mg",t,g,contrib),
+        metric("pot","Potasio","mg",t,g,contrib), metric("na","Sodio","mg",t,g,contrib), metric("vitc","Vitamina C","mg",t,g,contrib)
+      ].join("");
+
+      renderLegend();
+      renderMtor(t);
+    }
+
+    async function handleFoodFile(file){
+      const text = await file.text();
+      const ext = (file.name.split(".").pop()||"").toLowerCase();
+      let loaded = [];
+      if (ext === "json") loaded = normalizeDB(JSON.parse(text));
+      else if (ext === "csv") loaded = normalizeDB(parseCSV(text));
+      else throw new Error("Formato no soportado");
+      if (!loaded.length) throw new Error("Archivo vacio o invalido");
+      DB = loaded;
+      localStorage.setItem(LS_DB, JSON.stringify(DB));
+      setStatus("dbStatus", `Base cargada manualmente: ${DB.length} alimentos (${file.name})`);
+      renderFoods(); renderAll();
+    }
+
+    function parseActivitiesCSV(text){
+      const lines = text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+      if (lines.length < 2) return [];
+      const h = lines[0].split(",").map(x=>x.trim().toLowerCase());
+      const idx = (n) => h.indexOf(n);
+      const out = [];
+      for(let i=1;i<lines.length;i++){
+        const c = lines[i].split(",").map(x=>x.trim());
+        out.push({
+          id: c[idx("id")] || `evt_${i}`,
+          date: c[idx("date")] || "",
+          activity_type: c[idx("activity_type")] || c[idx("actividad")] || "actividad",
+          duration_min: num(c[idx("duration_min")]),
+          kcal_active: num(c[idx("kcal_active")]),
+          source: c[idx("source")] || "manual"
+        });
+      }
+      return out;
+    }
+
+    async function handleActivityFile(file){
+      const text = await file.text();
+      const ext = (file.name.split(".").pop()||"").toLowerCase();
+      let loaded = [];
+      if (ext === "json") {
+        const d = JSON.parse(text);
+        loaded = Array.isArray(d.events) ? d.events : (Array.isArray(d) ? d : []);
+      } else if (ext === "csv") loaded = parseActivitiesCSV(text);
+      else throw new Error("Formato no soportado");
+      activities = loaded.map(e => ({ id:e.id || `evt_${Math.random().toString(36).slice(2)}`, date:e.date || "", activity_type:e.activity_type || "actividad", duration_min:num(e.duration_min), kcal_active:num(e.kcal_active), source:e.source || "manual" }));
+      localStorage.setItem(LS_ACT, JSON.stringify(activities));
+      setStatus("actStatus", `Actividades cargadas: ${activities.length} | Gasto: ${fmt(activityKcal())} kcal`);
+      renderAll();
+    }
+
+    $("guardarPerfil").onclick = saveProfile;
+    $("agregar").onclick = add;
+    $("limpiar").onclick = clearAll;
+    $("recargarDB").onclick = async () => { await loadDefaultExternalDB(); renderFoods(); renderAll(); };
+    $("dbFile").onchange = async (e) => { try{ await handleFoodFile(e.target.files[0]); } catch(err){ setStatus("dbStatus", `Error: ${err.message}`); } e.target.value = ""; };
+    $("actFile").onchange = async (e) => { try{ await handleActivityFile(e.target.files[0]); } catch(err){ setStatus("actStatus", `Error: ${err.message}`); } e.target.value = ""; };
+    buscar.oninput = renderFoods;
+    foodSel.onchange = renderModos;
+    window.rem = rem;
+
+    (async () => {
+      await loadDefaultExternalDB();
+      if (activities.length) setStatus("actStatus", `Actividades cargadas: ${activities.length} | Gasto: ${fmt(activityKcal())} kcal`);
+      renderFoods();
+      renderAll();
+    })();
+  </script>
+</body>
+</html>

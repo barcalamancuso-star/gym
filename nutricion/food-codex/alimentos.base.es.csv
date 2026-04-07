@@ -1,0 +1,147 @@
+id,nombre,categoria,modo,kcal,p,c,g,f,fe,mg,zn,pot,na,vitc
+aceite_coco,Aceite de coco,Grasa,ml,8.3,0,0,0.92,0,0,0,0,0,0,0
+aceite_girasol,Aceite de girasol,Grasa,ml,8,0,0,0.9,0,0,0,0,0,0,0
+aceite_oliva,Aceite de oliva,Grasa,ml,8,0,0,0.9,0,0,0,0,0,0,0
+acelga,Acelga,Verdura,crudo,19,1.8,3.7,0.2,1.6,1.8,81,0.4,379,213,30
+acelga,Acelga,Verdura,cocido,20,1.9,3.8,0.2,2.1,2.0,86,0.4,450,180,18
+agua,Agua,Bebida,ml,0,0,0,0,0,0,0,0,0,0,0
+ajo,Ajo,Verdura,crudo,149,6.4,33.1,0.5,2.1,1.7,25,1.2,401,17,31.2
+almendras,Almendras,Fruto seco,crudo,579,21.2,21.6,49.9,12.5,3.7,270,3.1,733,1,0
+anana,Anana,Fruta,crudo,50,0.5,13.1,0.1,1.4,0.3,12,0.1,109,1,47.8
+apio,Apio,Verdura,crudo,16,0.7,3,0.2,1.6,0.2,11,0.1,260,80,3.1
+arandanos,Arandanos,Fruta,crudo,57,0.7,14.5,0.3,2.4,0.3,6,0.2,77,1,9.7
+arroz_blanco,Arroz blanco,Carbo,seco,365,7.1,80,0.7,1.3,1.5,25,1.1,115,5,0
+arroz_blanco,Arroz blanco,Carbo,cocido,130,2.7,28,0.3,0.4,0.2,12,0.5,35,1,0
+arroz_integral,Arroz integral,Carbo,seco,370,7.9,77,2.9,3.5,1.8,143,2.0,223,7,0
+arroz_integral,Arroz integral,Carbo,cocido,123,2.7,25.6,1.0,1.8,0.6,43,0.8,86,4,0
+arvejas,Arvejas,Legumbre,cocido,84,5.4,15.6,0.4,5.5,1.5,33,1.2,244,5,14
+atun_natural,Atun al natural,Proteina,escurrido,116,25.5,0,1.0,0,1.0,35,0.7,237,320,0
+avellana,Avellana,Fruto seco,crudo,628,15,16.7,60.8,9.7,4.7,163,2.5,680,0,6.3
+avena,Avena,Carbo,seco,389,16.9,66.3,6.9,10.6,4.7,177,4.0,429,2,0
+avena,Avena,Carbo,cocido,71,2.5,12,1.5,1.7,0.9,44,1.0,61,49,0
+azucar,Azucar,Extra,seco,387,0,100,0,0,0,0,0,2,1,0
+banana,Banana,Fruta,unidad,105,1.3,27,0.3,3.1,0.3,32,0.2,422,1,10.3
+banana,Banana,Fruta,crudo,89,1.1,22.8,0.3,2.6,0.3,27,0.2,358,1,8.7
+batata,Batata,Tuberculo,crudo,86,1.6,20.1,0.1,3,0.6,25,0.3,337,55,2.4
+batata,Batata,Tuberculo,hervido,76,1.4,17.7,0.1,2.5,0.6,22,0.3,230,27,12.8
+berenjena,Berenjena,Verdura,crudo,25,1,5.9,0.2,3,0.2,14,0.2,229,2,2.2
+brocoli,Brocoli,Verdura,crudo,34,2.8,6.6,0.4,2.6,0.7,21,0.4,316,33,89.2
+brocoli,Brocoli,Verdura,cocido,35,2.4,7.2,0.4,3.3,0.7,21,0.4,293,41,64.9
+cacao_amargo,Cacao amargo,Extra,seco,228,19.6,57.9,13.7,33.2,13.9,499,6.8,1524,21,0
+cafe_negro,Cafe negro,Bebida,ml,0.02,0,0,0,0,0,0.004,0,0.49,0.002,0
+camaron,Camaron,Proteina,cocido,99,24,0.2,0.3,0,0.5,35,1.4,264,111,0
+carne_picada_lean,Carne picada magra,Proteina,crudo,176,20.5,0,10,0,2.2,21,4.1,310,75,0
+carne_picada_lean,Carne picada magra,Proteina,cocido,240,27,0,15,0,2.8,24,5.0,350,82,0
+carne_magra,Carne vacuna magra,Proteina,crudo,170,21,0,9,0,2.1,21,4.0,318,69,0
+carne_magra,Carne vacuna magra,Proteina,cocido,217,26,0,12,0,2.6,22,4.7,330,72,0
+castana_caju,Castana de caju,Fruto seco,crudo,553,18.2,30.2,43.8,3.3,6.7,292,5.8,660,12,0.5
+cebada,Cebada,Carbo,seco,354,12.5,73.5,2.3,17.3,3.6,133,2.8,452,12,0
+cebada,Cebada,Carbo,cocido,123,2.3,28.2,0.4,3.8,1.3,22,1.0,93,3,0
+cebolla,Cebolla,Verdura,crudo,40,1.1,9.3,0.1,1.7,0.2,10,0.2,146,4,7.4
+champinon,Champinon,Verdura,crudo,22,3.1,3.3,0.3,1,0.5,9,0.5,318,5,2.1
+chia,Chia,Semilla,seco,486,16.5,42.1,30.7,34.4,7.7,335,4.6,407,16,1.6
+chocolate_70,Chocolate 70%,Extra,crudo,598,7.8,45.9,42.6,10.9,11.9,228,3.3,715,20,0
+chorizo,Chorizo,Procesado,crudo,455,24,1.9,38,0,1.2,25,2.9,300,1200,0
+clara_huevo,Clara de huevo,Proteina,unidad,17,3.6,0.2,0,0,0.03,4,0.02,54,55,0
+coliflor,Coliflor,Verdura,crudo,25,1.9,5,0.3,2,0.4,15,0.3,299,30,48.2
+cordero,Cordero,Proteina,crudo,206,20,0,13,0,1.8,20,3.2,310,72,0
+cordero,Cordero,Proteina,cocido,282,25,0,20,0,2.2,23,3.8,340,80,0
+cuscus,Cuscus,Carbo,seco,376,12.8,77.4,0.6,5,1.1,44,0.8,166,10,0
+cuscus,Cuscus,Carbo,cocido,112,3.8,23.2,0.2,1.4,0.4,8,0.3,58,5,0
+durazno,Durazno,Fruta,crudo,39,0.9,9.5,0.3,1.5,0.3,9,0.2,190,0,6.6
+espinaca,Espinaca,Verdura,crudo,23,2.9,3.6,0.4,2.2,2.7,79,0.5,558,79,28.1
+espinaca,Espinaca,Verdura,cocido,23,3.0,3.8,0.3,2.4,3.6,87,0.5,466,70,9.8
+frutilla,Frutilla,Fruta,crudo,32,0.7,7.7,0.3,2,0.4,13,0.1,153,1,58.8
+garbanzos,Garbanzos,Legumbre,seco,364,19.3,60.7,6,17.4,6.2,79,3.4,875,24,4
+garbanzos,Garbanzos,Legumbre,cocido,164,8.9,27.4,2.6,7.6,2.9,48,1.5,291,7,1.3
+gaseosa,Gaseosa azucarada,Bebida,ml,0.42,0,0.106,0,0,0,0,0,0.01,0.01,0
+hamburguesa,Hamburguesa vaca,Procesado,crudo,250,17,8,18,0,2.5,20,3.5,280,420,0
+harina_trigo,Harina de trigo,Carbo,seco,364,10.3,76.3,1,2.7,1.2,22,0.7,107,2,0
+higado_vacuno,Higado vacuno,Proteina,crudo,135,20.4,3.9,3.6,0,6.5,18,4.0,313,69,27
+higado_vacuno,Higado vacuno,Proteina,cocido,175,26,5,5,0,8.0,22,5.0,350,80,23
+huevo,Huevo,Proteina,unidad,70,6.3,0.4,5,0,0.9,6,0.6,69,62,0
+huevo,Huevo,Proteina,cocido,155,12.6,1.1,10.6,0,1.8,12,1.3,126,124,0
+jamon_cocido,Jamon cocido,Procesado,crudo,145,20.9,1.5,5.5,0,0.9,18,1.9,287,1200,0
+jamon_crudo,Jamon crudo,Procesado,crudo,241,31,0,14,0,1.1,27,2.3,350,1700,0
+jugo_naranja,Jugo de naranja,Bebida,ml,0.45,0.007,0.104,0.002,0.002,0.0002,0.011,0.0001,2.0,0.001,0.5
+kefir,Kefir,Lacteo,ml,0.5,0.035,0.04,0.018,0,0.0002,0.12,0.0004,1.5,0.4,0
+kiwi,Kiwi,Fruta,crudo,61,1.1,14.7,0.5,3,0.3,17,0.1,312,3,92.7
+leche_descremada,Leche descremada,Lacteo,ml,0.35,0.034,0.05,0.001,0,0.0003,0.11,0.0004,1.6,0.44,0
+leche_entera,Leche entera,Lacteo,ml,0.62,0.033,0.048,0.033,0,0.0003,0.1,0.0004,1.5,0.43,0
+lechuga,Lechuga,Verdura,crudo,15,1.4,2.9,0.2,1.3,0.5,13,0.2,194,28,9.2
+lentejas,Lentejas,Legumbre,seco,353,25.8,60.1,1.1,30.5,6.5,122,3.3,955,6,4.5
+lentejas,Lentejas,Legumbre,cocido,116,9,20.1,0.4,7.9,3.3,36,1.3,369,2,1.5
+cerdo_lomo,Lomo de cerdo,Proteina,crudo,143,21,0,6,0,0.8,24,2.2,423,62,0
+cerdo_lomo,Lomo de cerdo,Proteina,cocido,195,29,0,8,0,1.0,26,2.5,460,70,0
+maiz_grano,Maiz en grano,Carbo,cocido,96,3.4,21,1.5,2.4,0.5,37,0.5,270,15,5.5
+mandarina,Mandarina,Fruta,crudo,53,0.8,13.3,0.3,1.8,0.2,12,0.1,166,2,26.7
+mandioca,Mandioca,Tuberculo,crudo,160,1.4,38.1,0.3,1.8,0.3,21,0.3,271,14,20.6
+mandioca,Mandioca,Tuberculo,hervido,112,0.9,27.8,0.3,1.6,0.3,16,0.2,206,14,11.2
+mango,Mango,Fruta,crudo,60,0.8,15,0.4,1.6,0.2,10,0.1,168,1,36.4
+mani,Mani,Fruto seco,crudo,567,25.8,16.1,49.2,8.5,4.6,168,3.3,705,18,0
+manteca,Manteca,Grasa,crudo,717,0.9,0.1,81,0,0,2,0.1,24,643,0
+manzana,Manzana,Fruta,unidad,95,0.5,25,0.3,4.4,0.2,9,0.1,195,2,8.4
+manzana,Manzana,Fruta,crudo,52,0.3,13.8,0.2,2.4,0.1,5,0.0,107,1,4.6
+margarina,Margarina,Grasa,crudo,717,0,0.7,80,0,0,2,0,24,660,0
+mate_cocido,Mate cocido,Bebida,ml,0.01,0.0001,0.001,0,0,0.0001,0.02,0.0001,0.2,0.01,0.0002
+mayonesa,Mayonesa,Grasa,crudo,680,1,1,75,0,0.5,1,0.2,20,635,0
+melon,Melon,Fruta,crudo,34,0.8,8.2,0.2,0.9,0.2,12,0.2,267,16,36.7
+merluza,Merluza,Proteina,crudo,90,18,0,1.3,0,0.3,24,0.4,300,70,0
+merluza,Merluza,Proteina,cocido,112,23,0,1.7,0,0.4,27,0.5,340,78,0
+miel,Miel,Extra,crudo,304,0.3,82.4,0,0.2,0.4,2,0.2,52,4,0.5
+morron_rojo,Morron rojo,Verdura,crudo,31,1,6,0.3,2.1,0.4,12,0.3,211,4,127.7
+pollo_muslo,Muslo de pollo,Proteina,crudo,144,19,0,8,0,1.1,23,1.9,223,82,0
+pollo_muslo,Muslo de pollo,Proteina,cocido,209,26,0,11,0,1.3,25,2.2,250,95,0
+naranja,Naranja,Fruta,unidad,62,1.2,15.4,0.2,3.1,0.1,13,0.1,237,0,69.7
+naranja,Naranja,Fruta,crudo,47,0.9,11.8,0.1,2.4,0.1,10,0.1,181,0,53.2
+nuez,Nuez,Fruto seco,crudo,654,15.2,13.7,65.2,6.7,2.9,158,3.1,441,2,1.3
+palta,Palta,Fruta,crudo,160,2,8.5,14.7,6.7,0.6,29,0.6,485,7,10
+pan_blanco,Pan blanco,Carbo,crudo,265,9,49,3.2,2.7,3.6,23,0.7,115,491,0
+pan_integral,Pan integral,Carbo,crudo,247,13,41,4.2,7,2.7,82,1.6,230,430,0
+pasta_trigo,Pasta de trigo,Carbo,seco,371,13,75,1.5,3,3.6,52,1.4,223,6,0
+pasta_trigo,Pasta de trigo,Carbo,cocido,158,5.8,30.9,0.9,1.8,1.1,18,0.6,44,1,0
+pavo_pechuga,Pechuga de pavo,Proteina,crudo,114,24,0,1.5,0,1.1,28,1.5,260,52,0
+pavo_pechuga,Pechuga de pavo,Proteina,cocido,135,29,0,1.8,0,1.4,32,1.8,302,60,0
+pollo_pechuga,Pechuga de pollo,Proteina,crudo,120,22.5,0,2.6,0,0.7,28,1.0,256,70,0
+pollo_pechuga,Pechuga de pollo,Proteina,cocido,165,31,0,3.6,0,1.0,29,1.0,256,74,0
+pepino,Pepino,Verdura,crudo,15,0.7,3.6,0.1,0.5,0.3,13,0.2,147,2,2.8
+pera,Pera,Fruta,unidad,101,0.6,27,0.2,5.5,0.3,12,0.2,206,2,7.5
+pera,Pera,Fruta,crudo,57,0.4,15.2,0.1,3.1,0.2,7,0.1,116,1,4.3
+pistacho,Pistacho,Fruto seco,crudo,562,20.2,28,45.3,10.6,3.9,121,2.2,1025,1,5.6
+polenta,Polenta,Carbo,seco,362,8.1,79,1.5,7.3,2.5,127,1.1,287,35,0
+polenta,Polenta,Carbo,cocido,70,1.7,15,0.3,1.2,0.6,18,0.2,35,280,0
+pomelo,Pomelo,Fruta,crudo,42,0.8,10.7,0.1,1.6,0.1,9,0.1,135,0,31.2
+porotos_alubia,Porotos alubia,Legumbre,seco,333,21,60,1.6,15.2,5.1,190,3.0,1400,12,4
+porotos_alubia,Porotos alubia,Legumbre,cocido,127,8.7,22.8,0.5,7.4,2.9,63,1.0,370,2,0
+porotos_negros,Porotos negros,Legumbre,seco,341,21.6,62.4,1.4,15.5,5.0,171,3.7,1483,5,4.5
+porotos_negros,Porotos negros,Legumbre,cocido,132,8.9,23.7,0.5,8.7,2.1,70,1.1,355,1,0
+queso_cremoso,Queso cremoso,Lacteo,crudo,320,20,3,26,0,0.4,20,2.8,98,620,0
+queso_portsalut,Queso Port Salut,Lacteo,crudo,300,23,2,22,0,0.3,28,3.4,100,800,0
+quinoa,Quinoa,Carbo,seco,368,14.1,64.2,6.1,7,4.6,197,3.1,563,5,0
+quinoa,Quinoa,Carbo,cocido,120,4.4,21.3,1.9,2.8,1.5,64,1.1,172,7,0
+remolacha,Remolacha,Verdura,cocido,44,1.7,10,0.2,2,0.8,23,0.4,305,78,4.9
+repollo,Repollo,Verdura,crudo,25,1.3,6,0.1,2.5,0.5,12,0.2,170,18,36.6
+ricota,Ricota,Lacteo,crudo,174,11.3,3,12.9,0,0.3,11,1.5,105,84,0
+sal_mesa,Sal de mesa,Extra,seco,0,0,0,0,0,0,0,0,0,38758,0
+salchicha,Salchicha,Procesado,crudo,301,12,2.3,27,0,1.0,20,2.0,220,850,0
+salmon,Salmon,Proteina,crudo,208,20.4,0,13.4,0,0.5,29,0.6,363,59,0
+salmon,Salmon,Proteina,cocido,240,25.2,0,15,0,0.7,30,0.7,400,65,0
+sandia,Sandia,Fruta,crudo,30,0.6,7.6,0.2,0.4,0.2,10,0.1,112,1,8.1
+sardina,Sardina,Proteina,cocido,208,25,0,11,0,2.9,39,1.3,397,307,0
+girasol_semilla,Semillas de girasol,Semilla,seco,584,20.8,20,51.5,8.6,5.3,325,5.0,645,9,1.4
+lino,Semillas de lino,Semilla,seco,534,18.3,28.9,42.2,27.3,5.7,392,4.3,813,30,0.6
+sesamo,Sesamo,Semilla,seco,573,17.7,23.4,49.7,11.8,14.6,351,7.8,468,11,0
+soja,Soja,Legumbre,seco,446,36.5,30.2,19.9,9.3,15.7,280,4.9,1797,2,6
+soja,Soja,Legumbre,cocido,173,16.6,9.9,9,6,5.1,86,1.2,515,2,1.7
+te_negro,Te negro,Bebida,ml,0.01,0,0,0,0,0,0.001,0,0.18,0.003,0
+tomate,Tomate,Verdura,crudo,18,0.9,3.9,0.2,1.2,0.3,11,0.2,237,5,13.7
+tortilla_trigo,Tortilla de trigo,Carbo,crudo,310,8.5,52,7.5,3.8,2.7,28,0.9,140,520,0
+papa,Tuberculo,Tuberculo,crudo,77,2,17.5,0.1,2.2,0.8,23,0.3,425,6,19.7
+papa,Tuberculo,Tuberculo,hervido,87,1.9,20.1,0.1,1.8,0.3,20,0.3,379,4,7.4
+uvas,Uvas,Fruta,crudo,69,0.7,18.1,0.2,0.9,0.4,7,0.1,191,2,3.2
+yogur_griego,Yogur griego,Lacteo,crudo,97,9,3.9,5,0,0.1,11,0.7,141,36,0.5
+yogur_natural,Yogur natural,Lacteo,crudo,61,3.5,4.7,3.3,0,0.1,11,0.6,141,46,0.5
+zanahoria,Zanahoria,Verdura,crudo,41,0.9,9.6,0.2,2.8,0.3,12,0.2,320,69,5.9
+zanahoria,Zanahoria,Verdura,cocido,35,0.8,8.2,0.2,3.0,0.3,10,0.2,235,58,3.6
+zapallo,Zapallo,Verdura,cocido,20,1,4.9,0.1,1.1,0.4,8,0.3,230,4,9
+zucchini,Zucchini,Verdura,crudo,17,1.2,3.1,0.3,1,0.4,18,0.3,261,8,17.9

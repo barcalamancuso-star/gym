@@ -1,0 +1,2677 @@
+[
+  {
+    "id": "aceite_coco",
+    "nombre": "Aceite de coco",
+    "categoria": "Grasa",
+    "modos": {
+      "ml": {
+        "kcal": 8.3,
+        "p": 0,
+        "c": 0,
+        "g": 0.92,
+        "f": 0,
+        "fe": 0,
+        "mg": 0,
+        "zn": 0,
+        "pot": 0,
+        "na": 0,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "aceite_girasol",
+    "nombre": "Aceite de girasol",
+    "categoria": "Grasa",
+    "modos": {
+      "ml": {
+        "kcal": 8,
+        "p": 0,
+        "c": 0,
+        "g": 0.9,
+        "f": 0,
+        "fe": 0,
+        "mg": 0,
+        "zn": 0,
+        "pot": 0,
+        "na": 0,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "aceite_oliva",
+    "nombre": "Aceite de oliva",
+    "categoria": "Grasa",
+    "modos": {
+      "ml": {
+        "kcal": 8,
+        "p": 0,
+        "c": 0,
+        "g": 0.9,
+        "f": 0,
+        "fe": 0,
+        "mg": 0,
+        "zn": 0,
+        "pot": 0,
+        "na": 0,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "acelga",
+    "nombre": "Acelga",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 19,
+        "p": 1.8,
+        "c": 3.7,
+        "g": 0.2,
+        "f": 1.6,
+        "fe": 1.8,
+        "mg": 81,
+        "zn": 0.4,
+        "pot": 379,
+        "na": 213,
+        "vitc": 30
+      },
+      "cocido": {
+        "kcal": 20,
+        "p": 1.9,
+        "c": 3.8,
+        "g": 0.2,
+        "f": 2.1,
+        "fe": 2.0,
+        "mg": 86,
+        "zn": 0.4,
+        "pot": 450,
+        "na": 180,
+        "vitc": 18
+      }
+    }
+  },
+  {
+    "id": "agua",
+    "nombre": "Agua",
+    "categoria": "Bebida",
+    "modos": {
+      "ml": {
+        "kcal": 0,
+        "p": 0,
+        "c": 0,
+        "g": 0,
+        "f": 0,
+        "fe": 0,
+        "mg": 0,
+        "zn": 0,
+        "pot": 0,
+        "na": 0,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "ajo",
+    "nombre": "Ajo",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 149,
+        "p": 6.4,
+        "c": 33.1,
+        "g": 0.5,
+        "f": 2.1,
+        "fe": 1.7,
+        "mg": 25,
+        "zn": 1.2,
+        "pot": 401,
+        "na": 17,
+        "vitc": 31.2
+      }
+    }
+  },
+  {
+    "id": "almendras",
+    "nombre": "Almendras",
+    "categoria": "Fruto seco",
+    "modos": {
+      "crudo": {
+        "kcal": 579,
+        "p": 21.2,
+        "c": 21.6,
+        "g": 49.9,
+        "f": 12.5,
+        "fe": 3.7,
+        "mg": 270,
+        "zn": 3.1,
+        "pot": 733,
+        "na": 1,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "anana",
+    "nombre": "Anana",
+    "categoria": "Fruta",
+    "modos": {
+      "crudo": {
+        "kcal": 50,
+        "p": 0.5,
+        "c": 13.1,
+        "g": 0.1,
+        "f": 1.4,
+        "fe": 0.3,
+        "mg": 12,
+        "zn": 0.1,
+        "pot": 109,
+        "na": 1,
+        "vitc": 47.8
+      }
+    }
+  },
+  {
+    "id": "apio",
+    "nombre": "Apio",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 16,
+        "p": 0.7,
+        "c": 3,
+        "g": 0.2,
+        "f": 1.6,
+        "fe": 0.2,
+        "mg": 11,
+        "zn": 0.1,
+        "pot": 260,
+        "na": 80,
+        "vitc": 3.1
+      }
+    }
+  },
+  {
+    "id": "arandanos",
+    "nombre": "Arandanos",
+    "categoria": "Fruta",
+    "modos": {
+      "crudo": {
+        "kcal": 57,
+        "p": 0.7,
+        "c": 14.5,
+        "g": 0.3,
+        "f": 2.4,
+        "fe": 0.3,
+        "mg": 6,
+        "zn": 0.2,
+        "pot": 77,
+        "na": 1,
+        "vitc": 9.7
+      }
+    }
+  },
+  {
+    "id": "arroz_blanco",
+    "nombre": "Arroz blanco",
+    "categoria": "Carbo",
+    "modos": {
+      "seco": {
+        "kcal": 365,
+        "p": 7.1,
+        "c": 80,
+        "g": 0.7,
+        "f": 1.3,
+        "fe": 1.5,
+        "mg": 25,
+        "zn": 1.1,
+        "pot": 115,
+        "na": 5,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 130,
+        "p": 2.7,
+        "c": 28,
+        "g": 0.3,
+        "f": 0.4,
+        "fe": 0.2,
+        "mg": 12,
+        "zn": 0.5,
+        "pot": 35,
+        "na": 1,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "arroz_integral",
+    "nombre": "Arroz integral",
+    "categoria": "Carbo",
+    "modos": {
+      "seco": {
+        "kcal": 370,
+        "p": 7.9,
+        "c": 77,
+        "g": 2.9,
+        "f": 3.5,
+        "fe": 1.8,
+        "mg": 143,
+        "zn": 2.0,
+        "pot": 223,
+        "na": 7,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 123,
+        "p": 2.7,
+        "c": 25.6,
+        "g": 1.0,
+        "f": 1.8,
+        "fe": 0.6,
+        "mg": 43,
+        "zn": 0.8,
+        "pot": 86,
+        "na": 4,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "arvejas",
+    "nombre": "Arvejas",
+    "categoria": "Legumbre",
+    "modos": {
+      "cocido": {
+        "kcal": 84,
+        "p": 5.4,
+        "c": 15.6,
+        "g": 0.4,
+        "f": 5.5,
+        "fe": 1.5,
+        "mg": 33,
+        "zn": 1.2,
+        "pot": 244,
+        "na": 5,
+        "vitc": 14
+      }
+    }
+  },
+  {
+    "id": "atun_natural",
+    "nombre": "Atun al natural",
+    "categoria": "Proteina",
+    "modos": {
+      "escurrido": {
+        "kcal": 116,
+        "p": 25.5,
+        "c": 0,
+        "g": 1.0,
+        "f": 0,
+        "fe": 1.0,
+        "mg": 35,
+        "zn": 0.7,
+        "pot": 237,
+        "na": 320,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "avellana",
+    "nombre": "Avellana",
+    "categoria": "Fruto seco",
+    "modos": {
+      "crudo": {
+        "kcal": 628,
+        "p": 15,
+        "c": 16.7,
+        "g": 60.8,
+        "f": 9.7,
+        "fe": 4.7,
+        "mg": 163,
+        "zn": 2.5,
+        "pot": 680,
+        "na": 0,
+        "vitc": 6.3
+      }
+    }
+  },
+  {
+    "id": "avena",
+    "nombre": "Avena",
+    "categoria": "Carbo",
+    "modos": {
+      "seco": {
+        "kcal": 389,
+        "p": 16.9,
+        "c": 66.3,
+        "g": 6.9,
+        "f": 10.6,
+        "fe": 4.7,
+        "mg": 177,
+        "zn": 4.0,
+        "pot": 429,
+        "na": 2,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 71,
+        "p": 2.5,
+        "c": 12,
+        "g": 1.5,
+        "f": 1.7,
+        "fe": 0.9,
+        "mg": 44,
+        "zn": 1.0,
+        "pot": 61,
+        "na": 49,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "azucar",
+    "nombre": "Azucar",
+    "categoria": "Extra",
+    "modos": {
+      "seco": {
+        "kcal": 387,
+        "p": 0,
+        "c": 100,
+        "g": 0,
+        "f": 0,
+        "fe": 0,
+        "mg": 0,
+        "zn": 0,
+        "pot": 2,
+        "na": 1,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "banana",
+    "nombre": "Banana",
+    "categoria": "Fruta",
+    "modos": {
+      "unidad": {
+        "kcal": 105,
+        "p": 1.3,
+        "c": 27,
+        "g": 0.3,
+        "f": 3.1,
+        "fe": 0.3,
+        "mg": 32,
+        "zn": 0.2,
+        "pot": 422,
+        "na": 1,
+        "vitc": 10.3
+      },
+      "crudo": {
+        "kcal": 89,
+        "p": 1.1,
+        "c": 22.8,
+        "g": 0.3,
+        "f": 2.6,
+        "fe": 0.3,
+        "mg": 27,
+        "zn": 0.2,
+        "pot": 358,
+        "na": 1,
+        "vitc": 8.7
+      }
+    }
+  },
+  {
+    "id": "batata",
+    "nombre": "Batata",
+    "categoria": "Tuberculo",
+    "modos": {
+      "crudo": {
+        "kcal": 86,
+        "p": 1.6,
+        "c": 20.1,
+        "g": 0.1,
+        "f": 3,
+        "fe": 0.6,
+        "mg": 25,
+        "zn": 0.3,
+        "pot": 337,
+        "na": 55,
+        "vitc": 2.4
+      },
+      "hervido": {
+        "kcal": 76,
+        "p": 1.4,
+        "c": 17.7,
+        "g": 0.1,
+        "f": 2.5,
+        "fe": 0.6,
+        "mg": 22,
+        "zn": 0.3,
+        "pot": 230,
+        "na": 27,
+        "vitc": 12.8
+      }
+    }
+  },
+  {
+    "id": "berenjena",
+    "nombre": "Berenjena",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 25,
+        "p": 1,
+        "c": 5.9,
+        "g": 0.2,
+        "f": 3,
+        "fe": 0.2,
+        "mg": 14,
+        "zn": 0.2,
+        "pot": 229,
+        "na": 2,
+        "vitc": 2.2
+      }
+    }
+  },
+  {
+    "id": "brocoli",
+    "nombre": "Brocoli",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 34,
+        "p": 2.8,
+        "c": 6.6,
+        "g": 0.4,
+        "f": 2.6,
+        "fe": 0.7,
+        "mg": 21,
+        "zn": 0.4,
+        "pot": 316,
+        "na": 33,
+        "vitc": 89.2
+      },
+      "cocido": {
+        "kcal": 35,
+        "p": 2.4,
+        "c": 7.2,
+        "g": 0.4,
+        "f": 3.3,
+        "fe": 0.7,
+        "mg": 21,
+        "zn": 0.4,
+        "pot": 293,
+        "na": 41,
+        "vitc": 64.9
+      }
+    }
+  },
+  {
+    "id": "cacao_amargo",
+    "nombre": "Cacao amargo",
+    "categoria": "Extra",
+    "modos": {
+      "seco": {
+        "kcal": 228,
+        "p": 19.6,
+        "c": 57.9,
+        "g": 13.7,
+        "f": 33.2,
+        "fe": 13.9,
+        "mg": 499,
+        "zn": 6.8,
+        "pot": 1524,
+        "na": 21,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "cafe_negro",
+    "nombre": "Cafe negro",
+    "categoria": "Bebida",
+    "modos": {
+      "ml": {
+        "kcal": 0.02,
+        "p": 0,
+        "c": 0,
+        "g": 0,
+        "f": 0,
+        "fe": 0,
+        "mg": 0.004,
+        "zn": 0,
+        "pot": 0.49,
+        "na": 0.002,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "camaron",
+    "nombre": "Camaron",
+    "categoria": "Proteina",
+    "modos": {
+      "cocido": {
+        "kcal": 99,
+        "p": 24,
+        "c": 0.2,
+        "g": 0.3,
+        "f": 0,
+        "fe": 0.5,
+        "mg": 35,
+        "zn": 1.4,
+        "pot": 264,
+        "na": 111,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "carne_picada_lean",
+    "nombre": "Carne picada magra",
+    "categoria": "Proteina",
+    "modos": {
+      "crudo": {
+        "kcal": 176,
+        "p": 20.5,
+        "c": 0,
+        "g": 10,
+        "f": 0,
+        "fe": 2.2,
+        "mg": 21,
+        "zn": 4.1,
+        "pot": 310,
+        "na": 75,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 240,
+        "p": 27,
+        "c": 0,
+        "g": 15,
+        "f": 0,
+        "fe": 2.8,
+        "mg": 24,
+        "zn": 5.0,
+        "pot": 350,
+        "na": 82,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "carne_magra",
+    "nombre": "Carne vacuna magra",
+    "categoria": "Proteina",
+    "modos": {
+      "crudo": {
+        "kcal": 170,
+        "p": 21,
+        "c": 0,
+        "g": 9,
+        "f": 0,
+        "fe": 2.1,
+        "mg": 21,
+        "zn": 4.0,
+        "pot": 318,
+        "na": 69,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 217,
+        "p": 26,
+        "c": 0,
+        "g": 12,
+        "f": 0,
+        "fe": 2.6,
+        "mg": 22,
+        "zn": 4.7,
+        "pot": 330,
+        "na": 72,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "castana_caju",
+    "nombre": "Castana de caju",
+    "categoria": "Fruto seco",
+    "modos": {
+      "crudo": {
+        "kcal": 553,
+        "p": 18.2,
+        "c": 30.2,
+        "g": 43.8,
+        "f": 3.3,
+        "fe": 6.7,
+        "mg": 292,
+        "zn": 5.8,
+        "pot": 660,
+        "na": 12,
+        "vitc": 0.5
+      }
+    }
+  },
+  {
+    "id": "cebada",
+    "nombre": "Cebada",
+    "categoria": "Carbo",
+    "modos": {
+      "seco": {
+        "kcal": 354,
+        "p": 12.5,
+        "c": 73.5,
+        "g": 2.3,
+        "f": 17.3,
+        "fe": 3.6,
+        "mg": 133,
+        "zn": 2.8,
+        "pot": 452,
+        "na": 12,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 123,
+        "p": 2.3,
+        "c": 28.2,
+        "g": 0.4,
+        "f": 3.8,
+        "fe": 1.3,
+        "mg": 22,
+        "zn": 1.0,
+        "pot": 93,
+        "na": 3,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "cebolla",
+    "nombre": "Cebolla",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 40,
+        "p": 1.1,
+        "c": 9.3,
+        "g": 0.1,
+        "f": 1.7,
+        "fe": 0.2,
+        "mg": 10,
+        "zn": 0.2,
+        "pot": 146,
+        "na": 4,
+        "vitc": 7.4
+      }
+    }
+  },
+  {
+    "id": "champinon",
+    "nombre": "Champinon",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 22,
+        "p": 3.1,
+        "c": 3.3,
+        "g": 0.3,
+        "f": 1,
+        "fe": 0.5,
+        "mg": 9,
+        "zn": 0.5,
+        "pot": 318,
+        "na": 5,
+        "vitc": 2.1
+      }
+    }
+  },
+  {
+    "id": "chia",
+    "nombre": "Chia",
+    "categoria": "Semilla",
+    "modos": {
+      "seco": {
+        "kcal": 486,
+        "p": 16.5,
+        "c": 42.1,
+        "g": 30.7,
+        "f": 34.4,
+        "fe": 7.7,
+        "mg": 335,
+        "zn": 4.6,
+        "pot": 407,
+        "na": 16,
+        "vitc": 1.6
+      }
+    }
+  },
+  {
+    "id": "chocolate_70",
+    "nombre": "Chocolate 70%",
+    "categoria": "Extra",
+    "modos": {
+      "crudo": {
+        "kcal": 598,
+        "p": 7.8,
+        "c": 45.9,
+        "g": 42.6,
+        "f": 10.9,
+        "fe": 11.9,
+        "mg": 228,
+        "zn": 3.3,
+        "pot": 715,
+        "na": 20,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "chorizo",
+    "nombre": "Chorizo",
+    "categoria": "Procesado",
+    "modos": {
+      "crudo": {
+        "kcal": 455,
+        "p": 24,
+        "c": 1.9,
+        "g": 38,
+        "f": 0,
+        "fe": 1.2,
+        "mg": 25,
+        "zn": 2.9,
+        "pot": 300,
+        "na": 1200,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "clara_huevo",
+    "nombre": "Clara de huevo",
+    "categoria": "Proteina",
+    "modos": {
+      "unidad": {
+        "kcal": 17,
+        "p": 3.6,
+        "c": 0.2,
+        "g": 0,
+        "f": 0,
+        "fe": 0.03,
+        "mg": 4,
+        "zn": 0.02,
+        "pot": 54,
+        "na": 55,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "coliflor",
+    "nombre": "Coliflor",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 25,
+        "p": 1.9,
+        "c": 5,
+        "g": 0.3,
+        "f": 2,
+        "fe": 0.4,
+        "mg": 15,
+        "zn": 0.3,
+        "pot": 299,
+        "na": 30,
+        "vitc": 48.2
+      }
+    }
+  },
+  {
+    "id": "cordero",
+    "nombre": "Cordero",
+    "categoria": "Proteina",
+    "modos": {
+      "crudo": {
+        "kcal": 206,
+        "p": 20,
+        "c": 0,
+        "g": 13,
+        "f": 0,
+        "fe": 1.8,
+        "mg": 20,
+        "zn": 3.2,
+        "pot": 310,
+        "na": 72,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 282,
+        "p": 25,
+        "c": 0,
+        "g": 20,
+        "f": 0,
+        "fe": 2.2,
+        "mg": 23,
+        "zn": 3.8,
+        "pot": 340,
+        "na": 80,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "cuscus",
+    "nombre": "Cuscus",
+    "categoria": "Carbo",
+    "modos": {
+      "seco": {
+        "kcal": 376,
+        "p": 12.8,
+        "c": 77.4,
+        "g": 0.6,
+        "f": 5,
+        "fe": 1.1,
+        "mg": 44,
+        "zn": 0.8,
+        "pot": 166,
+        "na": 10,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 112,
+        "p": 3.8,
+        "c": 23.2,
+        "g": 0.2,
+        "f": 1.4,
+        "fe": 0.4,
+        "mg": 8,
+        "zn": 0.3,
+        "pot": 58,
+        "na": 5,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "durazno",
+    "nombre": "Durazno",
+    "categoria": "Fruta",
+    "modos": {
+      "crudo": {
+        "kcal": 39,
+        "p": 0.9,
+        "c": 9.5,
+        "g": 0.3,
+        "f": 1.5,
+        "fe": 0.3,
+        "mg": 9,
+        "zn": 0.2,
+        "pot": 190,
+        "na": 0,
+        "vitc": 6.6
+      }
+    }
+  },
+  {
+    "id": "espinaca",
+    "nombre": "Espinaca",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 23,
+        "p": 2.9,
+        "c": 3.6,
+        "g": 0.4,
+        "f": 2.2,
+        "fe": 2.7,
+        "mg": 79,
+        "zn": 0.5,
+        "pot": 558,
+        "na": 79,
+        "vitc": 28.1
+      },
+      "cocido": {
+        "kcal": 23,
+        "p": 3.0,
+        "c": 3.8,
+        "g": 0.3,
+        "f": 2.4,
+        "fe": 3.6,
+        "mg": 87,
+        "zn": 0.5,
+        "pot": 466,
+        "na": 70,
+        "vitc": 9.8
+      }
+    }
+  },
+  {
+    "id": "frutilla",
+    "nombre": "Frutilla",
+    "categoria": "Fruta",
+    "modos": {
+      "crudo": {
+        "kcal": 32,
+        "p": 0.7,
+        "c": 7.7,
+        "g": 0.3,
+        "f": 2,
+        "fe": 0.4,
+        "mg": 13,
+        "zn": 0.1,
+        "pot": 153,
+        "na": 1,
+        "vitc": 58.8
+      }
+    }
+  },
+  {
+    "id": "garbanzos",
+    "nombre": "Garbanzos",
+    "categoria": "Legumbre",
+    "modos": {
+      "seco": {
+        "kcal": 364,
+        "p": 19.3,
+        "c": 60.7,
+        "g": 6,
+        "f": 17.4,
+        "fe": 6.2,
+        "mg": 79,
+        "zn": 3.4,
+        "pot": 875,
+        "na": 24,
+        "vitc": 4
+      },
+      "cocido": {
+        "kcal": 164,
+        "p": 8.9,
+        "c": 27.4,
+        "g": 2.6,
+        "f": 7.6,
+        "fe": 2.9,
+        "mg": 48,
+        "zn": 1.5,
+        "pot": 291,
+        "na": 7,
+        "vitc": 1.3
+      }
+    }
+  },
+  {
+    "id": "gaseosa",
+    "nombre": "Gaseosa azucarada",
+    "categoria": "Bebida",
+    "modos": {
+      "ml": {
+        "kcal": 0.42,
+        "p": 0,
+        "c": 0.106,
+        "g": 0,
+        "f": 0,
+        "fe": 0,
+        "mg": 0,
+        "zn": 0,
+        "pot": 0.01,
+        "na": 0.01,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "hamburguesa",
+    "nombre": "Hamburguesa vaca",
+    "categoria": "Procesado",
+    "modos": {
+      "crudo": {
+        "kcal": 250,
+        "p": 17,
+        "c": 8,
+        "g": 18,
+        "f": 0,
+        "fe": 2.5,
+        "mg": 20,
+        "zn": 3.5,
+        "pot": 280,
+        "na": 420,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "harina_trigo",
+    "nombre": "Harina de trigo",
+    "categoria": "Carbo",
+    "modos": {
+      "seco": {
+        "kcal": 364,
+        "p": 10.3,
+        "c": 76.3,
+        "g": 1,
+        "f": 2.7,
+        "fe": 1.2,
+        "mg": 22,
+        "zn": 0.7,
+        "pot": 107,
+        "na": 2,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "higado_vacuno",
+    "nombre": "Higado vacuno",
+    "categoria": "Proteina",
+    "modos": {
+      "crudo": {
+        "kcal": 135,
+        "p": 20.4,
+        "c": 3.9,
+        "g": 3.6,
+        "f": 0,
+        "fe": 6.5,
+        "mg": 18,
+        "zn": 4.0,
+        "pot": 313,
+        "na": 69,
+        "vitc": 27
+      },
+      "cocido": {
+        "kcal": 175,
+        "p": 26,
+        "c": 5,
+        "g": 5,
+        "f": 0,
+        "fe": 8.0,
+        "mg": 22,
+        "zn": 5.0,
+        "pot": 350,
+        "na": 80,
+        "vitc": 23
+      }
+    }
+  },
+  {
+    "id": "huevo",
+    "nombre": "Huevo",
+    "categoria": "Proteina",
+    "modos": {
+      "unidad": {
+        "kcal": 70,
+        "p": 6.3,
+        "c": 0.4,
+        "g": 5,
+        "f": 0,
+        "fe": 0.9,
+        "mg": 6,
+        "zn": 0.6,
+        "pot": 69,
+        "na": 62,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 155,
+        "p": 12.6,
+        "c": 1.1,
+        "g": 10.6,
+        "f": 0,
+        "fe": 1.8,
+        "mg": 12,
+        "zn": 1.3,
+        "pot": 126,
+        "na": 124,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "jamon_cocido",
+    "nombre": "Jamon cocido",
+    "categoria": "Procesado",
+    "modos": {
+      "crudo": {
+        "kcal": 145,
+        "p": 20.9,
+        "c": 1.5,
+        "g": 5.5,
+        "f": 0,
+        "fe": 0.9,
+        "mg": 18,
+        "zn": 1.9,
+        "pot": 287,
+        "na": 1200,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "jamon_crudo",
+    "nombre": "Jamon crudo",
+    "categoria": "Procesado",
+    "modos": {
+      "crudo": {
+        "kcal": 241,
+        "p": 31,
+        "c": 0,
+        "g": 14,
+        "f": 0,
+        "fe": 1.1,
+        "mg": 27,
+        "zn": 2.3,
+        "pot": 350,
+        "na": 1700,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "jugo_naranja",
+    "nombre": "Jugo de naranja",
+    "categoria": "Bebida",
+    "modos": {
+      "ml": {
+        "kcal": 0.45,
+        "p": 0.007,
+        "c": 0.104,
+        "g": 0.002,
+        "f": 0.002,
+        "fe": 0.0002,
+        "mg": 0.011,
+        "zn": 0.0001,
+        "pot": 2.0,
+        "na": 0.001,
+        "vitc": 0.5
+      }
+    }
+  },
+  {
+    "id": "kefir",
+    "nombre": "Kefir",
+    "categoria": "Lacteo",
+    "modos": {
+      "ml": {
+        "kcal": 0.5,
+        "p": 0.035,
+        "c": 0.04,
+        "g": 0.018,
+        "f": 0,
+        "fe": 0.0002,
+        "mg": 0.12,
+        "zn": 0.0004,
+        "pot": 1.5,
+        "na": 0.4,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "kiwi",
+    "nombre": "Kiwi",
+    "categoria": "Fruta",
+    "modos": {
+      "crudo": {
+        "kcal": 61,
+        "p": 1.1,
+        "c": 14.7,
+        "g": 0.5,
+        "f": 3,
+        "fe": 0.3,
+        "mg": 17,
+        "zn": 0.1,
+        "pot": 312,
+        "na": 3,
+        "vitc": 92.7
+      }
+    }
+  },
+  {
+    "id": "leche_descremada",
+    "nombre": "Leche descremada",
+    "categoria": "Lacteo",
+    "modos": {
+      "ml": {
+        "kcal": 0.35,
+        "p": 0.034,
+        "c": 0.05,
+        "g": 0.001,
+        "f": 0,
+        "fe": 0.0003,
+        "mg": 0.11,
+        "zn": 0.0004,
+        "pot": 1.6,
+        "na": 0.44,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "leche_entera",
+    "nombre": "Leche entera",
+    "categoria": "Lacteo",
+    "modos": {
+      "ml": {
+        "kcal": 0.62,
+        "p": 0.033,
+        "c": 0.048,
+        "g": 0.033,
+        "f": 0,
+        "fe": 0.0003,
+        "mg": 0.1,
+        "zn": 0.0004,
+        "pot": 1.5,
+        "na": 0.43,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "lechuga",
+    "nombre": "Lechuga",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 15,
+        "p": 1.4,
+        "c": 2.9,
+        "g": 0.2,
+        "f": 1.3,
+        "fe": 0.5,
+        "mg": 13,
+        "zn": 0.2,
+        "pot": 194,
+        "na": 28,
+        "vitc": 9.2
+      }
+    }
+  },
+  {
+    "id": "lentejas",
+    "nombre": "Lentejas",
+    "categoria": "Legumbre",
+    "modos": {
+      "seco": {
+        "kcal": 353,
+        "p": 25.8,
+        "c": 60.1,
+        "g": 1.1,
+        "f": 30.5,
+        "fe": 6.5,
+        "mg": 122,
+        "zn": 3.3,
+        "pot": 955,
+        "na": 6,
+        "vitc": 4.5
+      },
+      "cocido": {
+        "kcal": 116,
+        "p": 9,
+        "c": 20.1,
+        "g": 0.4,
+        "f": 7.9,
+        "fe": 3.3,
+        "mg": 36,
+        "zn": 1.3,
+        "pot": 369,
+        "na": 2,
+        "vitc": 1.5
+      }
+    }
+  },
+  {
+    "id": "cerdo_lomo",
+    "nombre": "Lomo de cerdo",
+    "categoria": "Proteina",
+    "modos": {
+      "crudo": {
+        "kcal": 143,
+        "p": 21,
+        "c": 0,
+        "g": 6,
+        "f": 0,
+        "fe": 0.8,
+        "mg": 24,
+        "zn": 2.2,
+        "pot": 423,
+        "na": 62,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 195,
+        "p": 29,
+        "c": 0,
+        "g": 8,
+        "f": 0,
+        "fe": 1.0,
+        "mg": 26,
+        "zn": 2.5,
+        "pot": 460,
+        "na": 70,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "maiz_grano",
+    "nombre": "Maiz en grano",
+    "categoria": "Carbo",
+    "modos": {
+      "cocido": {
+        "kcal": 96,
+        "p": 3.4,
+        "c": 21,
+        "g": 1.5,
+        "f": 2.4,
+        "fe": 0.5,
+        "mg": 37,
+        "zn": 0.5,
+        "pot": 270,
+        "na": 15,
+        "vitc": 5.5
+      }
+    }
+  },
+  {
+    "id": "mandarina",
+    "nombre": "Mandarina",
+    "categoria": "Fruta",
+    "modos": {
+      "crudo": {
+        "kcal": 53,
+        "p": 0.8,
+        "c": 13.3,
+        "g": 0.3,
+        "f": 1.8,
+        "fe": 0.2,
+        "mg": 12,
+        "zn": 0.1,
+        "pot": 166,
+        "na": 2,
+        "vitc": 26.7
+      }
+    }
+  },
+  {
+    "id": "mandioca",
+    "nombre": "Mandioca",
+    "categoria": "Tuberculo",
+    "modos": {
+      "crudo": {
+        "kcal": 160,
+        "p": 1.4,
+        "c": 38.1,
+        "g": 0.3,
+        "f": 1.8,
+        "fe": 0.3,
+        "mg": 21,
+        "zn": 0.3,
+        "pot": 271,
+        "na": 14,
+        "vitc": 20.6
+      },
+      "hervido": {
+        "kcal": 112,
+        "p": 0.9,
+        "c": 27.8,
+        "g": 0.3,
+        "f": 1.6,
+        "fe": 0.3,
+        "mg": 16,
+        "zn": 0.2,
+        "pot": 206,
+        "na": 14,
+        "vitc": 11.2
+      }
+    }
+  },
+  {
+    "id": "mango",
+    "nombre": "Mango",
+    "categoria": "Fruta",
+    "modos": {
+      "crudo": {
+        "kcal": 60,
+        "p": 0.8,
+        "c": 15,
+        "g": 0.4,
+        "f": 1.6,
+        "fe": 0.2,
+        "mg": 10,
+        "zn": 0.1,
+        "pot": 168,
+        "na": 1,
+        "vitc": 36.4
+      }
+    }
+  },
+  {
+    "id": "mani",
+    "nombre": "Mani",
+    "categoria": "Fruto seco",
+    "modos": {
+      "crudo": {
+        "kcal": 567,
+        "p": 25.8,
+        "c": 16.1,
+        "g": 49.2,
+        "f": 8.5,
+        "fe": 4.6,
+        "mg": 168,
+        "zn": 3.3,
+        "pot": 705,
+        "na": 18,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "manteca",
+    "nombre": "Manteca",
+    "categoria": "Grasa",
+    "modos": {
+      "crudo": {
+        "kcal": 717,
+        "p": 0.9,
+        "c": 0.1,
+        "g": 81,
+        "f": 0,
+        "fe": 0,
+        "mg": 2,
+        "zn": 0.1,
+        "pot": 24,
+        "na": 643,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "manzana",
+    "nombre": "Manzana",
+    "categoria": "Fruta",
+    "modos": {
+      "unidad": {
+        "kcal": 95,
+        "p": 0.5,
+        "c": 25,
+        "g": 0.3,
+        "f": 4.4,
+        "fe": 0.2,
+        "mg": 9,
+        "zn": 0.1,
+        "pot": 195,
+        "na": 2,
+        "vitc": 8.4
+      },
+      "crudo": {
+        "kcal": 52,
+        "p": 0.3,
+        "c": 13.8,
+        "g": 0.2,
+        "f": 2.4,
+        "fe": 0.1,
+        "mg": 5,
+        "zn": 0.0,
+        "pot": 107,
+        "na": 1,
+        "vitc": 4.6
+      }
+    }
+  },
+  {
+    "id": "margarina",
+    "nombre": "Margarina",
+    "categoria": "Grasa",
+    "modos": {
+      "crudo": {
+        "kcal": 717,
+        "p": 0,
+        "c": 0.7,
+        "g": 80,
+        "f": 0,
+        "fe": 0,
+        "mg": 2,
+        "zn": 0,
+        "pot": 24,
+        "na": 660,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "mate_cocido",
+    "nombre": "Mate cocido",
+    "categoria": "Bebida",
+    "modos": {
+      "ml": {
+        "kcal": 0.01,
+        "p": 0.0001,
+        "c": 0.001,
+        "g": 0,
+        "f": 0,
+        "fe": 0.0001,
+        "mg": 0.02,
+        "zn": 0.0001,
+        "pot": 0.2,
+        "na": 0.01,
+        "vitc": 0.0002
+      }
+    }
+  },
+  {
+    "id": "mayonesa",
+    "nombre": "Mayonesa",
+    "categoria": "Grasa",
+    "modos": {
+      "crudo": {
+        "kcal": 680,
+        "p": 1,
+        "c": 1,
+        "g": 75,
+        "f": 0,
+        "fe": 0.5,
+        "mg": 1,
+        "zn": 0.2,
+        "pot": 20,
+        "na": 635,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "melon",
+    "nombre": "Melon",
+    "categoria": "Fruta",
+    "modos": {
+      "crudo": {
+        "kcal": 34,
+        "p": 0.8,
+        "c": 8.2,
+        "g": 0.2,
+        "f": 0.9,
+        "fe": 0.2,
+        "mg": 12,
+        "zn": 0.2,
+        "pot": 267,
+        "na": 16,
+        "vitc": 36.7
+      }
+    }
+  },
+  {
+    "id": "merluza",
+    "nombre": "Merluza",
+    "categoria": "Proteina",
+    "modos": {
+      "crudo": {
+        "kcal": 90,
+        "p": 18,
+        "c": 0,
+        "g": 1.3,
+        "f": 0,
+        "fe": 0.3,
+        "mg": 24,
+        "zn": 0.4,
+        "pot": 300,
+        "na": 70,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 112,
+        "p": 23,
+        "c": 0,
+        "g": 1.7,
+        "f": 0,
+        "fe": 0.4,
+        "mg": 27,
+        "zn": 0.5,
+        "pot": 340,
+        "na": 78,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "miel",
+    "nombre": "Miel",
+    "categoria": "Extra",
+    "modos": {
+      "crudo": {
+        "kcal": 304,
+        "p": 0.3,
+        "c": 82.4,
+        "g": 0,
+        "f": 0.2,
+        "fe": 0.4,
+        "mg": 2,
+        "zn": 0.2,
+        "pot": 52,
+        "na": 4,
+        "vitc": 0.5
+      }
+    }
+  },
+  {
+    "id": "morron_rojo",
+    "nombre": "Morron rojo",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 31,
+        "p": 1,
+        "c": 6,
+        "g": 0.3,
+        "f": 2.1,
+        "fe": 0.4,
+        "mg": 12,
+        "zn": 0.3,
+        "pot": 211,
+        "na": 4,
+        "vitc": 127.7
+      }
+    }
+  },
+  {
+    "id": "pollo_muslo",
+    "nombre": "Muslo de pollo",
+    "categoria": "Proteina",
+    "modos": {
+      "crudo": {
+        "kcal": 144,
+        "p": 19,
+        "c": 0,
+        "g": 8,
+        "f": 0,
+        "fe": 1.1,
+        "mg": 23,
+        "zn": 1.9,
+        "pot": 223,
+        "na": 82,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 209,
+        "p": 26,
+        "c": 0,
+        "g": 11,
+        "f": 0,
+        "fe": 1.3,
+        "mg": 25,
+        "zn": 2.2,
+        "pot": 250,
+        "na": 95,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "naranja",
+    "nombre": "Naranja",
+    "categoria": "Fruta",
+    "modos": {
+      "unidad": {
+        "kcal": 62,
+        "p": 1.2,
+        "c": 15.4,
+        "g": 0.2,
+        "f": 3.1,
+        "fe": 0.1,
+        "mg": 13,
+        "zn": 0.1,
+        "pot": 237,
+        "na": 0,
+        "vitc": 69.7
+      },
+      "crudo": {
+        "kcal": 47,
+        "p": 0.9,
+        "c": 11.8,
+        "g": 0.1,
+        "f": 2.4,
+        "fe": 0.1,
+        "mg": 10,
+        "zn": 0.1,
+        "pot": 181,
+        "na": 0,
+        "vitc": 53.2
+      }
+    }
+  },
+  {
+    "id": "nuez",
+    "nombre": "Nuez",
+    "categoria": "Fruto seco",
+    "modos": {
+      "crudo": {
+        "kcal": 654,
+        "p": 15.2,
+        "c": 13.7,
+        "g": 65.2,
+        "f": 6.7,
+        "fe": 2.9,
+        "mg": 158,
+        "zn": 3.1,
+        "pot": 441,
+        "na": 2,
+        "vitc": 1.3
+      }
+    }
+  },
+  {
+    "id": "palta",
+    "nombre": "Palta",
+    "categoria": "Fruta",
+    "modos": {
+      "crudo": {
+        "kcal": 160,
+        "p": 2,
+        "c": 8.5,
+        "g": 14.7,
+        "f": 6.7,
+        "fe": 0.6,
+        "mg": 29,
+        "zn": 0.6,
+        "pot": 485,
+        "na": 7,
+        "vitc": 10
+      }
+    }
+  },
+  {
+    "id": "pan_blanco",
+    "nombre": "Pan blanco",
+    "categoria": "Carbo",
+    "modos": {
+      "crudo": {
+        "kcal": 265,
+        "p": 9,
+        "c": 49,
+        "g": 3.2,
+        "f": 2.7,
+        "fe": 3.6,
+        "mg": 23,
+        "zn": 0.7,
+        "pot": 115,
+        "na": 491,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "pan_integral",
+    "nombre": "Pan integral",
+    "categoria": "Carbo",
+    "modos": {
+      "crudo": {
+        "kcal": 247,
+        "p": 13,
+        "c": 41,
+        "g": 4.2,
+        "f": 7,
+        "fe": 2.7,
+        "mg": 82,
+        "zn": 1.6,
+        "pot": 230,
+        "na": 430,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "pasta_trigo",
+    "nombre": "Pasta de trigo",
+    "categoria": "Carbo",
+    "modos": {
+      "seco": {
+        "kcal": 371,
+        "p": 13,
+        "c": 75,
+        "g": 1.5,
+        "f": 3,
+        "fe": 3.6,
+        "mg": 52,
+        "zn": 1.4,
+        "pot": 223,
+        "na": 6,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 158,
+        "p": 5.8,
+        "c": 30.9,
+        "g": 0.9,
+        "f": 1.8,
+        "fe": 1.1,
+        "mg": 18,
+        "zn": 0.6,
+        "pot": 44,
+        "na": 1,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "pavo_pechuga",
+    "nombre": "Pechuga de pavo",
+    "categoria": "Proteina",
+    "modos": {
+      "crudo": {
+        "kcal": 114,
+        "p": 24,
+        "c": 0,
+        "g": 1.5,
+        "f": 0,
+        "fe": 1.1,
+        "mg": 28,
+        "zn": 1.5,
+        "pot": 260,
+        "na": 52,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 135,
+        "p": 29,
+        "c": 0,
+        "g": 1.8,
+        "f": 0,
+        "fe": 1.4,
+        "mg": 32,
+        "zn": 1.8,
+        "pot": 302,
+        "na": 60,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "pollo_pechuga",
+    "nombre": "Pechuga de pollo",
+    "categoria": "Proteina",
+    "modos": {
+      "crudo": {
+        "kcal": 120,
+        "p": 22.5,
+        "c": 0,
+        "g": 2.6,
+        "f": 0,
+        "fe": 0.7,
+        "mg": 28,
+        "zn": 1.0,
+        "pot": 256,
+        "na": 70,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 165,
+        "p": 31,
+        "c": 0,
+        "g": 3.6,
+        "f": 0,
+        "fe": 1.0,
+        "mg": 29,
+        "zn": 1.0,
+        "pot": 256,
+        "na": 74,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "pepino",
+    "nombre": "Pepino",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 15,
+        "p": 0.7,
+        "c": 3.6,
+        "g": 0.1,
+        "f": 0.5,
+        "fe": 0.3,
+        "mg": 13,
+        "zn": 0.2,
+        "pot": 147,
+        "na": 2,
+        "vitc": 2.8
+      }
+    }
+  },
+  {
+    "id": "pera",
+    "nombre": "Pera",
+    "categoria": "Fruta",
+    "modos": {
+      "unidad": {
+        "kcal": 101,
+        "p": 0.6,
+        "c": 27,
+        "g": 0.2,
+        "f": 5.5,
+        "fe": 0.3,
+        "mg": 12,
+        "zn": 0.2,
+        "pot": 206,
+        "na": 2,
+        "vitc": 7.5
+      },
+      "crudo": {
+        "kcal": 57,
+        "p": 0.4,
+        "c": 15.2,
+        "g": 0.1,
+        "f": 3.1,
+        "fe": 0.2,
+        "mg": 7,
+        "zn": 0.1,
+        "pot": 116,
+        "na": 1,
+        "vitc": 4.3
+      }
+    }
+  },
+  {
+    "id": "pistacho",
+    "nombre": "Pistacho",
+    "categoria": "Fruto seco",
+    "modos": {
+      "crudo": {
+        "kcal": 562,
+        "p": 20.2,
+        "c": 28,
+        "g": 45.3,
+        "f": 10.6,
+        "fe": 3.9,
+        "mg": 121,
+        "zn": 2.2,
+        "pot": 1025,
+        "na": 1,
+        "vitc": 5.6
+      }
+    }
+  },
+  {
+    "id": "polenta",
+    "nombre": "Polenta",
+    "categoria": "Carbo",
+    "modos": {
+      "seco": {
+        "kcal": 362,
+        "p": 8.1,
+        "c": 79,
+        "g": 1.5,
+        "f": 7.3,
+        "fe": 2.5,
+        "mg": 127,
+        "zn": 1.1,
+        "pot": 287,
+        "na": 35,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 70,
+        "p": 1.7,
+        "c": 15,
+        "g": 0.3,
+        "f": 1.2,
+        "fe": 0.6,
+        "mg": 18,
+        "zn": 0.2,
+        "pot": 35,
+        "na": 280,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "pomelo",
+    "nombre": "Pomelo",
+    "categoria": "Fruta",
+    "modos": {
+      "crudo": {
+        "kcal": 42,
+        "p": 0.8,
+        "c": 10.7,
+        "g": 0.1,
+        "f": 1.6,
+        "fe": 0.1,
+        "mg": 9,
+        "zn": 0.1,
+        "pot": 135,
+        "na": 0,
+        "vitc": 31.2
+      }
+    }
+  },
+  {
+    "id": "porotos_alubia",
+    "nombre": "Porotos alubia",
+    "categoria": "Legumbre",
+    "modos": {
+      "seco": {
+        "kcal": 333,
+        "p": 21,
+        "c": 60,
+        "g": 1.6,
+        "f": 15.2,
+        "fe": 5.1,
+        "mg": 190,
+        "zn": 3.0,
+        "pot": 1400,
+        "na": 12,
+        "vitc": 4
+      },
+      "cocido": {
+        "kcal": 127,
+        "p": 8.7,
+        "c": 22.8,
+        "g": 0.5,
+        "f": 7.4,
+        "fe": 2.9,
+        "mg": 63,
+        "zn": 1.0,
+        "pot": 370,
+        "na": 2,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "porotos_negros",
+    "nombre": "Porotos negros",
+    "categoria": "Legumbre",
+    "modos": {
+      "seco": {
+        "kcal": 341,
+        "p": 21.6,
+        "c": 62.4,
+        "g": 1.4,
+        "f": 15.5,
+        "fe": 5.0,
+        "mg": 171,
+        "zn": 3.7,
+        "pot": 1483,
+        "na": 5,
+        "vitc": 4.5
+      },
+      "cocido": {
+        "kcal": 132,
+        "p": 8.9,
+        "c": 23.7,
+        "g": 0.5,
+        "f": 8.7,
+        "fe": 2.1,
+        "mg": 70,
+        "zn": 1.1,
+        "pot": 355,
+        "na": 1,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "queso_cremoso",
+    "nombre": "Queso cremoso",
+    "categoria": "Lacteo",
+    "modos": {
+      "crudo": {
+        "kcal": 320,
+        "p": 20,
+        "c": 3,
+        "g": 26,
+        "f": 0,
+        "fe": 0.4,
+        "mg": 20,
+        "zn": 2.8,
+        "pot": 98,
+        "na": 620,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "queso_portsalut",
+    "nombre": "Queso Port Salut",
+    "categoria": "Lacteo",
+    "modos": {
+      "crudo": {
+        "kcal": 300,
+        "p": 23,
+        "c": 2,
+        "g": 22,
+        "f": 0,
+        "fe": 0.3,
+        "mg": 28,
+        "zn": 3.4,
+        "pot": 100,
+        "na": 800,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "quinoa",
+    "nombre": "Quinoa",
+    "categoria": "Carbo",
+    "modos": {
+      "seco": {
+        "kcal": 368,
+        "p": 14.1,
+        "c": 64.2,
+        "g": 6.1,
+        "f": 7,
+        "fe": 4.6,
+        "mg": 197,
+        "zn": 3.1,
+        "pot": 563,
+        "na": 5,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 120,
+        "p": 4.4,
+        "c": 21.3,
+        "g": 1.9,
+        "f": 2.8,
+        "fe": 1.5,
+        "mg": 64,
+        "zn": 1.1,
+        "pot": 172,
+        "na": 7,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "remolacha",
+    "nombre": "Remolacha",
+    "categoria": "Verdura",
+    "modos": {
+      "cocido": {
+        "kcal": 44,
+        "p": 1.7,
+        "c": 10,
+        "g": 0.2,
+        "f": 2,
+        "fe": 0.8,
+        "mg": 23,
+        "zn": 0.4,
+        "pot": 305,
+        "na": 78,
+        "vitc": 4.9
+      }
+    }
+  },
+  {
+    "id": "repollo",
+    "nombre": "Repollo",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 25,
+        "p": 1.3,
+        "c": 6,
+        "g": 0.1,
+        "f": 2.5,
+        "fe": 0.5,
+        "mg": 12,
+        "zn": 0.2,
+        "pot": 170,
+        "na": 18,
+        "vitc": 36.6
+      }
+    }
+  },
+  {
+    "id": "ricota",
+    "nombre": "Ricota",
+    "categoria": "Lacteo",
+    "modos": {
+      "crudo": {
+        "kcal": 174,
+        "p": 11.3,
+        "c": 3,
+        "g": 12.9,
+        "f": 0,
+        "fe": 0.3,
+        "mg": 11,
+        "zn": 1.5,
+        "pot": 105,
+        "na": 84,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "sal_mesa",
+    "nombre": "Sal de mesa",
+    "categoria": "Extra",
+    "modos": {
+      "seco": {
+        "kcal": 0,
+        "p": 0,
+        "c": 0,
+        "g": 0,
+        "f": 0,
+        "fe": 0,
+        "mg": 0,
+        "zn": 0,
+        "pot": 0,
+        "na": 38758,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "salchicha",
+    "nombre": "Salchicha",
+    "categoria": "Procesado",
+    "modos": {
+      "crudo": {
+        "kcal": 301,
+        "p": 12,
+        "c": 2.3,
+        "g": 27,
+        "f": 0,
+        "fe": 1.0,
+        "mg": 20,
+        "zn": 2.0,
+        "pot": 220,
+        "na": 850,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "salmon",
+    "nombre": "Salmon",
+    "categoria": "Proteina",
+    "modos": {
+      "crudo": {
+        "kcal": 208,
+        "p": 20.4,
+        "c": 0,
+        "g": 13.4,
+        "f": 0,
+        "fe": 0.5,
+        "mg": 29,
+        "zn": 0.6,
+        "pot": 363,
+        "na": 59,
+        "vitc": 0
+      },
+      "cocido": {
+        "kcal": 240,
+        "p": 25.2,
+        "c": 0,
+        "g": 15,
+        "f": 0,
+        "fe": 0.7,
+        "mg": 30,
+        "zn": 0.7,
+        "pot": 400,
+        "na": 65,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "sandia",
+    "nombre": "Sandia",
+    "categoria": "Fruta",
+    "modos": {
+      "crudo": {
+        "kcal": 30,
+        "p": 0.6,
+        "c": 7.6,
+        "g": 0.2,
+        "f": 0.4,
+        "fe": 0.2,
+        "mg": 10,
+        "zn": 0.1,
+        "pot": 112,
+        "na": 1,
+        "vitc": 8.1
+      }
+    }
+  },
+  {
+    "id": "sardina",
+    "nombre": "Sardina",
+    "categoria": "Proteina",
+    "modos": {
+      "cocido": {
+        "kcal": 208,
+        "p": 25,
+        "c": 0,
+        "g": 11,
+        "f": 0,
+        "fe": 2.9,
+        "mg": 39,
+        "zn": 1.3,
+        "pot": 397,
+        "na": 307,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "girasol_semilla",
+    "nombre": "Semillas de girasol",
+    "categoria": "Semilla",
+    "modos": {
+      "seco": {
+        "kcal": 584,
+        "p": 20.8,
+        "c": 20,
+        "g": 51.5,
+        "f": 8.6,
+        "fe": 5.3,
+        "mg": 325,
+        "zn": 5.0,
+        "pot": 645,
+        "na": 9,
+        "vitc": 1.4
+      }
+    }
+  },
+  {
+    "id": "lino",
+    "nombre": "Semillas de lino",
+    "categoria": "Semilla",
+    "modos": {
+      "seco": {
+        "kcal": 534,
+        "p": 18.3,
+        "c": 28.9,
+        "g": 42.2,
+        "f": 27.3,
+        "fe": 5.7,
+        "mg": 392,
+        "zn": 4.3,
+        "pot": 813,
+        "na": 30,
+        "vitc": 0.6
+      }
+    }
+  },
+  {
+    "id": "sesamo",
+    "nombre": "Sesamo",
+    "categoria": "Semilla",
+    "modos": {
+      "seco": {
+        "kcal": 573,
+        "p": 17.7,
+        "c": 23.4,
+        "g": 49.7,
+        "f": 11.8,
+        "fe": 14.6,
+        "mg": 351,
+        "zn": 7.8,
+        "pot": 468,
+        "na": 11,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "soja",
+    "nombre": "Soja",
+    "categoria": "Legumbre",
+    "modos": {
+      "seco": {
+        "kcal": 446,
+        "p": 36.5,
+        "c": 30.2,
+        "g": 19.9,
+        "f": 9.3,
+        "fe": 15.7,
+        "mg": 280,
+        "zn": 4.9,
+        "pot": 1797,
+        "na": 2,
+        "vitc": 6
+      },
+      "cocido": {
+        "kcal": 173,
+        "p": 16.6,
+        "c": 9.9,
+        "g": 9,
+        "f": 6,
+        "fe": 5.1,
+        "mg": 86,
+        "zn": 1.2,
+        "pot": 515,
+        "na": 2,
+        "vitc": 1.7
+      }
+    }
+  },
+  {
+    "id": "te_negro",
+    "nombre": "Te negro",
+    "categoria": "Bebida",
+    "modos": {
+      "ml": {
+        "kcal": 0.01,
+        "p": 0,
+        "c": 0,
+        "g": 0,
+        "f": 0,
+        "fe": 0,
+        "mg": 0.001,
+        "zn": 0,
+        "pot": 0.18,
+        "na": 0.003,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "tomate",
+    "nombre": "Tomate",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 18,
+        "p": 0.9,
+        "c": 3.9,
+        "g": 0.2,
+        "f": 1.2,
+        "fe": 0.3,
+        "mg": 11,
+        "zn": 0.2,
+        "pot": 237,
+        "na": 5,
+        "vitc": 13.7
+      }
+    }
+  },
+  {
+    "id": "tortilla_trigo",
+    "nombre": "Tortilla de trigo",
+    "categoria": "Carbo",
+    "modos": {
+      "crudo": {
+        "kcal": 310,
+        "p": 8.5,
+        "c": 52,
+        "g": 7.5,
+        "f": 3.8,
+        "fe": 2.7,
+        "mg": 28,
+        "zn": 0.9,
+        "pot": 140,
+        "na": 520,
+        "vitc": 0
+      }
+    }
+  },
+  {
+    "id": "papa",
+    "nombre": "Tuberculo",
+    "categoria": "Tuberculo",
+    "modos": {
+      "crudo": {
+        "kcal": 77,
+        "p": 2,
+        "c": 17.5,
+        "g": 0.1,
+        "f": 2.2,
+        "fe": 0.8,
+        "mg": 23,
+        "zn": 0.3,
+        "pot": 425,
+        "na": 6,
+        "vitc": 19.7
+      },
+      "hervido": {
+        "kcal": 87,
+        "p": 1.9,
+        "c": 20.1,
+        "g": 0.1,
+        "f": 1.8,
+        "fe": 0.3,
+        "mg": 20,
+        "zn": 0.3,
+        "pot": 379,
+        "na": 4,
+        "vitc": 7.4
+      }
+    }
+  },
+  {
+    "id": "uvas",
+    "nombre": "Uvas",
+    "categoria": "Fruta",
+    "modos": {
+      "crudo": {
+        "kcal": 69,
+        "p": 0.7,
+        "c": 18.1,
+        "g": 0.2,
+        "f": 0.9,
+        "fe": 0.4,
+        "mg": 7,
+        "zn": 0.1,
+        "pot": 191,
+        "na": 2,
+        "vitc": 3.2
+      }
+    }
+  },
+  {
+    "id": "yogur_griego",
+    "nombre": "Yogur griego",
+    "categoria": "Lacteo",
+    "modos": {
+      "crudo": {
+        "kcal": 97,
+        "p": 9,
+        "c": 3.9,
+        "g": 5,
+        "f": 0,
+        "fe": 0.1,
+        "mg": 11,
+        "zn": 0.7,
+        "pot": 141,
+        "na": 36,
+        "vitc": 0.5
+      }
+    }
+  },
+  {
+    "id": "yogur_natural",
+    "nombre": "Yogur natural",
+    "categoria": "Lacteo",
+    "modos": {
+      "crudo": {
+        "kcal": 61,
+        "p": 3.5,
+        "c": 4.7,
+        "g": 3.3,
+        "f": 0,
+        "fe": 0.1,
+        "mg": 11,
+        "zn": 0.6,
+        "pot": 141,
+        "na": 46,
+        "vitc": 0.5
+      }
+    }
+  },
+  {
+    "id": "zanahoria",
+    "nombre": "Zanahoria",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 41,
+        "p": 0.9,
+        "c": 9.6,
+        "g": 0.2,
+        "f": 2.8,
+        "fe": 0.3,
+        "mg": 12,
+        "zn": 0.2,
+        "pot": 320,
+        "na": 69,
+        "vitc": 5.9
+      },
+      "cocido": {
+        "kcal": 35,
+        "p": 0.8,
+        "c": 8.2,
+        "g": 0.2,
+        "f": 3.0,
+        "fe": 0.3,
+        "mg": 10,
+        "zn": 0.2,
+        "pot": 235,
+        "na": 58,
+        "vitc": 3.6
+      }
+    }
+  },
+  {
+    "id": "zapallo",
+    "nombre": "Zapallo",
+    "categoria": "Verdura",
+    "modos": {
+      "cocido": {
+        "kcal": 20,
+        "p": 1,
+        "c": 4.9,
+        "g": 0.1,
+        "f": 1.1,
+        "fe": 0.4,
+        "mg": 8,
+        "zn": 0.3,
+        "pot": 230,
+        "na": 4,
+        "vitc": 9
+      }
+    }
+  },
+  {
+    "id": "zucchini",
+    "nombre": "Zucchini",
+    "categoria": "Verdura",
+    "modos": {
+      "crudo": {
+        "kcal": 17,
+        "p": 1.2,
+        "c": 3.1,
+        "g": 0.3,
+        "f": 1,
+        "fe": 0.4,
+        "mg": 18,
+        "zn": 0.3,
+        "pot": 261,
+        "na": 8,
+        "vitc": 17.9
+      }
+    }
+  }
+]
