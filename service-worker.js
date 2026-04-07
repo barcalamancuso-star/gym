@@ -1,4 +1,4 @@
-const CACHE_NAME = "gym-codex-v1.0.23";
+const CACHE_NAME = "gym-codex-v1.0.24";
 const APP_SHELL = [
   "./",
   "./index.html",
