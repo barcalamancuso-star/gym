@@ -5548,40 +5548,45 @@ function askName(def){return prompt('Nombre del archivo:',def);}
 function dlBlob(blob,filename){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();}
 
 async function shareOnly(blob,name,mime){
-  const file=new File([blob],name,{type:mime});
-  const isTextLike=mime.includes('text')||mime.includes('json')||mime.includes('csv');
+  const safeMime=String(mime||'application/octet-stream').split(';')[0].trim()||'application/octet-stream';
+  const file=new File([blob],name,{type:safeMime});
+  const isTextLike=safeMime.includes('text')||safeMime.includes('json')||safeMime.includes('csv');
   const shareText=isTextLike?await blob.text():null;
   const shareTitle=name;
   const shareBlurb=`${name}\nOmega`;
   // Web Share API con archivo
-  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+  if(navigator.share){
     try{
-      await navigator.share({
-        files:[file],
-        title:shareTitle,
-        text:shareBlurb
-      });
-      return true;
+      const canUseFiles=typeof navigator.canShare==='function'
+        ? navigator.canShare({files:[file]})
+        : true;
+      if(canUseFiles){
+        await navigator.share({
+          files:[file],
+          title:shareTitle,
+          text:shareBlurb
+        });
+        return true;
+      }
     }
-    catch(e){if(e.name==='AbortError')return false;}
+    catch(e){
+      if(e.name==='AbortError')return false;
+    }
   }
-  // Si no puede compartir archivos, intentar compartir el contenido como texto
-  if(navigator.share&&shareText){
+  // Si no puede compartir archivos, intentar compartir texto solo si no es enorme.
+  if(navigator.share&&shareText&&shareText.length<=6000){
     try{
       await navigator.share({
         title:shareTitle,
         text:`${shareBlurb}\n\n${shareText}`
       });
       return true;
-    }catch(e){if(e.name==='AbortError')return false;}
-  }
-  // Último fallback: clipboard o descarga directa
-  if(shareText){
-    try{await navigator.clipboard.writeText(shareText);alert('Copiado al portapapeles');}
-    catch{dlBlob(blob,name);}
-    return true;
+    }catch(e){
+      if(e.name==='AbortError')return false;
+    }
   }
   dlBlob(blob,name);
+  alert('Tu navegador no permitió compartir este archivo. Lo descargué para que lo envíes manualmente.');
   return true;
 }
 
