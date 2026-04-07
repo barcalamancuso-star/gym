@@ -284,6 +284,60 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   padding:6px 8px 7px;
   background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
 }
+.home-bw-box{
+  margin-top:8px;
+  border:1px solid var(--br2);
+  border-radius:10px;
+  padding:7px 8px;
+  background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.home-bw-label{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:1.3px;
+  color:var(--mu2);
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.home-bw-input{
+  width:72px;
+  background:rgba(255,255,255,.02);
+  border:1px solid var(--br2);
+  color:var(--tx);
+  font-family:var(--mono);
+  font-size:14px !important;
+  padding:8px 10px;
+  outline:none;
+  text-align:center;
+}
+.home-bw-unit{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:1px;
+  color:var(--mu);
+  text-transform:uppercase;
+}
+.home-bw-save{
+  margin-left:auto;
+  min-height:34px;
+  padding:0 12px;
+  border:1px solid var(--br2);
+  background:transparent;
+  color:var(--tx);
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+.home-bw-hint{
+  font-family:var(--mono);
+  font-size:9px;
+  color:var(--mu);
+  margin-left:2px;
+}
 .home-rec-table{
   max-height:108px;
   overflow-y:auto;
@@ -1315,6 +1369,13 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   <div class="s0-recovery">
     <div class="home-rec-box">
       <div id="home-recovery" class="home-rec-muted">recovery —</div>
+    </div>
+    <div class="home-bw-box">
+      <span class="home-bw-label">peso</span>
+      <input id="home-bw-input" class="home-bw-input" type="number" inputmode="decimal" step="0.1" min="1" placeholder="kg" onkeydown="if(event.key==='Enter')saveHomeBodyWeight()">
+      <span class="home-bw-unit">kg</span>
+      <button class="home-bw-save" onclick="saveHomeBodyWeight()">ok</button>
+      <span id="home-bw-hint" class="home-bw-hint"></span>
     </div>
   </div>
 
@@ -2665,6 +2726,37 @@ function renderHomeRecovery(){
   el.className='home-rec-table';
   el.innerHTML=rows;
 }
+function renderHomeBodyWeight(){
+  const inp=$('home-bw-input');
+  const hint=$('home-bw-hint');
+  if(inp){
+    const bw=getCurrentBodyWeightKg();
+    inp.value=String(Math.round(bw*10)/10);
+  }
+  if(hint)hint.textContent='actual';
+}
+function saveHomeBodyWeight(){
+  const inp=$('home-bw-input');
+  const hint=$('home-bw-hint');
+  if(!inp)return;
+  const next=Math.round(Number(inp.value)*10)/10;
+  if(!(Number.isFinite(next)&&next>0)){
+    if(hint)hint.textContent='peso invalido';
+    return;
+  }
+  if(!DB.perfil_fisico||typeof DB.perfil_fisico!=='object')DB.perfil_fisico={};
+  DB.perfil_fisico.peso_kg_actual=next;
+  if(!Array.isArray(DB.historial_biometrico))DB.historial_biometrico=[];
+  const todayRow=DB.historial_biometrico.find(x=>String(x&&x.fecha||'')===today());
+  if(todayRow)todayRow.peso_kg=next;
+  else DB.historial_biometrico.unshift({fecha:today(),peso_kg:next});
+  DB=normalizeDbData(DB);
+  saveAutoDb();
+  renderHomeBodyWeight();
+  updateBackupInfo();
+  if(hint)hint.textContent='guardado';
+  haptic('tap');
+}
 function getHomeHistoryEntries(maxDays=3){
   const out=[];
   const seenDates=new Set();
@@ -2678,6 +2770,7 @@ function getHomeHistoryEntries(maxDays=3){
 }
 function renderHome(){
   renderHomeRecovery();
+  renderHomeBodyWeight();
   const el=$('hist-area');
   if(!DB.history.length){
     // Mostrar 3 días vacíos con mismo diseño
@@ -2703,13 +2796,13 @@ function renderHome(){
   const calcHistVol=(h)=>{
     const ex=(h&&h.exercises&&typeof h.exercises==='object')?h.exercises:{};
     let total=0;
-    Object.values(ex).forEach(series=>{
+    Object.entries(ex).forEach(([name,series])=>{
       (Array.isArray(series)?series:[]).forEach(s=>{
         if(!s||s.deleted)return;
-        total+=(Number(s.kg)||0)*(Number(s.reps)||0)*(Number(s.mult)||1);
+        total+=calcSeriesVolume(name,s);
       });
     });
-    return total;
+    return Math.round(total*10)/10;
   };
 
   const homeHistory=getHomeHistoryEntries(3);
