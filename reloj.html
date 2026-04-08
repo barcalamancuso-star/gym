@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Ω reloj</title>
+  <meta name="theme-color" content="#090909">
+  <style>
+    :root{
+      --bg:#090909;
+      --panel:#111;
+      --panel2:#161616;
+      --line:#242424;
+      --text:#ece7dc;
+      --muted:#8b8377;
+      --gold:#d2a95d;
+      --green:#8aaa52;
+      --blue:#6d87c4;
+      --red:#b07838;
+      --mono:"IBM Plex Mono",ui-monospace,monospace;
+      --serif:"Georgia",serif;
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;height:100%;background:radial-gradient(circle at 50% 20%,rgba(210,169,93,.1),transparent 42%),var(--bg);color:var(--text);font-family:var(--mono);overflow:hidden}
+    body{display:flex;align-items:center;justify-content:center;padding:18px}
+    .watch{
+      width:min(100vw - 20px,320px);
+      aspect-ratio:1/1;
+      border-radius:34px;
+      border:1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(circle at 50% 14%,rgba(210,169,93,.11),transparent 30%),
+        linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01)),
+        var(--panel);
+      box-shadow:0 22px 80px rgba(0,0,0,.46), inset 0 0 0 1px rgba(255,255,255,.02);
+      padding:16px 16px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      position:relative;
+      overflow:hidden;
+    }
+    .watch::after{
+      content:"Ω";
+      position:absolute;
+      inset:auto 0 10px 0;
+      text-align:center;
+      font-family:var(--serif);
+      font-size:110px;
+      color:rgba(255,255,255,.025);
+      line-height:1;
+      pointer-events:none;
+    }
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      position:relative;
+      z-index:1;
+    }
+    .brand{
+      min-width:0;
+    }
+    .omega{
+      font-family:var(--serif);
+      font-size:22px;
+      line-height:1;
+      color:var(--gold);
+      text-shadow:0 0 10px rgba(210,169,93,.22);
+    }
+    .user{
+      margin-top:4px;
+      font-size:10px;
+      letter-spacing:2.2px;
+      color:var(--muted);
+      text-transform:uppercase;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:160px;
+    }
+    .phase-pill{
+      border:1px solid var(--line);
+      border-radius:999px;
+      min-height:28px;
+      padding:0 10px;
+      display:flex;
+      align-items:center;
+      font-size:10px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      color:var(--muted);
+      background:rgba(255,255,255,.02);
+      white-space:nowrap;
+    }
+    .phase-pill.work{color:var(--blue);border-color:rgba(109,135,196,.36)}
+    .phase-pill.rest{color:var(--gold);border-color:rgba(210,169,93,.36)}
+    .phase-pill.idle{color:var(--muted)}
+    .phase-pill.saving{color:var(--red);border-color:rgba(176,120,56,.36)}
+    .phase-pill.prep{color:var(--green);border-color:rgba(138,170,82,.36)}
+    .exercise{
+      position:relative;
+      z-index:1;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:12px 12px 13px;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+    }
+    .day{
+      font-size:9px;
+      letter-spacing:2px;
+      color:var(--muted);
+      text-transform:uppercase;
+    }
+    .name{
+      margin-top:8px;
+      font-family:var(--serif);
+      font-size:22px;
+      line-height:1.05;
+      min-height:46px;
+      display:flex;
+      align-items:flex-start;
+    }
+    .meta{
+      margin-top:8px;
+      font-size:10px;
+      letter-spacing:1.4px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .clock{
+      position:relative;
+      z-index:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      flex:1;
+      border-radius:28px;
+      border:1px solid rgba(255,255,255,.05);
+      background:
+        radial-gradient(circle at 50% 12%,rgba(255,255,255,.045),transparent 48%),
+        linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      overflow:hidden;
+    }
+    .clock-phase{
+      font-size:9px;
+      letter-spacing:2px;
+      color:var(--muted);
+      text-transform:uppercase;
+    }
+    .clock-main{
+      margin-top:8px;
+      font-family:var(--serif);
+      font-size:56px;
+      line-height:1;
+      letter-spacing:-1px;
+    }
+    .clock-main.work{color:var(--blue)}
+    .clock-main.rest{color:var(--gold)}
+    .clock-main.idle{color:var(--text)}
+    .clock-main.saving{color:var(--red)}
+    .clock-main.prep{color:var(--green)}
+    .clock-sub{
+      margin-top:8px;
+      font-size:10px;
+      letter-spacing:1.5px;
+      color:var(--muted);
+    }
+    .actions{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+    .btn{
+      min-height:42px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.025);
+      color:var(--text);
+      font-family:var(--mono);
+      font-size:10px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+    }
+    .btn.primary{
+      border-color:rgba(210,169,93,.26);
+      color:var(--gold);
+      background:rgba(210,169,93,.05);
+    }
+    .btn:disabled{
+      opacity:.38;
+    }
+    .hint{
+      position:relative;
+      z-index:1;
+      text-align:center;
+      font-size:8px;
+      letter-spacing:1.5px;
+      color:var(--muted);
+      text-transform:uppercase;
+      min-height:10px;
+    }
+  </style>
+</head>
+<body>
+  <main class="watch">
+    <div class="top">
+      <div class="brand">
+        <div class="omega">Ω</div>
+        <div id="user" class="user">reloj</div>
+      </div>
+      <div id="phase-pill" class="phase-pill idle">sin sesion</div>
+    </div>
+
+    <section class="exercise">
+      <div id="day" class="day">omega / reloj</div>
+      <div id="exercise" class="name">sin entrenamiento</div>
+      <div class="meta">
+        <span id="series">series 0</span>
+        <span id="next">—</span>
+      </div>
+    </section>
+
+    <section class="clock">
+      <div id="clock-phase" class="clock-phase">esperando</div>
+      <div id="clock-main" class="clock-main idle">00:00</div>
+      <div id="clock-sub" class="clock-sub">total 00:00</div>
+    </section>
+
+    <div class="actions">
+      <button id="toggle-btn" class="btn primary" type="button">inicio</button>
+      <button id="finish-btn" class="btn" type="button">fin ej</button>
+    </div>
+    <div id="hint" class="hint">prueba local · misma sesion</div>
+  </main>
+
+  <script>
+    const AUTO_DB_KEY='gym_codex_auto_db_v1';
+    const SESSION_DRAFT_KEY='gym_codex_session_draft_v1';
+    const WATCH_CMD_KEY='gym_codex_watch_cmd_v1';
+    const ACTIVE_PHASES=new Set(['work','rest','saving','prep']);
+
+    const $=id=>document.getElementById(id);
+
+    function readJson(key){
+      try{
+        const raw=localStorage.getItem(key);
+        return raw?JSON.parse(raw):null;
+      }catch(_e){
+        return null;
+      }
+    }
+    function payloadRowCount(row){
+      if(!row||row.deleted)return false;
+      return (Number(row.reps)||0)>0||(Number(row.kg)||0)>0||!!row.rpe||!!row.helped||!!row.nota||!!row.dskg||!!row.dsreps;
+    }
+    function fmtClock(ms){
+      const total=Math.max(0,Math.floor((Number(ms)||0)/1000));
+      const mm=Math.floor(total/60);
+      const ss=String(total%60).padStart(2,'0');
+      return `${String(mm).padStart(2,'0')}:${ss}`;
+    }
+    function phaseLabel(state){
+      const map={idle:'espera',work:'ejercicio',rest:'descanso',saving:'registro',prep:'preparacion'};
+      return map[state]||'sin sesion';
+    }
+    function buttonLabel(state){
+      return state==='work'?'listo':'inicio';
+    }
+    function getViewModel(){
+      const draft=readJson(SESSION_DRAFT_KEY);
+      const db=readJson(AUTO_DB_KEY)||{};
+      const user=(db&&db.usuario)||draft?.user||'omega';
+      if(!draft||!Array.isArray(draft.ejList)||!draft.ejList.length){
+        return {
+          user,
+          hasSession:false,
+          phase:'idle',
+          phaseText:'sin sesion',
+          exercise:'sin entrenamiento',
+          day:'omega / reloj',
+          series:0,
+          next:'—',
+          mainMs:0,
+          totalMs:0,
+          toggleEnabled:false,
+          finishEnabled:false
+        };
+      }
+      const now=Date.now();
+      const state=String(draft.state||'idle');
+      const idx=Math.max(0,Math.min(Number(draft.curEjIdx)||0,draft.ejList.length-1));
+      const exercise=draft.ejList[idx]||'—';
+      const rows=((draft.sesion&&draft.sesion[exercise])||[]).filter(payloadRowCount);
+      const next=draft.ejList[idx+1]||'—';
+      let mainMs=Math.max(0,Number(draft.msec)||0);
+      if(ACTIVE_PHASES.has(state)&&Number(draft.ts)>0) mainMs+=(now-Number(draft.ts));
+      let totalMs=Math.max(0,(Number(draft.totalSec)||0)*1000);
+      if(draft.started&&ACTIVE_PHASES.has(state)&&Number(draft.ts)>0) totalMs+=(now-Number(draft.ts));
+      return {
+        user,
+        hasSession:true,
+        phase:state,
+        phaseText:phaseLabel(state),
+        exercise,
+        day:(draft.curDay&&draft.curDay.name)||'entrenamiento',
+        series:rows.length,
+        next:next==='—'?'ultimo':`sig ${next}`,
+        mainMs,
+        totalMs,
+        toggleEnabled:state!=='saving'&&Array.isArray(draft.ejList)&&draft.ejList.length>0,
+        finishEnabled:(state==='idle'||state==='rest')&&rows.length>0
+      };
+    }
+    function sendCmd(cmd){
+      try{
+        localStorage.setItem(WATCH_CMD_KEY,JSON.stringify({cmd,ts:Date.now()}));
+        if(navigator.vibrate) navigator.vibrate(cmd==='toggle'?[22]:[14,40,14]);
+        $('hint').textContent='comando enviado';
+        setTimeout(()=>{
+          if($('hint').textContent==='comando enviado') $('hint').textContent='prueba local · misma sesion';
+        },900);
+      }catch(_e){
+        $('hint').textContent='sin acceso local';
+      }
+    }
+    function render(){
+      const vm=getViewModel();
+      $('user').textContent=String(vm.user||'omega').toUpperCase();
+      const pill=$('phase-pill');
+      pill.className=`phase-pill ${vm.phase}`;
+      pill.textContent=vm.phaseText;
+      $('day').textContent=vm.day;
+      $('exercise').textContent=vm.exercise;
+      $('series').textContent=`series ${vm.series}`;
+      $('next').textContent=vm.next;
+      $('clock-phase').textContent=vm.phaseText;
+      const main=$('clock-main');
+      main.className=`clock-main ${vm.phase}`;
+      main.textContent=fmtClock(vm.mainMs);
+      $('clock-sub').textContent=`total ${fmtClock(vm.totalMs)}`;
+      const t=$('toggle-btn');
+      t.textContent=buttonLabel(vm.phase);
+      t.disabled=!vm.toggleEnabled;
+      $('finish-btn').disabled=!vm.finishEnabled;
+    }
+
+    $('toggle-btn').addEventListener('click',()=>sendCmd('toggle'));
+    $('finish-btn').addEventListener('click',()=>sendCmd('finish'));
+    window.addEventListener('storage',render);
+    setInterval(render,250);
+    render();
+  </script>
+</body>
+</html>

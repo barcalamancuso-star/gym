@@ -1,7 +1,8 @@
-const CACHE_NAME = "gym-codex-v1.0.27";
+const CACHE_NAME = "gym-codex-v1.0.28";
 const APP_SHELL = [
   "./",
   "./index.html",
+  "./reloj.html",
   "./rutinas.html",
   "./muscle_lab.html",
   "./omega_local_v2.html",

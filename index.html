@@ -332,6 +332,17 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   letter-spacing:2px;
   text-transform:uppercase;
 }
+.home-bw-link{
+  min-height:34px;
+  padding:0 12px;
+  border:1px solid var(--br2);
+  background:transparent;
+  color:var(--mu2);
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
 .home-bw-hint{
   font-family:var(--mono);
   font-size:9px;
@@ -1375,6 +1386,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
       <input id="home-bw-input" class="home-bw-input" type="number" inputmode="decimal" step="0.1" min="1" placeholder="kg" onkeydown="if(event.key==='Enter')saveHomeBodyWeight()">
       <span class="home-bw-unit">kg</span>
       <button class="home-bw-save" onclick="saveHomeBodyWeight()">ok</button>
+      <button class="home-bw-link" onclick="openWatchView()">reloj</button>
       <span id="home-bw-hint" class="home-bw-hint"></span>
     </div>
   </div>
@@ -2365,6 +2377,7 @@ const AUTO_DB_KEY='gym_codex_auto_db_v1';
 const SESSION_DRAFT_KEY='gym_codex_session_draft_v1';
 const APP_SESSION_KEY='gym_codex_app_session_v1';
 const CSV_DAY_PENDING_KEY='gym_codex_csv_day_pending_v1';
+const WATCH_CMD_KEY='gym_codex_watch_cmd_v1';
 const SESSION_DRAFT_RESTORE_MAX_MS=1000*60*60*2;
 const APP_SESSION_RESTORE_MAX_MS=1000*60*60*2;
 let _lastDbLoadOk=false;
@@ -2384,6 +2397,8 @@ let _csvPendingMeta=null;
 let _currentSessionStats=null;
 const HAPTICS_ENABLED=true;
 let _hapticLastTs=0;
+let _lastWatchCmdTs=0;
+let _watchCmdPollIv=null;
 
 function buzz(pattern,minGap=45){
   if(!HAPTICS_ENABLED)return;
@@ -2756,6 +2771,52 @@ function saveHomeBodyWeight(){
   updateBackupInfo();
   if(hint)hint.textContent='guardado';
   haptic('tap');
+}
+function openWatchView(){
+  try{window.open('./reloj.html','_blank');}
+  catch(_e){location.href='./reloj.html';}
+}
+function currentScreenId(){
+  const on=document.querySelector('.screen.on');
+  return on?on.id:'';
+}
+function clearWatchCommand(){
+  try{localStorage.removeItem(WATCH_CMD_KEY);}catch(_e){}
+}
+function applyWatchCommand(cmdObj){
+  const cmd=String(cmdObj&&cmdObj.cmd||'').trim().toLowerCase();
+  if(!cmd)return false;
+  if(currentScreenId()!=='s2'||!Array.isArray(ejList)||!ejList.length)return false;
+  if(cmd==='toggle'){
+    if(state==='saving'||state==='prep')return false;
+    hAct();
+    return true;
+  }
+  if(cmd==='finish'){
+    if(state!=='idle'&&state!=='rest')return false;
+    finishEj();
+    return true;
+  }
+  return false;
+}
+function consumeWatchCommand(rawOverride=null){
+  try{
+    const raw=rawOverride===null?localStorage.getItem(WATCH_CMD_KEY):rawOverride;
+    if(!raw)return false;
+    const parsed=JSON.parse(raw);
+    const ts=Number(parsed&&parsed.ts);
+    if(Number.isFinite(ts)&&ts>0&&ts<=_lastWatchCmdTs){
+      clearWatchCommand();
+      return false;
+    }
+    const ok=applyWatchCommand(parsed);
+    if(Number.isFinite(ts)&&ts>0)_lastWatchCmdTs=ts;
+    clearWatchCommand();
+    return ok;
+  }catch(_e){
+    clearWatchCommand();
+    return false;
+  }
 }
 function getHomeHistoryEntries(maxDays=3){
   const out=[];
@@ -6757,6 +6818,11 @@ document.addEventListener('visibilitychange',()=>{
     updateFinalShareStatus();
   }
 });
+window.addEventListener('storage',(event)=>{
+  if(event.key===WATCH_CMD_KEY){
+    consumeWatchCommand(event.newValue||null);
+  }
+});
 
 window.addEventListener('beforeinstallprompt',(e)=>{
   e.preventDefault();
@@ -6771,6 +6837,8 @@ window.addEventListener('appinstalled',()=>{
 
 window.addEventListener('load',()=>{
   updateInstallButton();
+  if(_watchCmdPollIv)clearInterval(_watchCmdPollIv);
+  _watchCmdPollIv=setInterval(()=>consumeWatchCommand(),700);
 });
 
 if('serviceWorker' in navigator && window.isSecureContext && location.protocol.startsWith('http')){
