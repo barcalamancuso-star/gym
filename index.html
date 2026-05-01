@@ -550,9 +550,9 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   display:flex;flex-direction:column;align-items:stretch;gap:6px;flex-shrink:0;position:relative;
   background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
   transition:background .25s ease,border-color .25s ease;}
-.tbar-main{display:flex;align-items:center;gap:10px;min-height:52px;}
-.tnum{font-family:var(--mono);font-size:52px;font-weight:300;color:var(--mu);
-  letter-spacing:-2px;min-width:88px;transition:color .3s,transform .2s ease;line-height:1;}
+.tbar-main{display:flex;align-items:flex-end;gap:12px;min-height:72px;}
+.tnum{flex:1;font-family:var(--mono);font-size:78px;font-weight:300;color:var(--mu);
+  letter-spacing:-3px;min-width:0;transition:color .3s,transform .2s ease;line-height:.92;text-align:left;}
 .work .tnum{color:var(--go);}
 .rest .tnum{color:var(--re);}
 .prep .tnum{color:var(--tx);}
@@ -565,7 +565,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 #s2.mode-work .tbar{background:linear-gradient(180deg,rgba(138,170,82,.12),rgba(138,170,82,0));}
 #s2.mode-rest .tbar{background:linear-gradient(180deg,rgba(176,120,56,.12),rgba(176,120,56,0));}
 #s2.mode-saving .tbar{background:linear-gradient(180deg,rgba(200,168,75,.14),rgba(200,168,75,0));}
-#s2.mode-work .tnum{transform:scale(1.02);}
+#s2.mode-work .tnum{transform:scale(1.015);}
 .ttot{text-align:right;flex-shrink:0;}
 .ttot-l{font-size:8px;letter-spacing:2px;color:var(--mu);}
 .ttot-v{font-size:12px;color:var(--mu);}
@@ -781,7 +781,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 }
 .mh-gain.on{opacity:.86;}
 @media (max-width:760px){
-  .tnum{font-size:46px;min-width:74px;}
+  .tnum{font-size:62px;min-width:0;}
   .tm-chip{min-width:108px;padding:5px 6px;}
   .tm-chip-name{font-size:8px;}
   .tm-chip-state{font-size:7px;}
@@ -951,6 +951,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 }
 .ab3.go:active{transform:translateY(1px) scale(.99);}
 .ab3.stop{
+  width:176px;height:68px;
   border-color:rgba(156,220,146,.56);color:#def4d6;
   background:linear-gradient(180deg,rgba(74,132,76,.34),rgba(34,79,42,.24));
   box-shadow:0 10px 26px rgba(0,0,0,.34), inset 0 0 0 1px rgba(178,239,168,.12);
@@ -1066,7 +1067,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 @media (hover:hover) and (pointer:fine){
   :root{--touch:32px;}
   body{font-size:13px;}
-  .tnum{font-size:44px;}
+  .tnum{font-size:56px;}
   .ppl-btn{min-height:52px;}
   .s0-foot{padding:10px 20px 16px;}
   .icell{padding:5px 2px;min-height:30px;font-size:14px !important;}
@@ -1308,22 +1309,11 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   82%{opacity:1;transform:translate(-50%,0) scale(1);}
   100%{opacity:0;transform:translate(-50%,-8px) scale(.98);}
 }
-#test-reset-btn{
-  position:fixed;left:8px;bottom:8px;z-index:130;
-  background:transparent;border:1px solid var(--br2);color:var(--mu2);
-  font-family:var(--mono);font-size:8px;letter-spacing:1.8px;text-transform:uppercase;
-  padding:4px 7px;min-height:22px;line-height:1;opacity:.66;
-  border-radius:8px;
-}
-#test-reset-btn:active{
-  opacity:1;color:var(--tx);border-color:var(--tx);background:var(--c1);
-}
 </style>
 </head>
 <body class="screen-s0">
 <div id="overlay"></div>
 <div id="mev-travel-fx"></div>
-<button id="test-reset-btn" onclick="resetAppForTest()">reiniciar</button>
 <div id="global-brand" onclick="toggleTheme()">
   <span id="global-brand-sym">Ω</span>
   <span id="global-brand-name"></span>
@@ -1651,10 +1641,8 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
     <div id="fin-share-panel" class="fin-share-panel">
       <div id="fin-share-status" class="fin-share-status pending">csv del día pendiente</div>
       <button class="finb summary" onclick="shareSummaryCard()">Resumen</button>
-      <button class="finb csv" onclick="exportCSV()">CSV del día</button>
       <button class="finb share" onclick="shareCSV()">Compartir CSV</button>
       <button class="finb db" onclick="exportDB()">Guardar personal</button>
-      <button class="finb dbshare" onclick="shareDB()">Compartir personal</button>
       <div id="backup-info" class="backup-info"></div>
     </div>
   </div>
@@ -2366,9 +2354,9 @@ let allEjsKnown=[...ALL_EJS];
 let curType=null,curDay=null,ejList=[],sesion={};
 let state='idle',sec=0,msec=0,totalSec=0,iv=null,totalIv=null;
 let tW="—",tR="—",started=false,startTime=null,curEjIdx=0;
-const PREP_COUNTDOWN_SEC=1;
+const PREP_COUNTDOWN_SEC=5;
 let prepIv=null,prepLeft=0,prepBaseRestMs=0,prepFromState='idle';
-let metaSec=1800,metaIv=null;
+let metaSec=1800,metaIv=null,metaEndTs=0;
 let ejTipos={};
 let ejAgarres={};
 let ejFinalizados={};
@@ -2378,6 +2366,7 @@ const SESSION_DRAFT_KEY='gym_codex_session_draft_v1';
 const APP_SESSION_KEY='gym_codex_app_session_v1';
 const CSV_DAY_PENDING_KEY='gym_codex_csv_day_pending_v1';
 const WATCH_CMD_KEY='gym_codex_watch_cmd_v1';
+const META_TIMER_KEY='gym_codex_meta_timer_v1';
 const SESSION_DRAFT_RESTORE_MAX_MS=1000*60*60*2;
 const APP_SESSION_RESTORE_MAX_MS=1000*60*60*2;
 let _lastDbLoadOk=false;
@@ -2418,7 +2407,67 @@ function haptic(kind='tap'){
   buzz(18,35);
 }
 
-/* â•â• RUEDAS â•â• */
+function saveMetaTimerState(){
+  try{
+    if(metaEndTs>0)localStorage.setItem(META_TIMER_KEY,JSON.stringify({endTs:metaEndTs}));
+    else localStorage.removeItem(META_TIMER_KEY);
+  }catch(_e){}
+}
+
+function syncMetaTimerToNow(updateUi=true){
+  if(!metaEndTs){
+    if(updateUi){
+      const m=$('meta-timer');
+      if(m)m.textContent=fmt(metaSec||1800);
+    }
+    return metaSec||1800;
+  }
+  const left=Math.max(0,Math.ceil((metaEndTs-Date.now())/1000));
+  metaSec=left;
+  if(updateUi){
+    const m=$('meta-timer');
+    if(m)m.textContent=fmt(left);
+  }
+  if(left<=0){
+    clearInterval(metaIv);
+    metaIv=null;
+    metaEndTs=0;
+    saveMetaTimerState();
+  }
+  return left;
+}
+
+function startMetaTimer(durationSec=1800){
+  metaSec=durationSec;
+  metaEndTs=Date.now()+(durationSec*1000);
+  saveMetaTimerState();
+  clearInterval(metaIv);
+  syncMetaTimerToNow(true);
+  metaIv=setInterval(()=>syncMetaTimerToNow(true),1000);
+}
+
+function resumeMetaTimer(){
+  try{
+    const raw=localStorage.getItem(META_TIMER_KEY);
+    if(!raw)return false;
+    const parsed=JSON.parse(raw);
+    const endTs=Number(parsed&&parsed.endTs);
+    if(!Number.isFinite(endTs)||endTs<=Date.now()){
+      localStorage.removeItem(META_TIMER_KEY);
+      metaEndTs=0;
+      return false;
+    }
+    metaEndTs=endTs;
+    clearInterval(metaIv);
+    syncMetaTimerToNow(true);
+    metaIv=setInterval(()=>syncMetaTimerToNow(true),1000);
+    return true;
+  }catch(_e){
+    return false;
+  }
+}
+
+/* ══ RUEDAS ══ */
 let wheelVals={kg:null,reps:null,rpe:null,helped:null,dskg:null,dsreps:null,dsrpe:null};
 let curTipoKg='maq';
 
@@ -4806,10 +4855,10 @@ function prepareRegisterPickers(tipoOverride){
   const name=ejList[curEjIdx];
   const tipo=tipoOverride||(ejTipos[name]||'maq');
   const usesSeconds=exerciseUsesSeconds(name);
-  const kgStep=getKgStep(tipo);
+  const kgStep=0.5;
   const kgMax=tipo==='maq'?300:(tipo==='barra'?260:180);
   const kgVals=tipo==='pc'?[]:buildSelectRange(kgStep,kgMax,kgStep);
-  fillSelect('reg-kg',kgVals,'KG');
+  fillSelect('reg-kg',kgVals,tipo==='barra'?'KG TOTAL':'KG');
   fillSelect('reg-dskg',kgVals,'DROP KG');
   fillSelect('reg-reps',usesSeconds?buildSelectRange(1,180,1):buildSelectRange(1,30,1),usesSeconds?'SEG':'REPS');
   fillSelect('reg-helped',buildSelectRange(1,5,1),'AYUDA');
@@ -5421,16 +5470,7 @@ function finishW(){
   const notaIn=$('nota-sesion');
   if(notaIn) notaIn.value='';
 
-  metaSec=1800;
-  clearInterval(metaIv);
-  const metaTimer=$('meta-timer');
-  if(metaTimer) metaTimer.textContent='30:00';
-  metaIv=setInterval(()=>{
-    if(metaSec<=0){clearInterval(metaIv);return;}
-    metaSec--;
-    const m=$('meta-timer');
-    if(m) m.textContent=fmt(metaSec);
-  },1000);
+  startMetaTimer(1800);
 
   persistCurrentSessionToDb(true);
   markCsvPending();
@@ -5560,7 +5600,7 @@ function updateFinalShareStatus(){
   if(!el)return;
   const pending=isCurrentSessionCsvPending();
   el.className=`fin-share-status ${pending?'pending':'ok'}`;
-  el.textContent=pending?'csv del día pendiente · exportalo antes de cerrar':'csv del día exportado';
+  el.textContent=pending?'csv del día pendiente · compartilo antes de cerrar':'csv del día compartido';
 }
 
 function buildCurrentSessionStats(){
@@ -5631,7 +5671,7 @@ function updateFinalSummaryUi(statsArg){
   const volEl=$('fin-vol');
   const mevEl=$('fin-mev');
   const compEl=$('fin-vol-comp');
-  if(volEl)volEl.textContent=`vol ${stats.volTotal>0?stats.volTotal.toLocaleString('es-AR'):'0'} kg`;
+  if(volEl)volEl.textContent=`moviste ${stats.volTotal>0?stats.volTotal.toLocaleString('es-AR'):'0'} kilos`;
   if(mevEl)mevEl.textContent=`mev +${fmtSetCount(stats.mevTotal)}`;
   if(compEl){
     const prev=(DB.history||[]).find(h=>
@@ -6810,10 +6850,13 @@ document.addEventListener('visibilitychange',()=>{
   if(_isHardResetting)return;
   if(document.hidden){
     syncAllTimersToNow(false);
+    syncMetaTimerToNow(false);
+    saveMetaTimerState();
     saveSessionDraft(false);
     saveAutoDb();
   }else{
     syncAllTimersToNow(true);
+    syncMetaTimerToNow(true);
     refreshEjRestDisplay();
     updateFinalShareStatus();
   }
@@ -6837,6 +6880,7 @@ window.addEventListener('appinstalled',()=>{
 
 window.addEventListener('load',()=>{
   updateInstallButton();
+  resumeMetaTimer();
   if(_watchCmdPollIv)clearInterval(_watchCmdPollIv);
   _watchCmdPollIv=setInterval(()=>consumeWatchCommand(),700);
 });
