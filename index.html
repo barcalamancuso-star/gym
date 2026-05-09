@@ -550,9 +550,9 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   display:flex;flex-direction:column;align-items:stretch;gap:6px;flex-shrink:0;position:relative;
   background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
   transition:background .25s ease,border-color .25s ease;}
-.tbar-main{display:flex;align-items:flex-end;gap:12px;min-height:72px;}
-.tnum{flex:1;font-family:var(--mono);font-size:78px;font-weight:300;color:var(--mu);
-  letter-spacing:-3px;min-width:0;transition:color .3s,transform .2s ease;line-height:.92;text-align:left;}
+.tbar-main{display:flex;align-items:center;gap:10px;min-height:52px;}
+.tnum{flex:1;font-family:var(--mono);font-size:52px;font-weight:300;color:var(--mu);
+  letter-spacing:-2px;min-width:88px;transition:color .3s,transform .2s ease;line-height:1;text-align:left;}
 .work .tnum{color:var(--go);}
 .rest .tnum{color:var(--re);}
 .prep .tnum{color:var(--tx);}
@@ -781,7 +781,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 }
 .mh-gain.on{opacity:.86;}
 @media (max-width:760px){
-  .tnum{font-size:62px;min-width:0;}
+  .tnum{font-size:46px;min-width:0;}
   .tm-chip{min-width:108px;padding:5px 6px;}
   .tm-chip-name{font-size:8px;}
   .tm-chip-state{font-size:7px;}
@@ -932,7 +932,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 .ab3 span:first-child{line-height:1;font-size:15px;opacity:.95;}
 .ab3:active{transform:translateY(1px) scale(.992);}
 .ab3.go{
-  width:92px;height:92px;border-radius:999px;
+  width:184px;height:184px;border-radius:999px;
   border-color:rgba(221,207,186,.34);
   color:#efe6d5;
   background:radial-gradient(circle at 50% 34%,rgba(255,255,255,.06),rgba(255,255,255,.012) 54%,rgba(255,255,255,0) 70%);
@@ -941,37 +941,36 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 }
 .ab3.go::before{display:none;}
 .ab3.go::after{
-  content:'';position:absolute;inset:7px;border-radius:999px;
+  content:'';position:absolute;inset:10px;border-radius:999px;
   border:1px solid rgba(221,207,186,.18);pointer-events:none;
 }
 .ab3.go .go-txt{
   position:relative;z-index:2;
-  font-size:12px;letter-spacing:1.8px;font-family:var(--serif);line-height:1;
+  font-size:24px;letter-spacing:1.8px;font-family:var(--serif);line-height:1;
   text-transform:none;
 }
 .ab3.go:active{transform:translateY(1px) scale(.99);}
-.ab3.stop{
-  width:176px;height:68px;
-  border-color:rgba(156,220,146,.56);color:#def4d6;
-  background:linear-gradient(180deg,rgba(74,132,76,.34),rgba(34,79,42,.24));
-  box-shadow:0 10px 26px rgba(0,0,0,.34), inset 0 0 0 1px rgba(178,239,168,.12);
-}
+
 .ab3.save{
   border-color:rgba(226,196,143,.56);color:#f2e5cf;
   background:linear-gradient(180deg,rgba(153,121,73,.34),rgba(87,66,35,.24));
   box-shadow:0 10px 26px rgba(0,0,0,.34), inset 0 0 0 1px rgba(237,210,163,.12);
 }
-#focus-btn{width:136px !important;height:56px !important;}
+#focus-overlay{
+  padding:24px 14px 30px;
+  gap:28px !important;
+}
+#focus-btn{width:184px !important;height:184px !important;}
 #focus-ej{
   font-family:var(--serif);
-  font-size:18px;
+  font-size:30px;
   color:var(--tx);
   letter-spacing:.4px;
   text-align:center;
-  max-width:min(86vw,540px);
+  max-width:min(88vw,620px);
   white-space:normal;
   text-wrap:balance;
-  line-height:1.2;
+  line-height:1.1;
   opacity:.92;
 }
 #focus-cancel{
@@ -1067,7 +1066,7 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
 @media (hover:hover) and (pointer:fine){
   :root{--touch:32px;}
   body{font-size:13px;}
-  .tnum{font-size:56px;}
+  .tnum{font-size:44px;}
   .ppl-btn{min-height:52px;}
   .s0-foot{padding:10px 20px 16px;}
   .icell{padding:5px 2px;min-height:30px;font-size:14px !important;}
@@ -1376,7 +1375,6 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
       <input id="home-bw-input" class="home-bw-input" type="number" inputmode="decimal" step="0.1" min="1" placeholder="kg" onkeydown="if(event.key==='Enter')saveHomeBodyWeight()">
       <span class="home-bw-unit">kg</span>
       <button class="home-bw-save" onclick="saveHomeBodyWeight()">ok</button>
-      <button class="home-bw-link" onclick="openWatchView()">reloj</button>
       <span id="home-bw-hint" class="home-bw-hint"></span>
     </div>
   </div>
@@ -1439,11 +1437,11 @@ body.screen-s3 #global-brand{opacity:0;pointer-events:none;transform:translateY(
   </div>
 <!-- FOCUS MODE -->
 <div id="focus-overlay" style="display:none;position:absolute;inset:0;background:var(--bg);z-index:100;flex-direction:column;align-items:center;justify-content:center;gap:20px;">
-  <div id="focus-tnum" style="font-family:var(--mono);font-size:88px;font-weight:300;letter-spacing:-4px;transition:color .3s;"></div>
+  <div id="focus-tnum" style="font-family:var(--mono);font-size:min(38vw,240px);font-weight:300;letter-spacing:-8px;line-height:.88;transition:color .3s;"></div>
   <div id="focus-ej"></div>
-  <div style="display:flex;align-items:center;gap:10px;">
+  <div style="display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;">
     <button id="focus-cancel" onclick="cancelPrepCountdown()">cancelar</button>
-    <button onclick="hAct()" id="focus-btn" class="ab3 stop" style="width:110px;height:110px;"><span style="font-size:20px;font-weight:300;">✓</span><span>listo</span></button>
+    <button onclick="hAct()" id="focus-btn" class="ab3 go"><span class="go-txt">listo</span></button>
   </div>
 </div>
   <div class="workout-body">
@@ -2365,7 +2363,6 @@ const AUTO_DB_KEY='gym_codex_auto_db_v1';
 const SESSION_DRAFT_KEY='gym_codex_session_draft_v1';
 const APP_SESSION_KEY='gym_codex_app_session_v1';
 const CSV_DAY_PENDING_KEY='gym_codex_csv_day_pending_v1';
-const WATCH_CMD_KEY='gym_codex_watch_cmd_v1';
 const META_TIMER_KEY='gym_codex_meta_timer_v1';
 const SESSION_DRAFT_RESTORE_MAX_MS=1000*60*60*2;
 const APP_SESSION_RESTORE_MAX_MS=1000*60*60*2;
@@ -2386,8 +2383,7 @@ let _csvPendingMeta=null;
 let _currentSessionStats=null;
 const HAPTICS_ENABLED=true;
 let _hapticLastTs=0;
-let _lastWatchCmdTs=0;
-let _watchCmdPollIv=null;
+
 
 function buzz(pattern,minGap=45){
   if(!HAPTICS_ENABLED)return;
@@ -2821,51 +2817,9 @@ function saveHomeBodyWeight(){
   if(hint)hint.textContent='guardado';
   haptic('tap');
 }
-function openWatchView(){
-  try{window.open('./reloj.html','_blank');}
-  catch(_e){location.href='./reloj.html';}
-}
 function currentScreenId(){
   const on=document.querySelector('.screen.on');
   return on?on.id:'';
-}
-function clearWatchCommand(){
-  try{localStorage.removeItem(WATCH_CMD_KEY);}catch(_e){}
-}
-function applyWatchCommand(cmdObj){
-  const cmd=String(cmdObj&&cmdObj.cmd||'').trim().toLowerCase();
-  if(!cmd)return false;
-  if(currentScreenId()!=='s2'||!Array.isArray(ejList)||!ejList.length)return false;
-  if(cmd==='toggle'){
-    if(state==='saving'||state==='prep')return false;
-    hAct();
-    return true;
-  }
-  if(cmd==='finish'){
-    if(state!=='idle'&&state!=='rest')return false;
-    finishEj();
-    return true;
-  }
-  return false;
-}
-function consumeWatchCommand(rawOverride=null){
-  try{
-    const raw=rawOverride===null?localStorage.getItem(WATCH_CMD_KEY):rawOverride;
-    if(!raw)return false;
-    const parsed=JSON.parse(raw);
-    const ts=Number(parsed&&parsed.ts);
-    if(Number.isFinite(ts)&&ts>0&&ts<=_lastWatchCmdTs){
-      clearWatchCommand();
-      return false;
-    }
-    const ok=applyWatchCommand(parsed);
-    if(Number.isFinite(ts)&&ts>0)_lastWatchCmdTs=ts;
-    clearWatchCommand();
-    return ok;
-  }catch(_e){
-    clearWatchCommand();
-    return false;
-  }
 }
 function getHomeHistoryEntries(maxDays=3){
   const out=[];
@@ -4713,7 +4667,7 @@ function renderAr(){
     el.innerHTML=`<div class="ar-row"><button class="ab3 go" onclick="hAct()"><span class="go-txt">inicio</span></button></div>`;
   }
   else if(state==='work')
-    el.innerHTML=`<button class="ab3 stop" onclick="hAct()"><span style="font-size:20px;font-weight:300;">✓</span><span>listo</span></button>`;
+    el.innerHTML=`<div class="ar-row"><button class="ab3 go" onclick="hAct()"><span class="go-txt">listo</span></button></div>`;
   else if(state==='saving')
     el.innerHTML=`<button class="ab3 save" style="opacity:.55;pointer-events:none;"><span style="font-size:16px;font-weight:300;">…</span><span>cargar</span></button>`;
   else
@@ -6071,7 +6025,7 @@ function isStorageQuotaError(err){
 function notifyStorageQuota(){
   if(_storageQuotaWarned)return;
   _storageQuotaWarned=true;
-  alert('Memoria local llena. Exportá guardado personal y CSV del día para no perder datos.');
+  alert('Memoria local llena. Exportá guardado personal y Compartir CSV para no perder datos.');
 }
 function saveAutoDb(){
   if(_isHardResetting)return;
@@ -6861,12 +6815,6 @@ document.addEventListener('visibilitychange',()=>{
     updateFinalShareStatus();
   }
 });
-window.addEventListener('storage',(event)=>{
-  if(event.key===WATCH_CMD_KEY){
-    consumeWatchCommand(event.newValue||null);
-  }
-});
-
 window.addEventListener('beforeinstallprompt',(e)=>{
   e.preventDefault();
   _deferredInstallPrompt=e;
@@ -6881,8 +6829,6 @@ window.addEventListener('appinstalled',()=>{
 window.addEventListener('load',()=>{
   updateInstallButton();
   resumeMetaTimer();
-  if(_watchCmdPollIv)clearInterval(_watchCmdPollIv);
-  _watchCmdPollIv=setInterval(()=>consumeWatchCommand(),700);
 });
 
 if('serviceWorker' in navigator && window.isSecureContext && location.protocol.startsWith('http')){

@@ -1,13 +1,10 @@
-const CACHE_NAME = "gym-codex-v1.0.28";
+const CACHE_NAME = "gym-codex-v1.0.30";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./reloj.html",
   "./rutinas.html",
-  "./muscle_lab.html",
   "./omega_local_v2.html",
   "./manifest.webmanifest",
-  "./assets/muscle_lab_base_front_back.png",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png",
